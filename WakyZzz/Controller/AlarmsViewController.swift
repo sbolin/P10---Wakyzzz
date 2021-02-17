@@ -72,15 +72,21 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
             self.deleteAlarm(at: indexPath)
         }
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+        delete.backgroundColor =  UIColor(red: 1, green: 0, blue: 0, alpha: 1)
+        
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
             self.editAlarm(at: indexPath)
         }
-        return [delete, edit]
+        edit.backgroundColor =  UIColor(red: 0, green: 1, blue: 0, alpha: 1)
+        
+        let config = UISwipeActionsConfiguration(actions: [delete, edit])
+        config.performsFirstActionWithFullSwipe = false
+        
+        return config
     }
     
     func alarm(at indexPath: IndexPath) -> Alarm? {
@@ -89,7 +95,8 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func deleteAlarm(at indexPath: IndexPath) {
         tableView.beginUpdates()
-        alarms.remove(at: alarms.count)
+        print("Deleting alarm at indexPath\(indexPath.row)")
+        alarms.remove(at: indexPath.row) // alarms.count
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }

@@ -17,6 +17,9 @@
 		0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */; };
 		0424EB6F20BF0FAE00E15E46 /* AlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6E20BF0FAE00E15E46 /* AlarmViewController.swift */; };
 		0424EB7120C038AE00E15E46 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0424EB7020C038AE00E15E46 /* sound.mp3 */; };
+		154999DC25D531E300835EFA /* evil.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 154999DB25D531E300835EFA /* evil.m4a */; };
+		15594D8425DD4D9900BE602D /* TODO.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594D8325DD4D9900BE602D /* TODO.rtf */; };
+		15594D8725DD4DF000BE602D /* Tracked Issues.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594D8625DD4DF000BE602D /* Tracked Issues.rtf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 		0424EB6E20BF0FAE00E15E46 /* AlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmViewController.swift; sourceTree = "<group>"; };
 		0424EB7020C038AE00E15E46 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
+		154999DB25D531E300835EFA /* evil.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = evil.m4a; sourceTree = "<group>"; };
+		15594D8325DD4D9900BE602D /* TODO.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = TODO.rtf; sourceTree = "<group>"; };
+		15594D8625DD4DF000BE602D /* Tracked Issues.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Tracked Issues.rtf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,19 +70,70 @@
 		0424EB5220BEF89000E15E46 /* WakyZzz */ = {
 			isa = PBXGroup;
 			children = (
-				0424EB7020C038AE00E15E46 /* sound.mp3 */,
-				0424EB6820BEF93F00E15E46 /* Alarm.swift */,
-				0424EB6A20BEF96400E15E46 /* Action.swift */,
 				0424EB5320BEF89000E15E46 /* AppDelegate.swift */,
-				0424EB5520BEF89000E15E46 /* AlarmsViewController.swift */,
-				0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */,
-				0424EB6E20BF0FAE00E15E46 /* AlarmViewController.swift */,
-				0424EB5720BEF89000E15E46 /* Main.storyboard */,
+				15594D8C25DD53B000BE602D /* Model */,
+				0424EB6A20BEF96400E15E46 /* Action.swift */,
+				15594D8E25DD53BE00BE602D /* Controller */,
+				15594D9025DD53CA00BE602D /* View */,
+				15594D8B25DD539D00BE602D /* Storyboards */,
+				15594D8A25DD538C00BE602D /* Sounds */,
+				15594D8925DD537500BE602D /* Todo and Tracking */,
 				0424EB5A20BEF89100E15E46 /* Assets.xcassets */,
-				0424EB5C20BEF89100E15E46 /* LaunchScreen.storyboard */,
 				0424EB5F20BEF89100E15E46 /* Info.plist */,
 			);
 			path = WakyZzz;
+			sourceTree = "<group>";
+		};
+		15594D8925DD537500BE602D /* Todo and Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				15594D8625DD4DF000BE602D /* Tracked Issues.rtf */,
+				15594D8325DD4D9900BE602D /* TODO.rtf */,
+			);
+			path = "Todo and Tracking";
+			sourceTree = "<group>";
+		};
+		15594D8A25DD538C00BE602D /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				0424EB7020C038AE00E15E46 /* sound.mp3 */,
+				154999DB25D531E300835EFA /* evil.m4a */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		15594D8B25DD539D00BE602D /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				0424EB5C20BEF89100E15E46 /* LaunchScreen.storyboard */,
+				0424EB5720BEF89000E15E46 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		15594D8C25DD53B000BE602D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0424EB6820BEF93F00E15E46 /* Alarm.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		15594D8E25DD53BE00BE602D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0424EB5520BEF89000E15E46 /* AlarmsViewController.swift */,
+				0424EB6E20BF0FAE00E15E46 /* AlarmViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		15594D9025DD53CA00BE602D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +196,10 @@
 			files = (
 				0424EB7120C038AE00E15E46 /* sound.mp3 in Resources */,
 				0424EB5E20BEF89100E15E46 /* LaunchScreen.storyboard in Resources */,
+				15594D8425DD4D9900BE602D /* TODO.rtf in Resources */,
+				15594D8725DD4DF000BE602D /* Tracked Issues.rtf in Resources */,
 				0424EB5B20BEF89100E15E46 /* Assets.xcassets in Resources */,
+				154999DC25D531E300835EFA /* evil.m4a in Resources */,
 				0424EB5920BEF89000E15E46 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

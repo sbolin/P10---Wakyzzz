@@ -76,6 +76,7 @@ class AlarmViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func cancelButtonPress(_ sender: Any) {
+        delegate?.alarmViewControllerCancel() //
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
