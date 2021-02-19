@@ -1,5 +1,5 @@
 //
-//  AlarmViewController.swift
+//  SetAlarmViewController.swift
 //  WakyZzz
 //
 //  Created by Olga Volkova on 2018-05-30.
@@ -9,18 +9,18 @@
 import Foundation
 import UIKit
 
-protocol AlarmViewControllerDelegate {
-    func alarmViewControllerDone(alarm: Alarm)
-    func alarmViewControllerCancel()
+protocol SetAlarmViewControllerDelegate {
+    func setAlarmViewControllerDone(alarm: Alarm)
+    func setAlarmViewControllerCancel()
 }
 
-class AlarmViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var tableView: UITableView!
     var alarm: Alarm?
     
-    var delegate: AlarmViewControllerDelegate?
+    var delegate: SetAlarmViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ class AlarmViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         
-        datePicker.date = (alarm?.alarmDate)!
+        datePicker.date = (alarm?.alarmTimeAndDate)!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -76,16 +76,16 @@ class AlarmViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func cancelButtonPress(_ sender: Any) {
-        delegate?.alarmViewControllerCancel() //
+        delegate?.setAlarmViewControllerCancel() //
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func doneButtonPress(_ sender: Any) {
-        delegate?.alarmViewControllerDone(alarm: alarm!)
+        delegate?.setAlarmViewControllerDone(alarm: alarm!)
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     @IBAction func datePickerValueChanged(_ sender: Any) {
-        alarm?.setTime(date: datePicker.date)
+        alarm?.setAlarmTime(date: datePicker.date)
     }
     
 }

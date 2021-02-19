@@ -15,13 +15,28 @@ General:\
 Alarm.swift:\
 	1.	\cf2 var time = 8 * 3600 \cf3 // ( was 360 )\cf0 \
 	2.	\cf2 let components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)  \cf3 // ( var changed to let )\
+\cf0 	3.	Added \cf2 var snoozed = false \cf3 // ( new parameter )\cf0 \
+	4.	Changed \cf2 let h = ... \cf0 to\cf2  let hour = \cf3 // ( clarify parameter neame )\cf0 \
+	5.	Changed \cf2 let m = ... \cf0 to\cf2  let minute =  \cf3 // ( clarify parameter name)\cf0 \
+	6.	Changed \cf2 var components = ... \cf0 to\cf2  var alarmTimeComponents =  \cf3 // ( clarify parameter name)\cf0 \
+	7.	Changed \cf2 var alarmDate = ... \cf0 to\cf2  var alarmTimeAndDate =  \cf3 // ( clarify parameter name)\cf0 \
+	8.	Changed \cf2 var caption = ... \cf0 to\cf2  var repeatingDayString =  \cf3 // ( clarify parameter name)\cf0 \
+	9.	Changed \cf2 func setTime(date:) ... \cf0 to\cf2  func setAlarmTime(date:) =  \cf3 // ( clarify function name)\cf0 \
+\cf3 \
 \cf4 	\
 AlarmsViewController.swift:\
 	1. change \cf2 editActionsForRowAt\cf4  to \cf2 trailingSwipeActionsConfigurationForRowAt \cf3 // ( editActionsForRowAt is deprecated, change to trailingSwipeActions... )\
-\cf4 	2.	\cf2 alarms.remove(at: alarms.count)\cf4  incorrect, changed to \cf2 alarms.remove(at: indexPath.row)\cf3   // ( alarms.count is total number of alarms, need to delete alarm at indexpath.row )\cf2 \
+\cf4 	2.	\cf2 alarms.remove(at: alarms.count)\cf4  incorrect, changed to \cf2 alarms.remove(at: indexPath.row)\cf3   // ( alarms.count is total number of alarms, need to delete alarm at indexpath.row )\
+\cf4 	3. refactor code into extensions, with  \cf3 // ( editActionsForRowAt is deprecated, change to trailingSwipeActions... )\cf2 \
 \cf4 \
 AlarmViewController:\
 	1. add \cf2 delegate?.alarmViewControllerCancel() \cf3 // ( delegate method to cancel alarm was not called )\
+\cf0 	2.	Changed name to SetAlarmViewController to better reflect what it does and to better distinguish it from AlarmsViewController\
+\
+\cf4 SetAlarmViewController:\cf3 \
+\cf0 	1.	Changed name from AlarmViewController (see above)\
 \cf4 \
+\
+\
 Evil.m4a added (evil sound played until turned off by action)\
 }

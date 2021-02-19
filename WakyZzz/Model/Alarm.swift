@@ -8,33 +8,35 @@
 
 import Foundation 
 
-class Alarm { 
+class Alarm: Codable { 
     
     static let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
     var time = 8 * 3600 // 360
     var repeatDays = [false, false, false, false, false, false, false]
     var enabled = true
+    var snoozed = false // new
     
-    var alarmDate: Date? {
+    
+    var alarmTimeAndDate: Date? {
         let date = Date()
         let calendar = Calendar.current
-        let h = time/3600
-        let m = time/60 - h * 60
+        let hour = time/3600 // h
+        let minute = time/60 - hour * 60 // m
         
-        var components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
+        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
         
-        components.hour = h
-        components.minute = m
+        alarmTimeComponents.hour = hour
+        alarmTimeComponents.minute = minute
         
-        return calendar.date(from: components)
+        return calendar.date(from: alarmTimeComponents)
     }
     
-    var caption: String {        
+    var repeatingDayString: String {        
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-        return formatter.string(from: self.alarmDate!)
+        return formatter.string(from: self.alarmTimeAndDate!)
     }
     
     var repeating: String {
@@ -47,7 +49,7 @@ class Alarm {
         return captions.count > 0 ? captions.joined(separator: ", ") : "One time alarm"
     }
     
-    func setTime(date: Date) {
+    func setAlarmTime(date: Date) {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
         
