@@ -9,37 +9,40 @@
 import UIKit
 
 class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK:- Outlets
     @IBOutlet weak var tableView: UITableView!
     
+    //MARK: - Properties
+    var alarm = Alarm() // for initial dummy data setup, will be removed
     var alarms = [Alarm]()
     var editingIndexPath: IndexPath?
     
-    @IBAction func addButtonPress(_ sender: Any) {
-        presentSetAlarmViewController(alarm: nil)
-    }
+    //MARK: Set up data store
+    
 
+    
+//MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        config()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        configureTableView()
+        // for now, populate Alarms
+        if alarms.count == 0 {
+            populateAlarms()
+        }
     }
     
-    func config() {
-        
+    // Setup TableView delegate and datasource, populate alarms
+    func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // for now, populateAlarms each time, but in the future this isn't needed - user adds their own alarms
-        populateAlarms()
-        
     }
     
+    // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
     func populateAlarms() {
         
-        var alarm: Alarm
-        
         // Weekdays 5am
-        alarm = Alarm()
         alarm.time = 5 * 3600
         for i in 1 ... 5 {
             alarm.repeatDays[i] = true
@@ -55,6 +58,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         alarms.append(alarm)
     }
     
+    //MARK: - Tableview delegate methods
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -73,6 +77,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    //MARK: Set up table view editing
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
             self.deleteAlarm(at: indexPath)
@@ -128,6 +133,11 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         setAlarmViewController.alarm = alarm
         setAlarmViewController.delegate = self
         present(popupViewController, animated: true, completion: nil)
+    }
+    
+    //MARK: - Actions
+    @IBAction func addButtonPress(_ sender: Any) {
+        presentSetAlarmViewController(alarm: nil)
     }
 }
 
