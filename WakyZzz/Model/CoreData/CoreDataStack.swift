@@ -47,7 +47,7 @@ class CoreDataStack {
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: managedContext,
-            sectionNameKeyPath: #keyPath(AlarmEntity.status), // use if works, otherwise use nil,
+            sectionNameKeyPath: #keyPath(AlarmEntity.enabled), // use if works, otherwise use nil,
             cacheName: nil)
             
         return fetchedResultsController
@@ -66,28 +66,53 @@ class CoreDataStack {
         }
     }
     
-    func createAlarm() {
-        let newAlarm = AlarmEntity(context: managedContext)
-        newAlarm.alarmTime = 8 * 60 * 60
-        newAlarm.repeating = false
-        newAlarm.repeatDays = "0000000"
-        newAlarm.snoozed = false
-        newAlarm.snoozedTimes = 0
-        newAlarm.status = true // alarm turned on when created
+    func createAlarmEntity() {
+        let newAlarmEntity = AlarmEntity(context: managedContext)
+        newAlarmEntity.alarmTime = 8 * 60 * 60
+        newAlarmEntity.repeating = false
+        newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
+        newAlarmEntity.snoozed = false
+        newAlarmEntity.snoozedTimes = 0
+        newAlarmEntity.enabled = true // alarm turned on when created
         
         saveContext(managedContext: managedContext)
     }
     
-    func modifyAlarm(at indexPath: IndexPath) {
-        let alarm = fetchedAlarmResultsController.object(at: indexPath)
-        // ? need to find out what changed and set it
-        
+    func changeAlarmStatus(at indexPath: IndexPath, status: Bool) {
+        let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
+        alarmEntity.enabled = status
         saveContext(managedContext: managedContext)
     }
     
-    func deleteAlarm(at indexPath: IndexPath) {
-        let alarm = fetchedAlarmResultsController.object(at: indexPath)
-        managedContext.delete(alarm)
+    func changeAlarmTime(at indexPath: IndexPath, time: Int) {
+        let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
+        alarmEntity.alarmTime = Int32(time)
+        saveContext(managedContext: managedContext)
+    
+    }
+    
+    func changeRepeateDays(at indexPath: IndexPath, repeatDays: [Bool]) {
+        let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
+        alarmEntity.repeatDays = repeatDays
+        saveContext(managedContext: managedContext)
+    }
+    
+    func deleteAlarmEntity(at indexPath: IndexPath) {
+        let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
+        managedContext.delete(alarmEntity)
+        saveContext(managedContext: managedContext)
+    }
+    
+    func createAlarmEntityFromAlarmObject(alarm: Alarm) {
+        let newAlarmEntity = AlarmEntity(context: managedContext)
+        
+        newAlarmEntity.alarmTime = Int32(alarm.time)
+        newAlarmEntity.repeatDays = alarm.repeatDays
+        newAlarmEntity.repeating = alarm.repeatDays.contains(true) ? true : false
+        newAlarmEntity.snoozed = alarm.snoozed
+        newAlarmEntity.snoozedTimes = Int16(alarm.timeSnoozed)
+        newAlarmEntity.enabled = alarm.enabled
+        
         saveContext(managedContext: managedContext)
     }
 }

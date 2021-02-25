@@ -71,7 +71,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath) as! AlarmTableViewCell
         cell.delegate = self
         if let alarm = alarm(at: indexPath) {
-            cell.populate(caption: alarm.repeatingDayString, subcaption: alarm.repeating, enabled: alarm.enabled)
+            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
         }
         
         return cell
@@ -100,7 +100,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func deleteAlarm(at indexPath: IndexPath) {
-        // need to delete alarm from userdefaults
+        // need to delete alarm from coredata
         tableView.beginUpdates()
         print("Deleting alarm at indexPath\(indexPath.row)")
         alarms.remove(at: indexPath.row) // alarms.count
@@ -147,7 +147,7 @@ extension AlarmsViewController: AlarmCellDelegate {
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
         if let indexPath = tableView.indexPath(for: cell) {
             if let alarm = self.alarm(at: indexPath) {
-                // need to update userdefaults
+                // need to update coredata
                 alarm.enabled = enabled
             }
         }
