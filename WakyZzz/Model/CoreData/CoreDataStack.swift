@@ -12,7 +12,7 @@ import CoreData
 class CoreDataStack {
     
     //MARK: - Create Core Data Stack
-    private lazy var persistentContainer: NSPersistentContainer = {
+    lazy var persistentContainer: NSPersistentContainer = {
         
         let container = NSPersistentContainer(name: "WakyZzz")
         container.loadPersistentStores { storeDescription, error in
@@ -21,6 +21,11 @@ class CoreDataStack {
             }
         }
         return container
+    }()
+    
+    lazy var model: NSManagedObjectModel = {
+        let modelURL = Bundle.main.url(forResource: "WakyZzz", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
     // main managed Context
