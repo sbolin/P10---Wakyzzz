@@ -41,7 +41,7 @@ class CoreDataStack {
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
         request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
-        let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.alarmTime, ascending: true)
+        let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
         request.sortDescriptors = [alarmTimeSort]
         
         let fetchedResultsController = NSFetchedResultsController(
@@ -68,11 +68,10 @@ class CoreDataStack {
     
     func createAlarmEntity() {
         let newAlarmEntity = AlarmEntity(context: managedContext)
-        newAlarmEntity.alarmTime = 8 * 60 * 60
-        newAlarmEntity.repeating = false
+        newAlarmEntity.time = 8 * 60 * 60
         newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
         newAlarmEntity.snoozed = false
-        newAlarmEntity.snoozedTimes = 0
+        newAlarmEntity.timesSnoozed = 0
         newAlarmEntity.enabled = true // alarm turned on when created
         
         saveContext(managedContext: managedContext)
@@ -84,9 +83,12 @@ class CoreDataStack {
         saveContext(managedContext: managedContext)
     }
     
-    func changeAlarmTime(at indexPath: IndexPath, time: Int) {
+    func changeAlarmTime(at indexPath: IndexPath, date: Date) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
-        alarmEntity.alarmTime = Int32(time)
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
+        let time = components.hour! * 3600 + components.minute! * 60
+        alarmEntity.time = Int32(time)
         saveContext(managedContext: managedContext)
     
     }
@@ -106,11 +108,10 @@ class CoreDataStack {
     func createAlarmEntityFromAlarmObject(alarm: Alarm) {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         
-        newAlarmEntity.alarmTime = Int32(alarm.time)
+        newAlarmEntity.time = Int32(alarm.time)
         newAlarmEntity.repeatDays = alarm.repeatDays
-        newAlarmEntity.repeating = alarm.repeatDays.contains(true) ? true : false
         newAlarmEntity.snoozed = alarm.snoozed
-        newAlarmEntity.snoozedTimes = Int16(alarm.timeSnoozed)
+        newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
         newAlarmEntity.enabled = alarm.enabled
         
         saveContext(managedContext: managedContext)

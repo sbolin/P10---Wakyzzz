@@ -46,7 +46,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     struct AlertContext {
         static let alarmOff = AlertItem(title: "Turn Off Alarm", subtitle: "Alarm will be turned off", body: "Body of notification", type: .alarmTurnedOff)
         
-        static let alarmSnoozed = AlertItem(title: "Snooze Alarm", subtitle: "Snooze for 10 minutes", body: "Body of notification", type: .alarmSnoozed)
+        static let alarmSnoozed = AlertItem(title: "Snooze Alarm", subtitle: "Snooze for 1 minute", body: "Body of notification", type: .alarmSnoozed)
     }
     
 // End TODO: Above needs to be worked on
@@ -107,7 +107,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                 
             case .alarmSnoozed:
                 let alarmSnoozed = UNNotificationAction(identifier: "ALARM_SNOOZED",
-                                                   title: "Alarm Snoozed for 10 Minutes",
+                                                   title: "Alarm Snoozed for 1 Minute",
                                                    options: .foreground)
                 let category = UNNotificationCategory(identifier: identifier,
                                                       actions: [alarmSnoozed],

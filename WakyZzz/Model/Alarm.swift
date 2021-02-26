@@ -16,7 +16,7 @@ class Alarm: Codable {
     var repeatDays = [false, false, false, false, false, false, false]
     var enabled = true
     var snoozed = false // new
-    var timeSnoozed = 0 // new
+    var timesSnoozed = 0 // new
     
     
     var alarmTimeAndDate: Date? {
@@ -24,15 +24,16 @@ class Alarm: Codable {
         let calendar = Calendar.current
         let hour = time/3600 // h
         let minute = time/60 - hour * 60 // m
-        
+
         var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
-        
+
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute
-        
+
         return calendar.date(from: alarmTimeComponents)
     }
     
+    // computed property
     var localAlarmTimeString: String { // switched name to localAlarmTimeString from repeatingDayString
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -40,6 +41,7 @@ class Alarm: Codable {
         return formatter.string(from: self.alarmTimeAndDate!)
     }
     
+    // computed property
     var repeatingDayString: String { // switched name to repeatingDayString from repeating
         var captions = [String]()
         for i in 0 ..< repeatDays.count {

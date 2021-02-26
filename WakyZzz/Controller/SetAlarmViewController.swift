@@ -40,7 +40,12 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         
-        datePicker.date = (alarm?.alarmTimeAndDate)!
+        // initially show 8am on datepicker
+        var components = DateComponents()
+        components.hour = 8
+        components.minute = 0
+        let date = Calendar.current.date(from: components) ?? Date()
+        datePicker.date = date
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -48,7 +53,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Alarm.daysOfWeek.count
+        return Alarm.daysOfWeek.count // Alarm.daysOfWeek.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,29 +85,11 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     @IBAction func cancelButtonPress(_ sender: Any) {
         delegate?.setAlarmViewControllerCancel() //
         presentingViewController?.dismiss(animated: true, completion: nil)
-        print("Cancel pressed: alarm = ")
-        print("alarm?.alarmTimeAndDate \(String(describing: alarm?.alarmTimeAndDate))")
-        print("alarm?.enabled \(alarm?.enabled)")
-        print("alarm?.repeatDays \(alarm?.repeatDays)")
-        print("alarm?.repeatingDayString \(alarm?.repeatingDayString)")
-        print("alarm?.localAlarmTimeString \(alarm?.localAlarmTimeString)") // don't understand this output?
-        print("alarm?.snoozed \(alarm?.snoozed)")
-        print("alarm?.time \(alarm?.time)")
-        print("alarm?.timeSnoozed \(alarm?.timeSnoozed)")
     }
     
     @IBAction func doneButtonPress(_ sender: Any) {
         delegate?.setAlarmViewControllerDone(alarm: alarm!)
         presentingViewController?.dismiss(animated: true, completion: nil)
-        print("Done pressed: alarm = ")
-        print("alarm?.alarmTimeAndDate \(String(describing: alarm?.alarmTimeAndDate))")
-        print("alarm?.enabled \(alarm?.enabled)")
-        print("alarm?.repeatDays \(alarm?.repeatDays)")
-        print("alarm?.repeatingDayString \(alarm?.repeatingDayString)")
-        print("alarm?.localAlarmTimeString \(alarm?.localAlarmTimeString)") // don't understand this output?
-        print("alarm?.snoozed \(alarm?.snoozed)")
-        print("alarm?.time \(alarm?.time)")
-        print("alarm?.timeSnoozed \(alarm?.timeSnoozed)")
     }
     @IBAction func datePickerValueChanged(_ sender: Any) {
         alarm?.setAlarmTime(date: datePicker.date)
