@@ -22,12 +22,12 @@
 		15594D8725DD4DF000BE602D /* Tracked Issues.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594D8625DD4DF000BE602D /* Tracked Issues.rtf */; };
 		15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DA125DE4D4F00BE602D /* NotifcationController.swift */; };
 		15594DB125E10EBF00BE602D /* ClientSpec.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594DB025E10EBF00BE602D /* ClientSpec.rtf */; };
-		15594DB625E12E8B00BE602D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DB525E12E8B00BE602D /* CoreDataStack.swift */; };
+		15594DB625E12E8B00BE602D /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DB525E12E8B00BE602D /* CoreDataController.swift */; };
 		15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */; };
 		15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */; };
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
 		15D4AA2125E97B58000E4BF0 /* WakyZzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */; };
-		15D4AA2D25E97C73000E4BF0 /* MockCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2C25E97C73000E4BF0 /* MockCoreDataStack.swift */; };
+		15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,14 +58,14 @@
 		15594D8625DD4DF000BE602D /* Tracked Issues.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Tracked Issues.rtf"; sourceTree = "<group>"; };
 		15594DA125DE4D4F00BE602D /* NotifcationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifcationController.swift; sourceTree = "<group>"; };
 		15594DB025E10EBF00BE602D /* ClientSpec.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ClientSpec.rtf; sourceTree = "<group>"; };
-		15594DB525E12E8B00BE602D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		15594DB525E12E8B00BE602D /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		15C7E6E525E6B9C400630D13 /* WakyZzz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WakyZzz.xcdatamodel; sourceTree = "<group>"; };
 		15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		15D4AA1E25E97B58000E4BF0 /* WakyZzzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakyZzzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzTests.swift; sourceTree = "<group>"; };
 		15D4AA2225E97B58000E4BF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		15D4AA2C25E97C73000E4BF0 /* MockCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataStack.swift; sourceTree = "<group>"; };
+		15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,7 +181,7 @@
 			children = (
 				15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */,
 				15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */,
-				15594DB525E12E8B00BE602D /* CoreDataStack.swift */,
+				15594DB525E12E8B00BE602D /* CoreDataController.swift */,
 				15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -191,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */,
-				15D4AA2C25E97C73000E4BF0 /* MockCoreDataStack.swift */,
+				15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */,
 				15D4AA2225E97B58000E4BF0 /* Info.plist */,
 			);
 			path = WakyZzzTests;
@@ -303,7 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15594DB625E12E8B00BE602D /* CoreDataStack.swift in Sources */,
+				15594DB625E12E8B00BE602D /* CoreDataController.swift in Sources */,
 				15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */,
 				0424EB5620BEF89000E15E46 /* AlarmsViewController.swift in Sources */,
 				0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */,
@@ -322,7 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15D4AA2125E97B58000E4BF0 /* WakyZzzTests.swift in Sources */,
-				15D4AA2D25E97C73000E4BF0 /* MockCoreDataStack.swift in Sources */,
+				15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 //
-//  MockCoreDataStack.swift
+//  TestCoreDataController.swift
 //  WakyZzzTests
 //
 //  Created by Scott Bolin on 2/27/21.
@@ -7,10 +7,9 @@
 //
 
 @testable import WakyZzz
-import Foundation
 import CoreData
 
-class MockCoreDataStack: CoreDataStack {
+class TestCoreDataController: CoreDataController {
     
     override init() {
         super.init()
@@ -20,8 +19,8 @@ class MockCoreDataStack: CoreDataStack {
         persistentStoreDescription.url = URL(fileURLWithPath: "/dev/null")
         
         let container = NSPersistentContainer(
-            name: "WakyZzz",
-            managedObjectModel: CoreDataStack().model)
+            name: CoreDataController.shared.modelName,
+            managedObjectModel: CoreDataController.shared.model)
         
         container.persistentStoreDescriptions = [persistentStoreDescription]
         
