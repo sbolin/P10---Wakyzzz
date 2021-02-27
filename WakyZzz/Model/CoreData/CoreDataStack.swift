@@ -73,11 +73,11 @@ class CoreDataStack {
     
     func createAlarmEntity() {
         let newAlarmEntity = AlarmEntity(context: managedContext)
+        newAlarmEntity.enabled = true // alarm turned on when created
         newAlarmEntity.time = 8 * 60 * 60
         newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
         newAlarmEntity.snoozed = false
         newAlarmEntity.timesSnoozed = 0
-        newAlarmEntity.enabled = true // alarm turned on when created
         
         saveContext(managedContext: managedContext)
     }
