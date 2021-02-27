@@ -45,7 +45,7 @@ class CoreDataStack {
     //MARK: - Fetch Properties
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
-        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
+ //       request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
         request.sortDescriptors = [alarmTimeSort]
         
