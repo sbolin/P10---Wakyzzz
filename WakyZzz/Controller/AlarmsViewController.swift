@@ -33,6 +33,11 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkNotificationStatus()
+    }
+    
     // Setup TableView delegate and datasource, populate alarms
     func configureTableView() {
         tableView.delegate = self
@@ -56,6 +61,28 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         alarm.repeatDays[0] = true
         alarm.repeatDays[6] = true
         alarms.append(alarm)
+    }
+    
+    //MARK: - Check Notification Status, user could have changed it.
+    private func checkNotificationStatus() {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .authorized {
+                // Authorized, no need to do anything
+                return
+            } else {
+                // Not Authorized, request authorization.
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+                    if granted {
+                        print("Notification authorized, can proceed")
+                    }
+                    if let error = error {
+                        print("Error granting notifications, \(error), \(error.localizedDescription)")
+                        //TODO: Should throw up an alert, letting user know that app is useless without notifications
+                    }
+                }
+            }
+        }
     }
     
     //MARK: - Tableview delegate methods

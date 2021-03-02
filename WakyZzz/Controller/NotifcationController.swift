@@ -10,8 +10,8 @@ import UIKit
 import UserNotifications
 
 enum NotificationType {
-    case alarmTurnedOff
-    case alarmSnoozed
+    case turnOffOrSnooze
+    case alarmSnoozedThreeTimes
 }
 
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {
@@ -27,31 +27,27 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         
 
 // TODO: Below Needs to be worked on....
-        var id = UUID()
         var title = String()
         var subtitle = String()
         var body = String()
+        let snoozedTimes = Int()
         let type: NotificationType
         
-    }
-    
-    struct AlertItem: Identifiable {
-        let id = UUID()
-        let title: String
-        let subtitle: String
-        let body: String
-        let type: NotificationType
-    }
+        if snoozedTimes < 3 {
+            type = NotificationType.turnOffOrSnooze
+            title = "Turn Alarm Off 🔕 or Snooze? 😴"
+            subtitle = "Shut off or snooze for 1 minute"
+            body = "Body of notification"
+        } else {
+            type = NotificationType.alarmSnoozedThreeTimes
+            title = "Act of Kindness Alert! ⚠️"
+            subtitle = "You must perform an act of kindness to turn alarm off"
+            body = "Body of notification"
+        }
         
-    struct AlertContext {
-        static let alarmOff = AlertItem(title: "Turn Off Alarm", subtitle: "Alarm will be turned off", body: "Body of notification", type: .alarmTurnedOff)
+        setupNotification(title: title, subtitle: subtitle, body: body, notificationType: type)
         
-        static let alarmSnoozed = AlertItem(title: "Snooze Alarm", subtitle: "Snooze for 1 minute", body: "Body of notification", type: .alarmSnoozed)
     }
-    
-// End TODO: Above needs to be worked on
-
-    
     
     //MARK: - Schedule Notification
     private func setupNotification(title: String?, subtitle: String?, body: String?, notificationType: NotificationType) {
@@ -95,7 +91,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         switch notificationType {
-            case .alarmTurnedOff:
+            case .turnOffOrSnooze:
                 let alarmOff = UNNotificationAction(identifier: "ALARM_OFF",
                                                    title: "Alarm Turned Off",
                                                    options: .foreground)
@@ -104,13 +100,13 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                       intentIdentifiers: [],
                                                       options: .customDismissAction)
                 center.setNotificationCategories([category])
-                
-            case .alarmSnoozed:
-                let alarmSnoozed = UNNotificationAction(identifier: "ALARM_SNOOZED",
-                                                   title: "Alarm Snoozed for 1 Minute",
-                                                   options: .foreground)
+            
+            case .alarmSnoozedThreeTimes:
+                let alarmSnoozedThreeTimes = UNNotificationAction(identifier: "ALARM_SNOOZED3TIMES",
+                                                        title: "Alarm Snoozed for 3rd Time!",
+                                                        options: .foreground)
                 let category = UNNotificationCategory(identifier: identifier,
-                                                      actions: [alarmSnoozed],
+                                                      actions: [alarmSnoozedThreeTimes],
                                                       intentIdentifiers: [],
                                                       options: .customDismissAction)
                 center.setNotificationCategories([category])

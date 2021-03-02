@@ -24,7 +24,6 @@ final class WakyZzzTests: XCTestCase {
         }
         do {
             try fetchedResultsController.performFetch()
-            print("performed fetch...")
         } catch {
             print("Fetch failed")
         }
