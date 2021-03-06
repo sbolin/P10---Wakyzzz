@@ -10,8 +10,18 @@ import UIKit
 import UserNotifications
 
 enum NotificationType {
-    case turnOffOrSnooze
+    case turnOff
+    case alarmSnoozed
     case alarmSnoozedThreeTimes
+}
+
+enum ActOfKindness: String, CaseIterable {
+    case messageFriend = "Send a message to a friend asking how they are doing"
+    case contactFamily = "Send a kind thought to a family member"
+    case donateToCharity = "Send some money to your favorite charity"
+    case volunteer = "Volunteer at local homeless shelter"
+    case giveGifts = "Give gifts to local orphanage"
+    case payItForward = "Pay for next person in line"
 }
 
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {
@@ -30,24 +40,35 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         var title = String()
         var subtitle = String()
         var body = String()
+        var actOfKindness: String {
+            ActOfKindness.allCases.randomElement()!.rawValue
+        }
         let snoozedTimes = Int()
         let type: NotificationType
         
-        if snoozedTimes < 3 {
-            type = NotificationType.turnOffOrSnooze
+        if snoozedTimes == 0 {
+            type = NotificationType.turnOff
             title = "Turn Alarm Off 🔕 or Snooze? 😴"
             subtitle = "Shut off or snooze for 1 minute"
             body = "Body of notification"
         } else {
-            type = NotificationType.alarmSnoozedThreeTimes
-            title = "Act of Kindness Alert! ⚠️"
-            subtitle = "You must perform an act of kindness to turn alarm off"
-            body = "Body of notification"
+            if snoozedTimes < 3 {
+                type = NotificationType.alarmSnoozed
+                title = "Turn Alarm Off 🔕 or Snooze? 😴"
+                subtitle = "Shut off or snooze for 1 minute"
+                body = "You have snoozed \(snoozedTimes) out of 3"
+            } else {
+                type = NotificationType.alarmSnoozedThreeTimes
+                title = "Act of Kindness Alert! ⚠️"
+                subtitle = "You must perform an act of kindness to turn alarm off"
+                body = "Random act of kindness: \(actOfKindness)"
+            }
         }
         
         setupNotification(title: title, subtitle: subtitle, body: body, notificationType: type)
         
     }
+        
     
     //MARK: - Schedule Notification
     private func setupNotification(title: String?, subtitle: String?, body: String?, notificationType: NotificationType) {
@@ -87,16 +108,32 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
+    func removeNotification(at identifier: String) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
+
+    
     func registerCategory(notificationType: NotificationType) {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         switch notificationType {
-            case .turnOffOrSnooze:
+            case .turnOff:
                 let alarmOff = UNNotificationAction(identifier: "ALARM_OFF",
                                                    title: "Alarm Turned Off",
                                                    options: .foreground)
                 let category = UNNotificationCategory(identifier: identifier,
                                                       actions: [alarmOff],
+                                                      intentIdentifiers: [],
+                                                      options: .customDismissAction)
+                center.setNotificationCategories([category])
+            
+            case .alarmSnoozed:
+                let alarmSnoozed = UNNotificationAction(identifier: "ALARM_SNOOZED",
+                                                        title: "Alarm Snoozed",
+                                                        options: .foreground)
+                let category = UNNotificationCategory(identifier: identifier,
+                                                      actions: [alarmSnoozed],
                                                       intentIdentifiers: [],
                                                       options: .customDismissAction)
                 center.setNotificationCategories([category])
@@ -137,6 +174,11 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                 handleAlarmTapped?(false)
                 break
                 
+            case "ALARM_SNOOZED3TIMES":
+                // user tapped "Snooze Alarm" for third time
+                handleAlarmTapped?(false)
+                break
+                
             default:
                 break
         }
@@ -144,5 +186,28 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         completionHandler()
         // reset alarm
         UIApplication.shared.applicationIconBadgeNumber = 0
+    }
+    
+    func tempFunctionPrintNotifications() {
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (requests) in
+            var offCount = 0
+            var snoozeCount = 0
+            var snoozed3TimesCount = 0
+            
+            for request in requests {
+                print("Notification: \(request.content)")
+                
+                if request.identifier == "ALARM_OFF" {
+                    offCount += 1
+                } else if request.identifier == "ALARM_SNOOZED" {
+                    snoozeCount += 1
+                } else if request.identifier == "ALARM_SNOOZED3TIMES" {
+                snoozed3TimesCount += 1
+                } else if request === requests.last {
+                    print("No requests") 
+                }
+            }
+        })
     }
 }

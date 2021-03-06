@@ -14,18 +14,16 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     
     //MARK: - Properties
-    var alarm = Alarm() // for initial dummy data setup, will be removed
+    var alarm = Alarm()
     var alarms = [Alarm]()
     var editingIndexPath: IndexPath?
-    
+    private let notification = NotificationController()
     //MARK: Set up data store
-    
 
-    
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
+ //       self.navigationItem.leftBarButtonItem = self.editButtonItem
         configureTableView()
         // for now, populate Alarms
         if alarms.count == 0 {
