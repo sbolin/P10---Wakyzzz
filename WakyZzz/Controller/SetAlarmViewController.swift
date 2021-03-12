@@ -19,7 +19,9 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var tableView: UITableView!
     var alarm: Alarm?
-    
+    var alarmEntity: AlarmEntity?
+    lazy var coreDataController = CoreDataController()
+
     var delegate: SetAlarmViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -28,14 +30,22 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
         config()
     }
     
-    func config() {        
-        if alarm == nil {
+    func config() {
+        if alarmEntity == nil {
             navigationItem.title = "New Alarm"
-            alarm = Alarm()
+            coreDataController.createAlarmEntity()
+            
         }
         else {
             navigationItem.title = "Edit Alarm"
         }
+//        if alarm == nil {
+//            navigationItem.title = "New Alarm"
+//            alarm = Alarm()
+//        }
+//        else {
+//            navigationItem.title = "Edit Alarm"
+//        }
         
         tableView.delegate = self
         tableView.dataSource = self

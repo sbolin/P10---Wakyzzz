@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -19,6 +20,8 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var editingIndexPath: IndexPath?
     private let notification = NotificationController()
     //MARK: Set up data store
+//    lazy var coreDataController = CoreDataController()
+    var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
 
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
@@ -85,21 +88,34 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     //MARK: - Tableview delegate methods
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+ //       return 1
+        return fetchedResultsController.sections?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return alarms.count
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
+        //        return alarms.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath) as! AlarmTableViewCell
         cell.delegate = self
-        if let alarm = alarm(at: indexPath) {
-            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
-        }
-        
+        let fetchedAlarm = fetchedResultsController.object(at: indexPath)
+        cell.populate(caption: fetchedAlarm.localAlarmTimeString, subcaption: fetchedAlarm.repeatingDayString, enabled: fetchedAlarm.enabled)
+
+//        if let alarm = alarm(at: indexPath) {
+//            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
+//        }
         return cell
+    }
+    
+    // Added didSelectRowAt method, ask Peter if needed (this way, just select row to edit details)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
+            vc.alarmEntity = fetchedResultsController.object(at: indexPath)
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     //MARK: Set up table view editing
@@ -153,7 +169,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func presentSetAlarmViewController(alarm: Alarm?) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let popupViewController = storyboard.instantiateViewController(withIdentifier: "DetailNavigationController") as! UINavigationController
+        let popupViewController = storyboard.instantiateViewController(withIdentifier: "SetAlarm") as! UINavigationController
         let setAlarmViewController = popupViewController.viewControllers[0] as! SetAlarmViewController
         setAlarmViewController.alarm = alarm
         setAlarmViewController.delegate = self

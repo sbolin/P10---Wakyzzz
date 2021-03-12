@@ -43,11 +43,14 @@ AlarmsViewController.swift:\
 AlarmViewController:\
 	1. add \cf2 delegate?.alarmViewControllerCancel() \cf3 // ( delegate method to cancel alarm was not called )\
 \cf0 	2.	Changed name to SetAlarmViewController to better reflect what it does and to better distinguish it from AlarmsViewController\
+	3.	Change data source to Core Data\
+\
 \
 \cf4 SetAlarmViewController:\cf3 \
 \cf0 	1.	Changed name from AlarmViewController (see above)\
 	2. Changed datePicker to show 8am when SetAlarmViewController is instantiated.\
-	3.	Preparing to switch Alarm.swift model over to AlarmEntity, the CoreData model. \cf3 \
+	3.	Preparing to switch Alarm.swift model over to AlarmEntity, the CoreData model. \
+\cf3 \
 \cf0 \
 \cf4 CoreDataStack.swift:\
 	1. New file, set up Core Data Stack, include CRUD functionality\

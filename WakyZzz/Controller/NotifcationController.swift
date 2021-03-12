@@ -154,8 +154,13 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         completionHandler([.alert, .badge, .sound])
     }
     
-    // handle notifications
+    // handle notifications out of app
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        let userInfo = response.notification.request.content.userInfo
+        if let additionalData = userInfo["snoozeCount"] as? String {
+            print("Additional data: \(additionalData)")
+        }
         
         switch response.actionIdentifier {
             
