@@ -12,6 +12,7 @@ class Alarm: Codable {
     
     static let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
+    var alarmID = UUID()
     var time = 8 * 3600 // 360
     var repeatDays = [false, false, false, false, false, false, false]
     var enabled = true

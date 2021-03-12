@@ -8,10 +8,12 @@
 
 import Foundation
 
-class Action {
-    var caption: String!
-    
-    init(caption: String!) {
-        self.caption = caption
-    }
+enum Action: String, CaseIterable {
+    case messageFriend = "Send a message to a friend asking how they are doing"
+    case contactFamily = "Send a kind thought to a family member"
+    case donateToCharity = "Send some money to your favorite charity"
+    case volunteer = "Volunteer at local homeless shelter"
+    case giveGifts = "Give gifts to local orphanage"
+    case payItForward = "Pay for next person in line"
 }
+

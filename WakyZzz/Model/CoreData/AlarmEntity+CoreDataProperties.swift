@@ -17,6 +17,7 @@ extension AlarmEntity {
         return NSFetchRequest<AlarmEntity>(entityName: "AlarmEntity")
     }
 
+    @NSManaged public var alarmID: UUID
     @NSManaged public var enabled: Bool
     @NSManaged public var repeatDays: [Bool]
     @NSManaged public var snoozed: Bool
@@ -37,7 +38,7 @@ extension AlarmEntity {
         let hour = Int(time/3600) // h
         let minute = Int(time/60) - hour * 60 // m
         
-        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
+        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .second, .day, .month, .year, .weekdayOrdinal], from: date as Date)
         
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute

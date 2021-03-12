@@ -15,15 +15,6 @@ enum NotificationType {
     case alarmSnoozedThreeTimes
 }
 
-enum ActOfKindness: String, CaseIterable {
-    case messageFriend = "Send a message to a friend asking how they are doing"
-    case contactFamily = "Send a kind thought to a family member"
-    case donateToCharity = "Send some money to your favorite charity"
-    case volunteer = "Volunteer at local homeless shelter"
-    case giveGifts = "Give gifts to local orphanage"
-    case payItForward = "Pay for next person in line"
-}
-
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     
     //MARK: - Properties
@@ -31,17 +22,14 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     
     // closure for handling response to alarm
     var handleAlarmTapped: ((Bool) -> Void)?
-    
+
     //MARK: - Notification when Alarm changed (off/snooze)
     func manageLocalNotification() {
-        
-
-// TODO: Below Needs to be worked on....
         var title = String()
         var subtitle = String()
         var body = String()
         var actOfKindness: String {
-            ActOfKindness.allCases.randomElement()!.rawValue
+            Action.allCases.randomElement()!.rawValue
         }
         let snoozedTimes = Int()
         let type: NotificationType
@@ -112,6 +100,17 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
     }
+    
+    func removeAllDeliveredNotifications() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+    }
+    
+    func removePendingDeliveredNotifications() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllPendingNotificationRequests()
+    }
+
 
     
     func registerCategory(notificationType: NotificationType) {
@@ -152,7 +151,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     // Show notification when Wakyzzz.app is active
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Show the banner in-app
-        completionHandler([.alert, .sound])
+        completionHandler([.alert, .badge, .sound])
     }
     
     // handle notifications
@@ -188,6 +187,8 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
+    
+    
     func tempFunctionPrintNotifications() {
         
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (requests) in
@@ -209,5 +210,22 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                 }
             }
         })
+    }
+    
+    // create new content (based on old)
+    func updateNotification(notificationID: String) {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            for request in requests {
+                if request.identifier == notificationID { // note: must change UUID to string
+                    if let content = request.content.mutableCopy() as? UNMutableNotificationContent {
+                        // any changes
+                        content.title = "your new content's title"
+                        // create new notification
+                        let request = UNNotificationRequest(identifier: request.identifier, content: content, trigger: request.trigger)
+                        UNUserNotificationCenter.current().add(request)
+                    }
+                }
+            }
+        }
     }
 }

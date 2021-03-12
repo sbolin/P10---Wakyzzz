@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DA125DE4D4F00BE602D /* NotifcationController.swift */; };
 		15594DB125E10EBF00BE602D /* ClientSpec.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594DB025E10EBF00BE602D /* ClientSpec.rtf */; };
 		15594DB625E12E8B00BE602D /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DB525E12E8B00BE602D /* CoreDataController.swift */; };
+		15AE2D0625F376F400142463 /* xxx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AE2D0525F376F400142463 /* xxx.swift */; };
 		15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */; };
 		15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */; };
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
@@ -59,6 +60,7 @@
 		15594DA125DE4D4F00BE602D /* NotifcationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifcationController.swift; sourceTree = "<group>"; };
 		15594DB025E10EBF00BE602D /* ClientSpec.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ClientSpec.rtf; sourceTree = "<group>"; };
 		15594DB525E12E8B00BE602D /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
+		15AE2D0525F376F400142463 /* xxx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xxx.swift; sourceTree = "<group>"; };
 		15C7E6E525E6B9C400630D13 /* WakyZzz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WakyZzz.xcdatamodel; sourceTree = "<group>"; };
 		15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				0424EB5520BEF89000E15E46 /* AlarmsViewController.swift */,
 				0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */,
 				15594DA125DE4D4F00BE602D /* NotifcationController.swift */,
+				15AE2D0525F376F400142463 /* xxx.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -243,7 +246,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
-				ORGANIZATIONNAME = "Olga Volkova OC";
+				ORGANIZATIONNAME = TukgaeSoft;
 				TargetAttributes = {
 					0424EB4F20BEF89000E15E46 = {
 						CreatedOnToolsVersion = 9.3.1;
@@ -255,7 +258,7 @@
 				};
 			};
 			buildConfigurationList = 0424EB4B20BEF89000E15E46 /* Build configuration list for PBXProject "WakyZzz" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -311,6 +314,7 @@
 				15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */,
 				0424EB5420BEF89000E15E46 /* AppDelegate.swift in Sources */,
 				0424EB6B20BEF96400E15E46 /* Action.swift in Sources */,
+				15AE2D0625F376F400142463 /* xxx.swift in Sources */,
 				0424EB6920BEF93F00E15E46 /* Alarm.swift in Sources */,
 				15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */,
 				15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */,

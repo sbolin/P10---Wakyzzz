@@ -105,6 +105,7 @@ final class WakyZzzTests: XCTestCase {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
             print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
         }
         
         // fetch same goal
