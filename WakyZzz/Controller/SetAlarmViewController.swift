@@ -34,7 +34,6 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
         if alarmEntity == nil {
             navigationItem.title = "New Alarm"
             coreDataController.createAlarmEntity()
-            
         }
         else {
             navigationItem.title = "Edit Alarm"

@@ -22,6 +22,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     //MARK: Set up data store
 //    lazy var coreDataController = CoreDataController()
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
+    lazy var coreDataController = CoreDataController()
 
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
@@ -29,7 +30,10 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
  //       self.navigationItem.leftBarButtonItem = self.editButtonItem
         configureTableView()
         // for now, populate Alarms
-        if alarms.count == 0 {
+//        if alarms.count == 0 {
+//            populateAlarms()
+//        }
+        if fetchedResultsController.fetchedObjects == nil { // no alarms set
             populateAlarms()
         }
     }
@@ -47,7 +51,29 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
     func populateAlarms() {
+// using core data
+        let context = coreDataController.managedContext
+        let weekDayAlarmID = UUID()
+        coreDataController.createAlarmEntityWithID(id: weekDayAlarmID)
+        guard let weekDayAlarmEntity = coreDataController.fetchAlarmByAlarmID(with: weekDayAlarmID) else { return }
+        // Weekdays 5am
+        weekDayAlarmEntity.time = 5 * 3600
+        weekDayAlarmEntity.enabled = true
+        for i in 1 ... 5 {
+            weekDayAlarmEntity.repeatDays[i] = true
+        }
+        let weekEndAlarmID = UUID()
+        coreDataController.createAlarmEntityWithID(id: weekEndAlarmID)
+        guard let weekendAlarmEntity = coreDataController.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
+        weekendAlarmEntity.time = 9 * 3600
+        weekendAlarmEntity.enabled = false
+        weekendAlarmEntity.repeatDays[0] = true
+        weekendAlarmEntity.repeatDays[6] = true
+
+        coreDataController.saveContext(context: context)
         
+ // using Alarm object
+        /*
         // Weekdays 5am
         alarm.time = 5 * 3600
         for i in 1 ... 5 {
@@ -62,6 +88,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         alarm.repeatDays[0] = true
         alarm.repeatDays[6] = true
         alarms.append(alarm)
+ */
     }
     
     //MARK: - Check Notification Status, user could have changed it.
@@ -144,19 +171,22 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // need to delete alarm from coredata
         tableView.beginUpdates()
         print("Deleting alarm at indexPath\(indexPath.row)")
-        alarms.remove(at: indexPath.row) // alarms.count
+//        alarms.remove(at: indexPath.row) // alarms.count
+        coreDataController.deleteAlarmEntity(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }
     
     func editAlarm(at indexPath: IndexPath) {
-        editingIndexPath = indexPath
-        presentSetAlarmViewController(alarm: alarm(at: indexPath))
+        editingIndexPath = indexPath // What does this do?
+        let alarmEntity = fetchedResultsController.object(at: indexPath)
+        presentSetAlarmViewController(alarmEntity: alarmEntity) // (alarm: alarm(at: indexPath))
     }
     
     func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
         tableView.beginUpdates()
-        alarms.insert(alarm, at: indexPath.row)
+//        alarms.insert(alarm, at: indexPath.row)
+        coreDataController.createAlarmEntity()
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }
@@ -167,18 +197,24 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.reloadData()
     }
     
-    func presentSetAlarmViewController(alarm: Alarm?) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let popupViewController = storyboard.instantiateViewController(withIdentifier: "SetAlarm") as! UINavigationController
-        let setAlarmViewController = popupViewController.viewControllers[0] as! SetAlarmViewController
-        setAlarmViewController.alarm = alarm
-        setAlarmViewController.delegate = self
-        present(popupViewController, animated: true, completion: nil)
+    func presentSetAlarmViewController(alarmEntity: AlarmEntity?) { // change call site from (alarm: Alarm?)
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
+            vc.alarmEntity = alarmEntity
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+ // original code updated per above
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let popupViewController = storyboard.instantiateViewController(withIdentifier: "SetAlarm") as! UINavigationController
+//        let setAlarmViewController = popupViewController.viewControllers[0] as! SetAlarmViewController
+//        setAlarmViewController.alarm = alarm
+//        setAlarmViewController.delegate = self
+//        present(popupViewController, animated: true, completion: nil)
     }
     
     //MARK: - Actions
     @IBAction func addButtonPress(_ sender: Any) {
-        presentSetAlarmViewController(alarm: nil)
+        presentSetAlarmViewController(alarmEntity: nil) // (alarm: nil)
     }
 }
 
@@ -187,10 +223,11 @@ extension AlarmsViewController: AlarmCellDelegate {
     // AlarmCellDelegate method
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
         if let indexPath = tableView.indexPath(for: cell) {
-            if let alarm = self.alarm(at: indexPath) {
-                // need to update coredata
-                alarm.enabled = enabled
-            }
+            coreDataController.changeAlarmStatus(at: indexPath, status: enabled)
+//            if let alarm = self.alarm(at: indexPath) {
+// need to update coredata
+//               alarm.enabled = enabled
+//            }
         }
     }
 }

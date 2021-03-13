@@ -90,7 +90,17 @@ class CoreDataController {
         newAlarmEntity.snoozed = false
         newAlarmEntity.timesSnoozed = Int16(0)
         newAlarmEntity.enabled = true // alarm turned on when created
-        
+        saveContext(context: managedContext)
+    }
+    
+    func createAlarmEntityWithID(id: UUID) {
+        let newAlarmEntity = AlarmEntity(context: managedContext)
+        newAlarmEntity.alarmID = id
+        newAlarmEntity.time = Int32(8 * 60 * 60)
+        newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
+        newAlarmEntity.snoozed = false
+        newAlarmEntity.timesSnoozed = Int16(0)
+        newAlarmEntity.enabled = true // alarm turned on when created
         saveContext(context: managedContext)
     }
     
@@ -127,7 +137,6 @@ class CoreDataController {
     
     func deleteAlarmEntity(at indexPath: IndexPath) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
-        
         managedContext.delete(alarmEntity)
         saveContext(context: managedContext)
     }
