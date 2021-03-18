@@ -15,8 +15,8 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     
     //MARK: - Properties
-    var alarm = Alarm()
-    var alarms = [Alarm]()
+ //   var alarm = Alarm()
+//    var alarms = [Alarm]()
     var editingIndexPath: IndexPath?
     private let notification = NotificationController()
     //MARK: Set up data store
@@ -91,28 +91,6 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
  */
     }
     
-    //MARK: - Check Notification Status, user could have changed it.
-    private func checkNotificationStatus() {
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .authorized {
-                // Authorized, no need to do anything
-                return
-            } else {
-                // Not Authorized, request authorization.
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-                    if granted {
-                        print("Notification authorized, can proceed")
-                    }
-                    if let error = error {
-                        print("Error granting notifications, \(error), \(error.localizedDescription)")
-                        //TODO: Should throw up an alert, letting user know that app is useless without notifications
-                    }
-                }
-            }
-        }
-    }
-    
     //MARK: - Tableview delegate methods
     func numberOfSections(in tableView: UITableView) -> Int {
  //       return 1
@@ -163,9 +141,9 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return config
     }
     
-    func alarm(at indexPath: IndexPath) -> Alarm? {
-        return indexPath.row < alarms.count ? alarms[indexPath.row] : nil
-    }
+//    func alarm(at indexPath: IndexPath) -> Alarm? {
+//        return indexPath.row < alarms.count ? alarms[indexPath.row] : nil
+//    }
     
     func deleteAlarm(at indexPath: IndexPath) {
         // need to delete alarm from coredata
@@ -191,25 +169,12 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.endUpdates()
     }
     
-    func moveAlarm(from originalIndextPath: IndexPath, to targetIndexPath: IndexPath) {
-        let alarm = alarms.remove(at: originalIndextPath.row)
-        alarms.insert(alarm, at: targetIndexPath.row)
-        tableView.reloadData()
-    }
-    
     func presentSetAlarmViewController(alarmEntity: AlarmEntity?) { // change call site from (alarm: Alarm?)
         if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
             vc.alarmEntity = alarmEntity
+            vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         }
-        
- // original code updated per above
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let popupViewController = storyboard.instantiateViewController(withIdentifier: "SetAlarm") as! UINavigationController
-//        let setAlarmViewController = popupViewController.viewControllers[0] as! SetAlarmViewController
-//        setAlarmViewController.alarm = alarm
-//        setAlarmViewController.delegate = self
-//        present(popupViewController, animated: true, completion: nil)
     }
     
     //MARK: - Actions
@@ -217,7 +182,6 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         presentSetAlarmViewController(alarmEntity: nil) // (alarm: nil)
     }
 }
-
 
 extension AlarmsViewController: AlarmCellDelegate {
     // AlarmCellDelegate method
@@ -241,7 +205,9 @@ extension AlarmsViewController: SetAlarmViewControllerDelegate {
         }
         else {
             print("new Alarm added")
-            addAlarm(alarm, at: IndexPath(row: alarms.count, section: 0))
+//            addAlarm(alarm, at: IndexPath(row: alarms.count, section: 0))
+            let objectCount = fetchedResultsController.fetchedObjects?.count ?? 0
+            addAlarm(alarm, at: IndexPath(row: objectCount, section: 0))
         }
         editingIndexPath = nil
     }
@@ -249,5 +215,31 @@ extension AlarmsViewController: SetAlarmViewControllerDelegate {
     func setAlarmViewControllerCancel() {
         editingIndexPath = nil
     }
-    
 }
+
+
+
+// use for making pre-defined Notifications
+/*
+ 
+ 
+ if snoozedTimes == 0 {
+ type = NotificationType.turnOff
+ title = "Turn Alarm Off 🔕 or Snooze? 😴"
+ subtitle = "Shut off or snooze for 1 minute"
+ body = "Body of notification"
+ } else {
+ if snoozedTimes < 3 {
+ type = NotificationType.alarmSnoozed
+ title = "Turn Alarm Off 🔕 or Snooze? 😴"
+ subtitle = "Shut off or snooze for 1 minute"
+ body = "You have snoozed \(snoozedTimes) out of 3"
+ } else {
+ type = NotificationType.alarmSnoozedThreeTimes
+ title = "Act of Kindness Alert! ⚠️"
+ subtitle = "You must perform an act of kindness to turn alarm off"
+ body = "Random act of kindness: \(actOfKindness)"
+ }
+ }
+ 
+ */
