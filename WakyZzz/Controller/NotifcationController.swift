@@ -11,6 +11,7 @@ import UserNotifications
 
 enum NotificationType: String {
     case snoozable = "SNOOZABLE_ALARM"
+    case snoozed = "SNOOZED_ALARM"
     case nonSnoozable = "NON_SNOOZABLE_ALARM"
 }
 
@@ -89,7 +90,6 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         let snoozeAlarm = UNNotificationAction(identifier: "SNOOZE_ALARM",
                                                title: "Snooze alarm for 1 minute",
                                                options: .foreground) //UNNotificationActionOptions(rawValue: 1))
-        
         /// snoozed >= 3 times
         // act of kindness performed now
         let actOfKindnessNow = UNNotificationAction(identifier: "ACT_OF_KINDNESS",
@@ -107,6 +107,12 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                        intentIdentifiers: [],
                                                        hiddenPreviewsBodyPlaceholder: "",
                                                        options: .customDismissAction)
+        
+        let snoozedCategory = UNNotificationCategory(identifier: NotificationType.snoozed.rawValue,
+                                                       actions: [turnOffAlarm, snoozeAlarm],
+                                                       intentIdentifiers: [],
+                                                       hiddenPreviewsBodyPlaceholder: "",
+                                                       options: .customDismissAction)
         /// snoozed 3 times
         let nonSnoozableCategory = UNNotificationCategory(identifier: NotificationType.nonSnoozable.rawValue,
                                                           actions: [actOfKindnessNow, actOfKindnessLater],
@@ -115,7 +121,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                           options: .customDismissAction)
         
         // Register the notification type.
-        center.setNotificationCategories([snoozableCategory, nonSnoozableCategory])
+        center.setNotificationCategories([snoozableCategory, snoozedCategory, nonSnoozableCategory])
         
         print(#function)
         print("Actions and Categories set")

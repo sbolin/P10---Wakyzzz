@@ -9,38 +9,46 @@
 import UIKit
 import CoreData
 
-class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AlarmsViewController: UIViewController {
     
     //MARK:- Outlets
     @IBOutlet weak var tableView: UITableView!
     
-    //MARK: - Properties
- //   var alarm = Alarm()
-//    var alarms = [Alarm]()
-    var editingIndexPath: IndexPath?
-    private let notification = NotificationController()
+    //MARK: - Notification Properties
+    private let notifcationController = NotificationController() // manager
+    private let center = UNUserNotificationCenter.current()
+    private var alarmName = ""
+    private var subtitle = ""
+    private var body = ""
+
+//    private var alarm = Alarm()
+//    private var alarms = [Alarm]()
+    
+    private var editingIndexPath: IndexPath?
+    
     //MARK: Set up data store
-//    lazy var coreDataController = CoreDataController()
-    var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
     lazy var coreDataController = CoreDataController()
+    var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
+    
 
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
- //       self.navigationItem.leftBarButtonItem = self.editButtonItem
+//        self.navigationItem.leftBarButtonItem = self.editButtonItem
         configureTableView()
-        // for now, populate Alarms
+        self.center.delegate = self
+        notifcationController.requestNotificationAuthorization()
+        notifcationController.setupActions()
+// for now, populate Alarms
 //        if alarms.count == 0 {
 //            populateAlarms()
 //        }
+        // for now, populate core data with alarms
         if fetchedResultsController.fetchedObjects == nil { // no alarms set
             populateAlarms()
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        checkNotificationStatus()
+        scheduleAlarm(hour: 20, minute: 0, repeats: false, type: .snoozable)
+        scheduleAlarm(hour: 20, minute: 1, repeats: false, type: .nonSnoozable)
     }
     
     // Setup TableView delegate and datasource, populate alarms
@@ -62,6 +70,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         for i in 1 ... 5 {
             weekDayAlarmEntity.repeatDays[i] = true
         }
+        
         let weekEndAlarmID = UUID()
         coreDataController.createAlarmEntityWithID(id: weekEndAlarmID)
         guard let weekendAlarmEntity = coreDataController.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
@@ -91,54 +100,33 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
  */
     }
     
-    //MARK: - Tableview delegate methods
-    func numberOfSections(in tableView: UITableView) -> Int {
- //       return 1
-        return fetchedResultsController.sections?.count ?? 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
-        //        return alarms.count
-    }
+    func scheduleAlarm(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
+        let date = Date() // use today's date for now...
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let weekday = calendar.component(.weekday, from: date)
+        let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
+        let snoozedTimes = 2 // TODO: get from CoreData
+        let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
+        
+        switch type {
+            case .snoozable:
+                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
+                subtitle = "Shut off or snooze for 1 minute"
+                body = "Body of notification"
+            case .snoozed:
+                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
+                subtitle = "Shut off or snooze for 1 minute"
+                body = "You have snoozed \(snoozedTimes) out of 3"
+            case .nonSnoozable:
+                alarmName = "Act of Kindness Alert! ⚠️"
+                subtitle = "You must perform an act of kindness to turn alarm off"
+                body = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
+        }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath) as! AlarmTableViewCell
-        cell.delegate = self
-        let fetchedAlarm = fetchedResultsController.object(at: indexPath)
-        cell.populate(caption: fetchedAlarm.localAlarmTimeString, subcaption: fetchedAlarm.repeatingDayString, enabled: fetchedAlarm.enabled)
-
-//        if let alarm = alarm(at: indexPath) {
-//            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
-//        }
-        return cell
-    }
-    
-    // Added didSelectRowAt method, ask Peter if needed (this way, just select row to edit details)
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
-            vc.alarmEntity = fetchedResultsController.object(at: indexPath)
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-    
-    //MARK: Set up table view editing
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
-            self.deleteAlarm(at: indexPath)
-        }
-        delete.backgroundColor =  UIColor(red: 1, green: 0, blue: 0, alpha: 1)
-        
-        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
-            self.editAlarm(at: indexPath)
-        }
-        edit.backgroundColor =  UIColor(red: 0, green: 1, blue: 0, alpha: 1)
-        
-        let config = UISwipeActionsConfiguration(actions: [delete, edit])
-        config.performsFirstActionWithFullSwipe = false
-        
-        return config
+        notifcationController.createNotification(id: UUID(), dateComponent: dateComponents, title: alarmName, subtitle: subtitle, body: body, repeats: repeats, type: type)
     }
     
 //    func alarm(at indexPath: IndexPath) -> Alarm? {
@@ -146,7 +134,6 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 //    }
     
     func deleteAlarm(at indexPath: IndexPath) {
-        // need to delete alarm from coredata
         tableView.beginUpdates()
         print("Deleting alarm at indexPath\(indexPath.row)")
 //        alarms.remove(at: indexPath.row) // alarms.count
@@ -189,7 +176,6 @@ extension AlarmsViewController: AlarmCellDelegate {
         if let indexPath = tableView.indexPath(for: cell) {
             coreDataController.changeAlarmStatus(at: indexPath, status: enabled)
 //            if let alarm = self.alarm(at: indexPath) {
-// need to update coredata
 //               alarm.enabled = enabled
 //            }
         }

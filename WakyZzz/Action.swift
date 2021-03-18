@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Action: String, CaseIterable {
+enum ActOfKindness: String, CaseIterable {
     case messageFriend = "Send a message to a friend asking how they are doing"
     case contactFamily = "Send a kind thought to a family member"
     case donateToCharity = "Send some money to your favorite charity"

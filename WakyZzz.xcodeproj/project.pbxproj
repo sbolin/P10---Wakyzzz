@@ -18,6 +18,8 @@
 		0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */; };
 		0424EB7120C038AE00E15E46 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0424EB7020C038AE00E15E46 /* sound.mp3 */; };
 		154999DC25D531E300835EFA /* evil.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 154999DB25D531E300835EFA /* evil.m4a */; };
+		15576E872603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */; };
+		15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */; };
 		15594D8425DD4D9900BE602D /* TODO.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594D8325DD4D9900BE602D /* TODO.rtf */; };
 		15594D8725DD4DF000BE602D /* Tracked Issues.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 15594D8625DD4DF000BE602D /* Tracked Issues.rtf */; };
 		15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DA125DE4D4F00BE602D /* NotifcationController.swift */; };
@@ -54,6 +56,8 @@
 		0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmViewController.swift; sourceTree = "<group>"; };
 		0424EB7020C038AE00E15E46 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
 		154999DB25D531E300835EFA /* evil.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = evil.m4a; sourceTree = "<group>"; };
+		15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmViewController+TableViewDataSource+TableViewDelegate.swift"; sourceTree = "<group>"; };
+		15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+NotificationDelegate.swift"; sourceTree = "<group>"; };
 		15594D8325DD4D9900BE602D /* TODO.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = TODO.rtf; sourceTree = "<group>"; };
 		15594D8625DD4DF000BE602D /* Tracked Issues.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Tracked Issues.rtf"; sourceTree = "<group>"; };
 		15594DA125DE4D4F00BE602D /* NotifcationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifcationController.swift; sourceTree = "<group>"; };
@@ -162,6 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				0424EB5520BEF89000E15E46 /* AlarmsViewController.swift */,
+				15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */,
+				15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */,
 				0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */,
 				15594DA125DE4D4F00BE602D /* NotifcationController.swift */,
 			);
@@ -309,11 +315,13 @@
 				0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */,
 				0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */,
 				15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */,
+				15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */,
 				0424EB5420BEF89000E15E46 /* AppDelegate.swift in Sources */,
 				0424EB6B20BEF96400E15E46 /* Action.swift in Sources */,
 				0424EB6920BEF93F00E15E46 /* Alarm.swift in Sources */,
 				15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */,
 				15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */,
+				15576E872603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,7 +416,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -463,7 +471,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
