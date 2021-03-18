@@ -165,7 +165,24 @@ Questions 20 Feb 21
 \pard\tx220\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li720\fi-720\pardirnatural\partightenfactor0
 \cf0 	
 \f4 \uc0\u9642 
-\f0 	From my reading, it is not possible to change notification, only delete and re-add new one with updated info, is this correct? \
+\f0 	From my reading, it is not possible to change notification, only delete and re-add new one with updated info, is this correct? \cf4 - just need to create new notification with same id - old notification will be overwritten\
+\
+
+\f3\b \cf0 Questions 20 Mar 21
+\f0\b0 \
+	
+\f4 \uc0\u9642 
+\f0 	Repeating notifications for 'odd' repeats (like Mon, Wed, Fri etc) - does this require notification for each event, or can specific days/times be included in notification request? \
+\
+\
+TODO 15-20 Mar:\
+1. Further clean up of AlarmsViewController, it is still long (and also has many comments related to old use of Alarm object rather than Core Data)\
+2. Clean up NotificationController, \
+	a. Cleanup methods and helper methods (necessary or not?)\
+	b. Clarify notification creation - needs to be cleaned up for use with CoreData - basically, alarm will be saved to core data first, then notification will be created from core data object.\
+	c. Clarify repeating notifications = for example, if alarm repeats Mon, Wed, Fri, does that require 3 notification requests? I think it does. See if notification can be created with special repeating pattern.\
+Unit testing of notifications\
+3. Review client docs again, make sure including everything required.\
 \
 \
 \pard\tx642\pardeftab642\pardirnatural\partightenfactor0
