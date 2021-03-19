@@ -48,7 +48,8 @@ class AlarmsViewController: UIViewController {
             populateAlarms()
         }
         scheduleAlarm(hour: 20, minute: 0, repeats: false, type: .snoozable)
-        scheduleAlarm(hour: 20, minute: 1, repeats: false, type: .nonSnoozable)
+        scheduleAlarm(hour: 20, minute: 0, repeats: false, type: .snoozable)
+        scheduleAlarm(hour: 20, minute: 1, repeats: true, type: .nonSnoozable)
     }
     
     // Setup TableView delegate and datasource, populate alarms
@@ -80,24 +81,6 @@ class AlarmsViewController: UIViewController {
         weekendAlarmEntity.repeatDays[6] = true
 
         coreDataController.saveContext(context: context)
-        
- // using Alarm object
-        /*
-        // Weekdays 5am
-        alarm.time = 5 * 3600
-        for i in 1 ... 5 {
-            alarm.repeatDays[i] = true
-        }
-        alarms.append(alarm)
-        
-        // Weekend 9am
-        alarm = Alarm()
-        alarm.time = 9 * 3600
-        alarm.enabled = false
-        alarm.repeatDays[0] = true
-        alarm.repeatDays[6] = true
-        alarms.append(alarm)
- */
     }
     
     func scheduleAlarm(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
@@ -107,9 +90,14 @@ class AlarmsViewController: UIViewController {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         let weekday = calendar.component(.weekday, from: date)
+        var repeated: [Int] = [weekday]
         let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
         let snoozedTimes = 2 // TODO: get from CoreData
         let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
+        
+        if repeats {
+            repeated = [3, 5, 7] // Tues/Thur/Sat for example, final will use Core Data to populate
+        }
         
         switch type {
             case .snoozable:
@@ -119,14 +107,23 @@ class AlarmsViewController: UIViewController {
             case .snoozed:
                 alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
                 subtitle = "Shut off or snooze for 1 minute"
-                body = "You have snoozed \(snoozedTimes) out of 3"
+                body = "You have snoozed \(snoozedTimes) out of 3" // timesSn
             case .nonSnoozable:
                 alarmName = "Act of Kindness Alert! ⚠️"
                 subtitle = "You must perform an act of kindness to turn alarm off"
                 body = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
         }
+        
+        let notification = LocalNotification(
+            id: UUID().uuidString,
+            title: alarmName,
+            subtitle: subtitle,
+            body: body,
+            repeating: repeats,
+            repeatDays: repeated,
+            dateComponents: dateComponents)
 
-        notifcationController.createNotification(id: UUID(), dateComponent: dateComponents, title: alarmName, subtitle: subtitle, body: body, repeats: repeats, type: type)
+        notifcationController.createNotification(notification: notification, type: type)
     }
     
 //    func alarm(at indexPath: IndexPath) -> Alarm? {

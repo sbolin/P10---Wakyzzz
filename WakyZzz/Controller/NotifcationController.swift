@@ -20,8 +20,10 @@ struct LocalNotification {
     var id: String
     var title: String
     var subtitle: String
+    var body: String
     var repeating: Bool
-    var datetime: DateComponents
+    var repeatDays: [Int]
+    var dateComponents: DateComponents
 }
 
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {
@@ -126,15 +128,9 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         print(#function)
         print("Actions and Categories set")
     }
-    
-    
-        
-    
+
     //MARK: - Schedule Notification
-    func createNotification(id: UUID, dateComponent: DateComponents, title: String, subtitle: String, body: String, repeats: Bool, type: NotificationType) {
-        
-        // add to notifications array
-        notifications.append(LocalNotification(id: id.uuidString, title: title, subtitle: subtitle, repeating: repeats, datetime: dateComponent))
+    func createNotification(notification: LocalNotification, type: NotificationType) {
         
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
@@ -143,38 +139,54 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         let defaultSound = UNNotificationSound.init(named: (UNNotificationSoundName("sound.mp3")) as String)
         let annoyingSound = UNNotificationSound.init(named: (UNNotificationSoundName("evil.m4a")) as String)
         
-        content.title = title
-        content.subtitle = subtitle
-        content.body = body
+        content.title = notification.title
+        content.subtitle = notification.subtitle
+        content.body = notification.body
         content.categoryIdentifier = type.rawValue
-        content.sound = type.rawValue == "SNOOZABLE_ALARM" ? defaultSound : annoyingSound
-        content.threadIdentifier = "WakyZzz" // placeholder only
+        content.sound = type.rawValue == "NON_SNOOZABLE_ALARM" ? annoyingSound : defaultSound
+        content.threadIdentifier = type.rawValue // placeholder only
         content.summaryArgument = "WakyZzz" // placeholder, in case there are more than one notification showing
         content.summaryArgumentCount = 0 // placeholder, count of unread notifications
         content.targetContentIdentifier = "WakyZzz" // placeholder...
         
+        
+        for index in 0..<notification.repeatDays.count {
+            let repeatDay = notification.repeatDays[index]
+            createNotificationRequest(notification: notification, weekDay: repeatDay, content: content)
+        }
+    }
+    
+    private func createNotificationRequest(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
+        
+        // notification parameters
+        
+        let dateComponent = notification.dateComponents
+        let repeats = notification.repeating
+        let id = notification.id
+        
         // notification trigger
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
         
-        // notification request
-        let request = UNNotificationRequest(identifier: id.uuidString, content: content, trigger: trigger)
+        // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
         center.add(request) { error in
             if let error = error {
-                print("Request creation error: ", error.localizedDescription)
+                print("Request \(id) creation error: ", error.localizedDescription)
             } else {
-                print("Notification Scheduled OK")
+                print("Notification \(id) Scheduled OK")
+                self.notifications.append(notification) // append notification to notifications upon success
             }
         }
         
         // below is for debug only, not needed...
-        #if DEBUG
+        //       #if DEBUG
         print(#function)
-        print("Notification \(id) with request id \(type.rawValue) set")
+        print("Notification \(id) with request id \(request.identifier) set")
         print("List of notifications follows:")
         listScheduledNotifications()
-        listDelivereddNotifications()
-        #endif
+        listDeliveredNotifications()
+//       #endif
     }
     
     //MARK: - Cleanup methods
@@ -218,7 +230,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
-    private func listDelivereddNotifications() {
+    private func listDeliveredNotifications() {
         center.getDeliveredNotifications { notifications in
             for notification in notifications {
                 print("====Delivered Notifications====")
