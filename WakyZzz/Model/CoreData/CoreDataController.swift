@@ -11,17 +11,18 @@ import CoreData
 
 class CoreDataController {
     
-    //MARK: - Create CoreData Stack
-    static let shared = CoreDataController() // singleton
+    //MARK: - Singleton
+    static let shared = CoreDataController()
     init() {}
     
-    //MARK: - Create Core Data Stack
+    //MARK: - NSManagedObjectModel
     lazy var modelName = "WakyZzz"
     lazy var model: NSManagedObjectModel = {
         let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
         return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
+    //MARK: - NSPersistentContainer
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
         container.loadPersistentStores { (storeDescription, error) in
@@ -32,12 +33,14 @@ class CoreDataController {
         return container
     }()
     
+    //MARK: - NSManagedObjectContext Main
     lazy var managedContext: NSManagedObjectContext = {
         let context = self.persistentContainer.viewContext
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }()
     
+    //MARK: - Background Context
     lazy var derivedContext: NSManagedObjectContext = {
         let context = self.persistentContainer.newBackgroundContext()
         return context
@@ -47,13 +50,14 @@ class CoreDataController {
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
         request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
+        let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
-        request.sortDescriptors = [alarmTimeSort]
+        request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
         
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: managedContext,
-            sectionNameKeyPath: #keyPath(AlarmEntity.enabled), // use if works, otherwise use nil,
+            sectionNameKeyPath: #keyPath(AlarmEntity.enabled),
             cacheName: nil)
             
         return fetchedResultsController

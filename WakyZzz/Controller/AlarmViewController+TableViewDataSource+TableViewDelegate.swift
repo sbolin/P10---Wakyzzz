@@ -12,13 +12,14 @@ import CoreData
 extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
     //MARK: - Tableview delegate methods
     func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 1
+        fetchedResultsController.sections?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections![section]
+        guard let sectionInfo = fetchedResultsController.sections?[section] else {
+            return 0
+        }
         return sectionInfo.numberOfObjects
-        //        return alarms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -31,6 +32,12 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
         //            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
         //        }
         return cell
+    }
+    
+    // Added titleForHeaderInSection, sort table view based on enabled or not (then by alarm time)
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let sectionInfo = fetchedResultsController.sections?[section]
+        return sectionInfo?.name
     }
     
     // Added didSelectRowAt method, ask Peter if needed (this way, just select row to edit details)
