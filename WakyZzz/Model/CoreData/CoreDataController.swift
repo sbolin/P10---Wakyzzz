@@ -15,29 +15,30 @@ class CoreDataController {
     static let shared = CoreDataController()
     init() {}
     
-    //MARK: - NSManagedObjectModel
     lazy var modelName = "WakyZzz"
-    lazy var model: NSManagedObjectModel = {
-        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
-        return NSManagedObjectModel(contentsOf: modelURL)!
-    }()
     
-    //MARK: - NSPersistentContainer
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
-        container.loadPersistentStores { (storeDescription, error) in
-            if let error = error as NSError? {
-                print("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
+//    //MARK: - NSManagedObjectModel
+//    lazy var model: NSManagedObjectModel = {
+//        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
+//        return NSManagedObjectModel(contentsOf: modelURL)!
+//    }()
     
     //MARK: - NSManagedObjectContext Main
     lazy var managedContext: NSManagedObjectContext = {
         let context = self.persistentContainer.viewContext
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
+    }()
+    
+    //MARK: - NSPersistentContainer
+    private lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: modelName)
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                print("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        return container
     }()
     
     //MARK: - Background Context
@@ -57,7 +58,7 @@ class CoreDataController {
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: managedContext,
-            sectionNameKeyPath: #keyPath(AlarmEntity.enabled),
+            sectionNameKeyPath: nil, // #keyPath(AlarmEntity.enabled)
             cacheName: nil)
             
         return fetchedResultsController
@@ -67,7 +68,7 @@ class CoreDataController {
         var alarm: AlarmEntity?
         managedContext.performAndWait {
             let request = AlarmEntity.alarmFetchRequest()
-            request.predicate = NSPredicate(format: "identifier == %@", alarmID as CVarArg)
+            request.predicate = NSPredicate(format: "alarmID == %@", alarmID as CVarArg)
             request.fetchLimit = 1
             alarm = (try? request.execute())?.first
         }
@@ -81,7 +82,7 @@ class CoreDataController {
         do {
             try managedContext.save()
         } catch let error as NSError {
-            managedContext.rollback()
+            managedContext.rollback() // if error, go back to previous state
             print("Unresolved error \(error), \(error.localizedDescription)")
         }
     }

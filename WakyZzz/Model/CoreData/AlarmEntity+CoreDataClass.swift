@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(AlarmEntity)
+//@objc(AlarmEntity)
 public class AlarmEntity: NSManagedObject {
 
 }

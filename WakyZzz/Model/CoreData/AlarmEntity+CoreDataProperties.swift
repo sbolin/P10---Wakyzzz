@@ -2,8 +2,8 @@
 //  AlarmEntity+CoreDataProperties.swift
 //  WakyZzz
 //
-//  Created by Scott Bolin on 2/25/21.
-//  Copyright © 2021 Olga Volkova OC. All rights reserved.
+//  Created by Scott Bolin on 3/27/21.
+//  Copyright © 2021 TukgaeSoft. All rights reserved.
 //
 //
 
