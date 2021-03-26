@@ -34,18 +34,18 @@ class AlarmsViewController: UIViewController {
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchedResultsController.delegate = self
-//        self.navigationItem.leftBarButtonItem = self.editButtonItem
         tableView.delegate = self
-//      tableView.dataSource = self
+        fetchedResultsController.delegate = self
         center.delegate = self
+//      tableView.dataSource = self
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
+        
+//      self.navigationItem.leftBarButtonItem = self.editButtonItem
 // for now, populate Alarms
 //        if alarms.count == 0 {
 //            populateAlarms()
 //        }
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -66,15 +66,18 @@ class AlarmsViewController: UIViewController {
     
     // Setup TableView delegate and datasource, populate alarms
     func configureTableView() {
+        print(#function)
         // setup fetchrequest
         if fetchedResultsController == nil {
+            print("fetchResultsController is nil, set to fetchedAlarmResultsController")
             fetchedResultsController = CoreDataController.shared.fetchedAlarmResultsController
         }
         do {
+            print("tryng to performFetch()")
             try fetchedResultsController.performFetch()
  //           tableView.reloadData()
-        } catch {
-            print("Fetch failed")
+        } catch (let error) {
+            print("Fetch failed, error: \(error.localizedDescription)")
         }
     }
     

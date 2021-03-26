@@ -30,22 +30,25 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     
     //MARK: - Properties
     var notifications = [LocalNotification]()
-//    let alerts = AlertsManager()
     let center = UNUserNotificationCenter.current()
+    // user notification types to check if authorized or not.
     var alertOn = false
     var soundOn = false
     var badgeOn = false
+    //    let alerts = AlertsManager()
 
     //MARK: - Request Authorization
     func requestNotificationAuthorization() {
         print(#function)
         let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .announcement, .badge, .carPlay, .sound) // asks for authorization to show notification via alert, Siri read aloud, badges, carplay, and play sound
         
+        // unused authorization options, keep in case added functionality later
         let _: UNAuthorizationOptions = [
             .criticalAlert, // For having sound even device is muted / Do Not Disturb is enabled
             .providesAppNotificationSettings, // provide settings in app
             .provisional] // post non-interrupting notifications provisionally to the Notification Center
         
+        // request user authorization to present notifications
         center.requestAuthorization(options: authOptions) { granted, error in
             
             if let error = error {
@@ -75,6 +78,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                     // ignore other settings for version 1
                 }
             } else {
+                // notification denied. Should present alert letting user know that notifications are required for alarm functionality (app is useless without notifications...)
                 print("Notification denied")
             }
         }
@@ -159,7 +163,6 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     private func createNotificationRequest(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
         
         // notification parameters
-        
         let dateComponent = notification.dateComponents
         let repeats = notification.repeating
         let id = notification.id
@@ -220,7 +223,19 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MaRK: - NotificationController helper methods
+    func removeNotification(at identifier: String) {
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
+    
+    func removeAllDeliveredNotifications() {
+        center.removeAllDeliveredNotifications()
+    }
+    
+    func removeAllPendingNotificationRequests() {
+        center.removeAllPendingNotificationRequests()
+    }
+    
+    //MARK: - NotificationController helper methods
     private func listScheduledNotifications() {
         center.getPendingNotificationRequests { notifications in
             for notification in notifications {
@@ -237,17 +252,5 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                 print(notification)
             }
         }
-    }
-    
-    func removeNotification(at identifier: String) {
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
-    }
-    
-    func removeAllDeliveredNotifications() {
-        center.removeAllDeliveredNotifications()
-    }
-    
-    func removeAllPendingNotificationRequests() {
-        center.removeAllPendingNotificationRequests()
     }
 }
