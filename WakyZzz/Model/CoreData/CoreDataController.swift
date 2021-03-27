@@ -18,14 +18,15 @@ class CoreDataController {
     lazy var modelName = "WakyZzz"
     
     //MARK: - NSManagedObjectModel
-    lazy var model: NSManagedObjectModel = {
-        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
-        return NSManagedObjectModel(contentsOf: modelURL)!
-    }()
+//    lazy var model: NSManagedObjectModel = {
+//        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
+//        return NSManagedObjectModel(contentsOf: modelURL)!
+//    }()
     
     //MARK: - NSPersistentContainer
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
+//        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
+        let container = NSPersistentContainer(name: modelName)
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 print("Unresolved error \(error), \(error.userInfo)")
@@ -50,11 +51,13 @@ class CoreDataController {
     //MARK: - Fetch Properties
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
-//        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
-        let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
+        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
+        // annoying having table resort when alarm enabled/disabled...
+//        let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
-        request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
-        
+//        request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
+        request.sortDescriptors = [alarmTimeSort]
+
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: managedContext,

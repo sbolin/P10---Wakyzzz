@@ -71,7 +71,7 @@ class AlarmsViewController: UIViewController {
             print("Fetch failed, error: \(error.localizedDescription)")
         }
         fetchedResultsController.delegate = self
-        tableView.reloadData()
+ //       tableView.reloadData()
     }
     
     

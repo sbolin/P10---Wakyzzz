@@ -21,7 +21,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     var alarm: Alarm?
     var alarmEntity: AlarmEntity?
-    lazy var coreDataController = CoreDataController()
+//    lazy var coreDataController = CoreDataController()
 
     var delegate: SetAlarmViewControllerDelegate?
     
@@ -129,7 +129,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     @IBAction func datePickerValueChanged(_ sender: Any) {
         alarm?.setAlarmTime(date: datePicker.date)
         // need to update below method, since IndexPath is not correct. Should update based on alarmEntity.id instead.
-        coreDataController.changeAlarmTime(at: IndexPath(row: 0, section: 0), date: datePicker.date)
+        CoreDataController.shared.changeAlarmTime(at: IndexPath(row: 0, section: 0), date: datePicker.date)
     }
     
 }
