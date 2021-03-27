@@ -11,11 +11,11 @@ import UIKit
 extension AlarmsViewController {
     // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
     func populateAlarms() {
-        let context = coreDataController.managedContext
+//        let context = CoreDataController.shared.managedContext
         // weekday alarm
         let weekDayAlarmID = UUID()
-        coreDataController.createAlarmEntityWithID(id: weekDayAlarmID)
-        guard let weekDayAlarmEntity = coreDataController.fetchAlarmByAlarmID(with: weekDayAlarmID) else { return }
+        CoreDataController.shared.createAlarmEntityWithID(id: weekDayAlarmID)
+        guard let weekDayAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekDayAlarmID) else { return }
         // Weekdays 5am
         weekDayAlarmEntity.time = 5 * 3600
         weekDayAlarmEntity.enabled = true
@@ -24,14 +24,15 @@ extension AlarmsViewController {
         }
         
         let weekEndAlarmID = UUID()
-        coreDataController.createAlarmEntityWithID(id: weekEndAlarmID)
-        guard let weekendAlarmEntity = coreDataController.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
+        CoreDataController.shared.createAlarmEntityWithID(id: weekEndAlarmID)
+        guard let weekendAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
         weekendAlarmEntity.time = 9 * 3600
         weekendAlarmEntity.enabled = false
         weekendAlarmEntity.repeatDays[0] = true
         weekendAlarmEntity.repeatDays[6] = true
         
-        coreDataController.saveContext(context: context)
+ //       CoreDataController.shared.saveContext(context: context)
+        tableView.reloadData()
     }
     
     func scheduleAlarm(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
@@ -85,7 +86,7 @@ extension AlarmsViewController {
         tableView.beginUpdates()
         print("Deleting alarm at indexPath\(indexPath.row)")
         //        alarms.remove(at: indexPath.row) // alarms.count
-        coreDataController.deleteAlarmEntity(at: indexPath)
+        CoreDataController.shared.deleteAlarmEntity(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }
@@ -99,7 +100,7 @@ extension AlarmsViewController {
     func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
         tableView.beginUpdates()
         //        alarms.insert(alarm, at: indexPath.row)
-        coreDataController.createAlarmEntity()
+        CoreDataController.shared.createAlarmEntity()
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }

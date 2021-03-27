@@ -14,6 +14,9 @@ class AlarmsViewController: UIViewController {
     //MARK:- Outlets
     @IBOutlet weak var tableView: UITableView!
     
+    //MARK: Set up data store
+    var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
+    
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager
     let center = UNUserNotificationCenter.current()
@@ -25,18 +28,12 @@ class AlarmsViewController: UIViewController {
 //    private var alarms = [Alarm]()
     
     private var editingIndexPath: IndexPath? // what is this???
-    
-    //MARK: Set up data store
-    lazy var coreDataController = CoreDataController()
-    var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
-    
 
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-
         center.delegate = self
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
@@ -47,6 +44,8 @@ class AlarmsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         populateAlarms()
+//        checkFirstRun()
+//        configureTableView()
     }
     
     func checkFirstRun() {
@@ -72,7 +71,7 @@ class AlarmsViewController: UIViewController {
             print("Fetch failed, error: \(error.localizedDescription)")
         }
         fetchedResultsController.delegate = self
-
+        tableView.reloadData()
     }
     
     
@@ -86,7 +85,7 @@ extension AlarmsViewController: AlarmCellDelegate {
     // AlarmCellDelegate method
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
         if let indexPath = tableView.indexPath(for: cell) {
-            coreDataController.changeAlarmStatus(at: indexPath, status: enabled)
+            CoreDataController.shared.changeAlarmStatus(at: indexPath, status: enabled)
 //            if let alarm = self.alarm(at: indexPath) {
 //               alarm.enabled = enabled
 //            }

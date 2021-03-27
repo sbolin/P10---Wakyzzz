@@ -17,28 +17,28 @@ class CoreDataController {
     
     lazy var modelName = "WakyZzz"
     
-//    //MARK: - NSManagedObjectModel
-//    lazy var model: NSManagedObjectModel = {
-//        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
-//        return NSManagedObjectModel(contentsOf: modelURL)!
-//    }()
-    
-    //MARK: - NSManagedObjectContext Main
-    lazy var managedContext: NSManagedObjectContext = {
-        let context = self.persistentContainer.viewContext
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
+    //MARK: - NSManagedObjectModel
+    lazy var model: NSManagedObjectModel = {
+        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
     //MARK: - NSPersistentContainer
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: modelName)
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 print("Unresolved error \(error), \(error.userInfo)")
             }
         }
         return container
+    }()
+    
+    //MARK: - NSManagedObjectContext Main
+    lazy var managedContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
     }()
     
     //MARK: - Background Context
@@ -50,7 +50,7 @@ class CoreDataController {
     //MARK: - Fetch Properties
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
-        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
+//        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
         let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
         request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
@@ -78,11 +78,11 @@ class CoreDataController {
     //MARK: - CoreData Utility Methods
     //MARK: SaveContext
     func saveContext(context: NSManagedObjectContext) {
-        guard managedContext.hasChanges else { return }
+        guard context.hasChanges else { return }
         do {
-            try managedContext.save()
+            try context.save()
         } catch let error as NSError {
-            managedContext.rollback() // if error, go back to previous state
+            context.rollback() // if error, go back to previous state
             print("Unresolved error \(error), \(error.localizedDescription)")
         }
     }
