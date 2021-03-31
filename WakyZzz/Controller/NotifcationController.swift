@@ -78,7 +78,11 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                     // ignore other settings for version 1
                 }
             } else {
-                // notification denied. Should present alert letting user know that notifications are required for alarm functionality (app is useless without notifications...)
+                // really need notifications, or app is basically useless. Throw up an alert to let user know
+                let alert = UIAlertController(title: "Notifications not Authorized", message: "Notifications are a required feature of WakyZzz. Without notifications, the alarms will not go off. Please go to settings are all notifications", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Noted! 👍", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                
                 print("Notification denied")
             }
         }
@@ -134,7 +138,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     }
 
     //MARK: - Schedule Notification
-    func createNotification(notification: LocalNotification, type: NotificationType) {
+    func scheduleNotification(notification: LocalNotification, type: NotificationType) {
         
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
@@ -237,18 +241,18 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     
     //MARK: - NotificationController helper methods
     private func listScheduledNotifications() {
+        print("====Scheduled Notifications====")
         center.getPendingNotificationRequests { notifications in
             for notification in notifications {
-                print("====Scheduled Notifications====")
                 print(notification)
             }
         }
     }
     
     private func listDeliveredNotifications() {
+        print("====Delivered Notifications====")
         center.getDeliveredNotifications { notifications in
             for notification in notifications {
-                print("====Delivered Notifications====")
                 print(notification)
             }
         }

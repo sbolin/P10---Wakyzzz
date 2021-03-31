@@ -75,7 +75,7 @@ extension AlarmsViewController {
             repeatDays: repeated,
             dateComponents: dateComponents)
         
-        notifcationController.createNotification(notification: notification, type: type)
+        notifcationController.scheduleNotification(notification: notification, type: type)
     }
     
     //    func alarm(at indexPath: IndexPath) -> Alarm? {

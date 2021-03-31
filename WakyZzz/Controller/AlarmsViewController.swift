@@ -53,8 +53,12 @@ class AlarmsViewController: UIViewController {
         if !launchedBefore  {
             // First launch, set user defaults to true (Launched Before = true)
             UserDefaults.standard.set(true, forKey: "Launched Before")
+            
+            // show alert for setting up alarms
+            let alert = UIAlertController(title: "Lets get started!", message: "1. Add alarm (+ button) or edit existing alarms.\n2. Set days to repeat (or not repeat).\n3. Turn alarm on!.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
+            self.present(alert, animated: true)
         }
-        // add in first run for app overview?
     }
     
     // Setup TableView delegate and datasource, populate alarms
