@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nEb-eO-71f">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -69,6 +68,7 @@
                                             <outlet property="captionLabel" destination="FKQ-CR-bhd" id="H7r-AM-bCw"/>
                                             <outlet property="enabledSwitch" destination="aOW-6I-KN4" id="RIA-bN-LyG"/>
                                             <outlet property="subcaptionLabel" destination="ZCN-if-4O3" id="s2R-KN-K7Y"/>
+                                            <segue destination="ZR4-jh-IrU" kind="show" identifier="SetAlarm" id="Qux-Iq-gh5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -161,7 +161,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vC8-4Q-tyH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2626" y="133"/>
+            <point key="canvasLocation" x="1841" y="133"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="M85-su-oDJ">
@@ -180,24 +180,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dab-CC-50q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="222" y="133"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="K1t-Xq-vbd">
-            <objects>
-                <navigationController storyboardIdentifier="DetailNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Ey7-6N-FMc" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="u8J-0W-HsQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="ZR4-jh-IrU" kind="relationship" relationship="rootViewController" id="wuc-xW-adO"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5f2-nC-4tt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1780" y="132.68365817091455"/>
         </scene>
     </scenes>
     <resources>

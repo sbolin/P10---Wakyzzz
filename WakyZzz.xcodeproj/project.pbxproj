@@ -170,9 +170,9 @@
 			isa = PBXGroup;
 			children = (
 				0424EB5520BEF89000E15E46 /* AlarmsViewController.swift */,
-				157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */,
-				157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */,
 				15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */,
+				157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */,
+				157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */,
 				15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */,
 				0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */,
 				15594DA125DE4D4F00BE602D /* NotifcationController.swift */,

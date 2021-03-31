@@ -74,7 +74,6 @@ class AlarmsViewController: UIViewController {
  //       tableView.reloadData()
     }
     
-    
     //MARK: - Actions
     @IBAction func addButtonPress(_ sender: Any) {
         presentSetAlarmViewController(alarmEntity: nil) // (alarm: nil)

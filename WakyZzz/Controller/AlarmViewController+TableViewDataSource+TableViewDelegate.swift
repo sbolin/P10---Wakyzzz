@@ -52,17 +52,19 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
             self.deleteAlarm(at: indexPath)
+            completion(true)
         }
-        delete.backgroundColor =  UIColor(red: 1, green: 0, blue: 0, alpha: 1)
         
         let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
             self.editAlarm(at: indexPath)
+            completion(true)
         }
+        
+        delete.backgroundColor =  UIColor(red: 1, green: 0, blue: 0, alpha: 1)
         edit.backgroundColor =  UIColor(red: 0, green: 1, blue: 0, alpha: 1)
         
         let config = UISwipeActionsConfiguration(actions: [delete, edit])
         config.performsFirstActionWithFullSwipe = false
-        
         return config
     }
 }
