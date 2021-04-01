@@ -78,11 +78,6 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                     // ignore other settings for version 1
                 }
             } else {
-                // really need notifications, or app is basically useless. Throw up an alert to let user know
-                let alert = UIAlertController(title: "Notifications not Authorized", message: "Notifications are a required feature of WakyZzz. Without notifications, the alarms will not go off. Please go to settings are all notifications", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Noted! 👍", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                
                 print("Notification denied")
             }
         }
@@ -138,7 +133,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     }
 
     //MARK: - Schedule Notification
-    func scheduleNotification(notification: LocalNotification, type: NotificationType) {
+    func createNotificationContent(notification: LocalNotification, type: NotificationType) {
         
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
@@ -160,16 +155,16 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         
         for index in 0..<notification.repeatDays.count {
             let repeatDay = notification.repeatDays[index]
-            createNotificationRequest(notification: notification, weekDay: repeatDay, content: content)
+            createNotification(notification: notification, weekDay: repeatDay, content: content)
         }
     }
     
-    private func createNotificationRequest(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
+    private func createNotification(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
         
         // notification parameters
         let dateComponent = notification.dateComponents
         let repeats = notification.repeating
-        let id = notification.id
+        let id = notification.id // must use core data id so id can be tracked
         
         // notification trigger
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
@@ -181,19 +176,19 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
             if let error = error {
                 print("Request \(id) creation error: ", error.localizedDescription)
             } else {
-                print("Notification \(id) Scheduled OK")
-                self.notifications.append(notification) // append notification to notifications upon success
+                print("Notification \(id) Scheduled")
+                self.notifications.append(notification) // not needed...only use notification for creation
             }
         }
         
         // below is for debug only, not needed...
-        //       #if DEBUG
+        #if DEBUG
         print(#function)
         print("Notification \(id) with request id \(request.identifier) set")
         print("List of notifications follows:")
         listScheduledNotifications()
         listDeliveredNotifications()
-//       #endif
+        #endif
     }
     
     //MARK: - Cleanup methods
@@ -207,6 +202,8 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
             }
         }
         center.removeDeliveredNotifications(withIdentifiers: id)
+        // below not needed if notifications is used for creation only
+
         notifications.removeAll { item in
             return item.id == id[0]
         }
@@ -222,6 +219,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
             }
         }
         center.removePendingNotificationRequests(withIdentifiers: id)
+        // below not needed if notifications is used for creation only
         notifications.removeAll { item in
             return item.id == id[0]
         }

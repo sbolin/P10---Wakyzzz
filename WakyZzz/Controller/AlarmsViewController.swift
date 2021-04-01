@@ -43,9 +43,9 @@ class AlarmsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        populateAlarms()
-//        checkFirstRun()
-//        configureTableView()
+        if CoreDataController.shared.modelIsEmpty {
+            populateAlarms()
+        }
     }
     
     func checkFirstRun() {

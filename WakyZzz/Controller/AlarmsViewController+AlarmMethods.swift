@@ -11,6 +11,7 @@ import UIKit
 extension AlarmsViewController {
     // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
     func populateAlarms() {
+        
 //        let context = CoreDataController.shared.managedContext
         // weekday alarm
         let weekDayAlarmID = UUID()
@@ -75,7 +76,7 @@ extension AlarmsViewController {
             repeatDays: repeated,
             dateComponents: dateComponents)
         
-        notifcationController.scheduleNotification(notification: notification, type: type)
+        notifcationController.createNotificationContent(notification: notification, type: type)
     }
     
     //    func alarm(at indexPath: IndexPath) -> Alarm? {
