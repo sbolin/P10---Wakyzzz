@@ -138,16 +138,6 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
-    func updateSnoozeStatus(for alarmID: UUID) {
-        guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
-        alarmEntity.snoozed = true
-        alarmEntity.timesSnoozed += 1
-        saveContext(context: managedContext)
-        if alarmEntity.timesSnoozed > 3 {
-            print("Activate Random Act of Kindness™")
-        }
-    }
-    
     func changeRepeateDays(at indexPath: IndexPath, repeatDays: [Bool]) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         alarmEntity.repeatDays = repeatDays
@@ -160,6 +150,16 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
+    func updateSnoozeStatus(for alarmID: UUID) {
+        guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
+        alarmEntity.snoozed = true
+        alarmEntity.timesSnoozed += 1
+        saveContext(context: managedContext)
+        if alarmEntity.timesSnoozed > 3 {
+            print("Activate Random Act of Kindness™")
+        }
+    }
+    
     func createAlarmEntityFromAlarmObject(alarm: Alarm) {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = alarm.alarmID
@@ -168,6 +168,19 @@ class CoreDataController {
         newAlarmEntity.snoozed = alarm.snoozed
         newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
         newAlarmEntity.enabled = alarm.enabled
+        
+        saveContext(context: managedContext)
+    }
+    
+    func updateAlarmEntityFromAlarmObject(at indexPath: IndexPath, alarm: Alarm) {
+        // just update all properties, rather than track/update individual properties
+        let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
+        alarmEntity.alarmID = alarm.alarmID
+        alarmEntity.time = Int32(alarm.time)
+        alarmEntity.repeatDays = alarm.repeatDays
+        alarmEntity.snoozed = alarm.snoozed
+        alarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
+        alarmEntity.enabled = alarm.enabled
         
         saveContext(context: managedContext)
     }

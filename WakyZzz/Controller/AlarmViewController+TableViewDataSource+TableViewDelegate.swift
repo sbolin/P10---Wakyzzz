@@ -42,10 +42,7 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
     
     // Added didSelectRowAt method, ask Peter if needed (this way, just select row to edit details)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
-            vc.alarmEntity = fetchedResultsController.object(at: indexPath)
-            navigationController?.pushViewController(vc, animated: true)
-        }
+        editAlarm(at: indexPath)
     }
     
     //MARK: Set up table view editing
@@ -60,7 +57,10 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
             completion(true)
         }
         
+        delete.image = UIImage(systemName: "trash.circle")
         delete.backgroundColor =  UIColor(red: 1, green: 0, blue: 0, alpha: 1)
+
+        edit.image = UIImage(systemName: "pencil.circle")
         edit.backgroundColor =  UIColor(red: 0, green: 1, blue: 0, alpha: 1)
         
         let config = UISwipeActionsConfiguration(actions: [delete, edit])

@@ -28,9 +28,6 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00 AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FKQ-CR-bhd">
                                                     <rect key="frame" x="16" y="11" width="287" height="58"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="58" id="eKk-cp-Af9"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -57,10 +54,10 @@
                                                 <constraint firstItem="FKQ-CR-bhd" firstAttribute="leading" secondItem="UFv-lQ-eKE" secondAttribute="leadingMargin" id="B4e-gH-wvI"/>
                                                 <constraint firstItem="FKQ-CR-bhd" firstAttribute="trailing" secondItem="aOW-6I-KN4" secondAttribute="leading" constant="-8" id="Kgq-gU-F9m"/>
                                                 <constraint firstItem="ZCN-if-4O3" firstAttribute="trailing" secondItem="UFv-lQ-eKE" secondAttribute="trailingMargin" id="NWk-ka-8bR"/>
-                                                <constraint firstItem="ZCN-if-4O3" firstAttribute="top" secondItem="FKQ-CR-bhd" secondAttribute="bottom" constant="16" id="OjO-9L-BZg"/>
                                                 <constraint firstItem="aOW-6I-KN4" firstAttribute="centerY" secondItem="FKQ-CR-bhd" secondAttribute="centerY" id="RJq-yi-nrb"/>
                                                 <constraint firstItem="FKQ-CR-bhd" firstAttribute="top" secondItem="UFv-lQ-eKE" secondAttribute="topMargin" id="lit-qI-LRB"/>
                                                 <constraint firstItem="ZCN-if-4O3" firstAttribute="bottom" secondItem="UFv-lQ-eKE" secondAttribute="bottomMargin" id="ltK-U2-70O"/>
+                                                <constraint firstItem="ZCN-if-4O3" firstAttribute="top" secondItem="FKQ-CR-bhd" secondAttribute="bottom" constant="16" id="mmw-iD-72q"/>
                                                 <constraint firstItem="ZCN-if-4O3" firstAttribute="leading" secondItem="UFv-lQ-eKE" secondAttribute="leadingMargin" id="usI-zF-FeA"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -106,7 +103,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="yhU-rL-ath">
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="yhU-rL-ath">
                                 <rect key="frame" x="0.0" y="44" width="375" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="cbv-5e-JDX"/>

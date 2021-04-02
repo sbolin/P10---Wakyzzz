@@ -27,7 +27,7 @@ class AlarmsViewController: UIViewController {
 //    private var alarm = Alarm()
 //    private var alarms = [Alarm]()
     
-    private var editingIndexPath: IndexPath? // what is this???
+    var editingIndexPath: IndexPath?
 
 //MARK: - View Lifecylcle
     override func viewDidLoad() {
@@ -35,9 +35,10 @@ class AlarmsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         center.delegate = self
+        checkFirstRun()
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
-        checkFirstRun()
+//        checkFirstRun()
         configureTableView()
     }
     
@@ -55,7 +56,7 @@ class AlarmsViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: "Launched Before")
             
             // show alert for setting up alarms
-            let alert = UIAlertController(title: "Lets get started!", message: "1. Add alarm (+ button) or edit existing alarms.\n2. Set days to repeat (or not repeat).\n3. Turn alarm on!.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Lets get started!", message: "1. Approve Notifications (Alert after this one).\n2. Add alarm (+ button) or edit existing alarms.\n3. Set days to repeat (or not repeat).\n4. Turn alarm on!.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
             self.present(alert, animated: true)
         }
@@ -68,13 +69,13 @@ class AlarmsViewController: UIViewController {
         if fetchedResultsController == nil {
             fetchedResultsController = CoreDataController.shared.fetchedAlarmResultsController
         }
+        fetchedResultsController.delegate = self
         do {
             try fetchedResultsController.performFetch()
-            tableView.reloadData()
+ //           tableView.reloadData()
         } catch (let error) {
             print("Fetch failed, error: \(error.localizedDescription)")
         }
-        fetchedResultsController.delegate = self
  //       tableView.reloadData()
     }
     
@@ -93,26 +94,5 @@ extension AlarmsViewController: AlarmCellDelegate {
 //               alarm.enabled = enabled
 //            }
         }
-    }
-}
-
-extension AlarmsViewController: SetAlarmViewControllerDelegate {
-    // SetAlarmViewControllerDelegate methods
-    func setAlarmViewControllerDone(alarm: Alarm) {
-        if let editingIndexPath = editingIndexPath {
-            print("Edited Alarm")
-            tableView.reloadRows(at: [editingIndexPath], with: .automatic)
-        }
-        else {
-            print("new Alarm added")
-//            addAlarm(alarm, at: IndexPath(row: alarms.count, section: 0))
-            let objectCount = fetchedResultsController.fetchedObjects?.count ?? 0
-            addAlarm(alarm, at: IndexPath(row: objectCount, section: 0))
-        }
-        editingIndexPath = nil
-    }
-    
-    func setAlarmViewControllerCancel() {
-        editingIndexPath = nil
     }
 }

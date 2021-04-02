@@ -57,6 +57,17 @@ extension AlarmEntity {
         }
         return captions.count > 0 ? captions.joined(separator: ", ") : "One time alarm"
     }
+    
+    func toAlarm() -> Alarm {
+        let alarm = Alarm()
+        alarm.alarmID = self.alarmID
+        alarm.enabled = self.enabled
+        alarm.repeatDays = self.repeatDays
+        alarm.snoozed = self.snoozed
+        alarm.time = Int(self.time)
+        alarm.timesSnoozed = Int(self.timesSnoozed)
+        return alarm
+    }
 
 }
 

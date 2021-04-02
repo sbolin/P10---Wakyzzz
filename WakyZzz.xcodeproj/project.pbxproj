@@ -160,8 +160,8 @@
 		15594D8C25DD53B000BE602D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				15594DB425E12E3E00BE602D /* CoreData */,
 				0424EB6820BEF93F00E15E46 /* Alarm.swift */,
+				15594DB425E12E3E00BE602D /* CoreData */,
 			);
 			path = Model;
 			sourceTree = "<group>";

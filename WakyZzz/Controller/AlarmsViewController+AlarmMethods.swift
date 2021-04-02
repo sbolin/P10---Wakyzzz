@@ -11,7 +11,6 @@ import UIKit
 extension AlarmsViewController {
     // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
     func populateAlarms() {
-        
 //        let context = CoreDataController.shared.managedContext
         // weekday alarm
         let weekDayAlarmID = UUID()
@@ -45,7 +44,7 @@ extension AlarmsViewController {
         let weekday = calendar.component(.weekday, from: date)
         var repeated: [Int] = [weekday]
         let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
-        let snoozedTimes = 2 // TODO: get from CoreData
+        let snoozedTimes = 0 // TODO: get from CoreData
         let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
         
         if repeats {
@@ -93,7 +92,7 @@ extension AlarmsViewController {
     }
     
     func editAlarm(at indexPath: IndexPath) {
-//        editingIndexPath = indexPath // What does this do?
+        editingIndexPath = indexPath
         let alarmEntity = fetchedResultsController.object(at: indexPath)
         presentSetAlarmViewController(alarmEntity: alarmEntity) // (alarm: alarm(at: indexPath))
     }
@@ -101,17 +100,42 @@ extension AlarmsViewController {
     func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
         tableView.beginUpdates()
         //        alarms.insert(alarm, at: indexPath.row)
-        CoreDataController.shared.createAlarmEntity()
+        CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
         tableView.insertRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
     }
     
     func presentSetAlarmViewController(alarmEntity: AlarmEntity?) { // change call site from (alarm: Alarm?)
         if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
-            vc.alarmEntity = alarmEntity
+            // need to convert AlarmEntity to Alarm
+            let alarm = alarmEntity?.toAlarm()
+            vc.alarm = alarm
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+}
+
+//MARK: - SetAlarmViewControllerDelegate methods
+extension AlarmsViewController: SetAlarmViewControllerDelegate {
+    // SetAlarmViewControllerDelegate methods
+    func setAlarmViewControllerDone(alarm: Alarm) {
+        if let editingIndexPath = editingIndexPath {
+            // edited alarm
+            CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
+//            tableView.reloadRows(at: [editingIndexPath], with: .automatic)
+        }
+        else {
+            // new alarm
+//            let objectCount = fetchedResultsController.fetchedObjects?.count ?? 0
+//            addAlarm(alarm, at: IndexPath(row: objectCount, section: 0))
+            CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
+
+        }
+        editingIndexPath = nil
+    }
     
+    func setAlarmViewControllerCancel() {
+        editingIndexPath = nil
+    }
 }

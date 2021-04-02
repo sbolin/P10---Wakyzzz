@@ -17,18 +17,19 @@ extension AlarmsViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-            
             case .insert:
                 tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .delete:
-                tableView.deleteRows(at: [newIndexPath!], with: .automatic)
+                tableView.deleteRows(at: [indexPath!], with: .automatic) //newIndexPath
             case .move:
-                tableView.deleteRows(at: [indexPath!], with: .automatic)
-                tableView.insertRows(at: [newIndexPath!], with: .automatic)
+                tableView.moveRow(at: indexPath!, to: newIndexPath!)
+ //               tableView.deleteRows(at: [indexPath!], with: .automatic)
+ //               tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .update:
-                let cell = tableView.cellForRow(at: indexPath!) as! AlarmTableViewCell
-                let fetchedAlarm = fetchedResultsController.object(at: indexPath!)
-                cell.populate(caption: fetchedAlarm.localAlarmTimeString, subcaption: fetchedAlarm.repeatingDayString, enabled: fetchedAlarm.enabled)
+                tableView.reloadRows(at: [indexPath!], with: .automatic)
+//                let cell = tableView.cellForRow(at: indexPath!) as! AlarmTableViewCell
+//                let fetchedAlarm = fetchedResultsController.object(at: indexPath!)
+//                cell.populate(caption: fetchedAlarm.localAlarmTimeString, subcaption: fetchedAlarm.repeatingDayString, enabled: fetchedAlarm.enabled)
             @unknown default:
                 print("Unexpected NSFetchedResultsChangeType")
         }
@@ -38,15 +39,15 @@ extension AlarmsViewController: NSFetchedResultsControllerDelegate {
         tableView.endUpdates()
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        let indexSet = IndexSet(integer: sectionIndex)
-        switch type {
-            case .insert:
-                tableView.insertSections(indexSet, with: .automatic)
-            case .delete:
-                tableView.deleteSections(indexSet, with: .automatic)
-            default:
-                break
-        }
-    }
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+//        let indexSet = IndexSet(integer: sectionIndex)
+//        switch type {
+//            case .insert:
+//                tableView.insertSections(indexSet, with: .automatic)
+//            case .delete:
+//                tableView.deleteSections(indexSet, with: .automatic)
+//            default:
+//                break
+//        }
+//    }
 }
