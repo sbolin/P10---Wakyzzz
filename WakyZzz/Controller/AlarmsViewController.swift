@@ -38,13 +38,14 @@ class AlarmsViewController: UIViewController {
         checkFirstRun()
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
-//        checkFirstRun()
         configureTableView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if CoreDataController.shared.modelIsEmpty {
+            print(#function)
+            print("Model empty? \(CoreDataController.shared.modelIsEmpty)")
             populateAlarms()
         }
     }
@@ -56,7 +57,7 @@ class AlarmsViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: "Launched Before")
             
             // show alert for setting up alarms
-            let alert = UIAlertController(title: "Lets get started!", message: "1. Approve Notifications (Alert after this one).\n2. Add alarm (+ button) or edit existing alarms.\n3. Set days to repeat (or not repeat).\n4. Turn alarm on!.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Lets get started!", message: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. Alarm goes off once if no repeated days.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
             self.present(alert, animated: true)
         }
