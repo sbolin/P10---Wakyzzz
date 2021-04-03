@@ -53,9 +53,11 @@ class CoreDataController {
         do {
             let request = AlarmEntity.alarmFetchRequest()
             let count = try managedContext.count(for: request)
+            print("count: \(count)")
             return count == 0
         } catch {
-            return true
+            print("could not count objects")
+            return false
         }
     }()
     

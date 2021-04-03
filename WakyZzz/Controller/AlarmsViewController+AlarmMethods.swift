@@ -32,9 +32,9 @@ extension AlarmsViewController {
         weekendAlarmEntity.repeatDays[6] = true
         
         CoreDataController.shared.saveContext(context: context)
-//        tableView.reloadData()
     }
     
+    // Schedule notification alarms at given time/repeat. Better to call using AlarmEntity
     func scheduleAlarm(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
         let date = Date() // use today's date for now...
         let calendar = Calendar.current
@@ -48,7 +48,7 @@ extension AlarmsViewController {
         let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
         
         if repeats {
-            repeated = [3, 5, 7] // Tues/Thur/Sat for example, final will use Core Data to populate
+            repeated = [3, 5, 7] // use Core Data to populate...
         }
         
         switch type {
@@ -78,14 +78,9 @@ extension AlarmsViewController {
         notifcationController.createNotificationContent(notification: notification, type: type)
     }
     
-    //    func alarm(at indexPath: IndexPath) -> Alarm? {
-    //        return indexPath.row < alarms.count ? alarms[indexPath.row] : nil
-    //    }
-    
+    //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
         tableView.beginUpdates()
-        print("Deleting alarm at indexPath\(indexPath.row)")
-        //        alarms.remove(at: indexPath.row) // alarms.count
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
@@ -94,20 +89,19 @@ extension AlarmsViewController {
     func editAlarm(at indexPath: IndexPath) {
         editingIndexPath = indexPath
         let alarmEntity = fetchedResultsController.object(at: indexPath)
-        presentSetAlarmViewController(alarmEntity: alarmEntity) // (alarm: alarm(at: indexPath))
+        presentSetAlarmViewController(alarmEntity: alarmEntity)
     }
     
     func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
-        tableView.beginUpdates()
-        //        alarms.insert(alarm, at: indexPath.row)
+//        tableView.beginUpdates()
         CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-        tableView.endUpdates()
+//        tableView.insertRows(at: [indexPath], with: .automatic)
+//        tableView.endUpdates()
     }
     
-    func presentSetAlarmViewController(alarmEntity: AlarmEntity?) { // change call site from (alarm: Alarm?)
+    // convert/pass Alarm object to SetAlarmViewController in lieu of AlarmEntity
+    func presentSetAlarmViewController(alarmEntity: AlarmEntity?) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "SetAlarm") as? SetAlarmViewController {
-            // need to convert AlarmEntity to Alarm
             let alarm = alarmEntity?.toAlarm()
             vc.alarm = alarm
             vc.delegate = self
@@ -123,14 +117,10 @@ extension AlarmsViewController: SetAlarmViewControllerDelegate {
         if let editingIndexPath = editingIndexPath {
             // edited alarm
             CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
-//            tableView.reloadRows(at: [editingIndexPath], with: .automatic)
         }
         else {
             // new alarm
-//            let objectCount = fetchedResultsController.fetchedObjects?.count ?? 0
-//            addAlarm(alarm, at: IndexPath(row: objectCount, section: 0))
             CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
-
         }
         editingIndexPath = nil
     }

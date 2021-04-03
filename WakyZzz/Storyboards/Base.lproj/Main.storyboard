@@ -65,7 +65,6 @@
                                             <outlet property="captionLabel" destination="FKQ-CR-bhd" id="H7r-AM-bCw"/>
                                             <outlet property="enabledSwitch" destination="aOW-6I-KN4" id="RIA-bN-LyG"/>
                                             <outlet property="subcaptionLabel" destination="ZCN-if-4O3" id="s2R-KN-K7Y"/>
-                                            <segue destination="ZR4-jh-IrU" kind="show" identifier="SetAlarm" id="Qux-Iq-gh5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -104,7 +103,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="yhU-rL-ath">
-                                <rect key="frame" x="0.0" y="44" width="375" height="200"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="cbv-5e-JDX"/>
                                 </constraints>
@@ -113,7 +112,7 @@
                                 </connections>
                             </datePicker>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kcO-Xc-lqv">
-                                <rect key="frame" x="0.0" y="244" width="375" height="423"/>
+                                <rect key="frame" x="0.0" y="200" width="375" height="467"/>
                                 <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DayOfWeekCell" id="Zh0-E4-lCB">

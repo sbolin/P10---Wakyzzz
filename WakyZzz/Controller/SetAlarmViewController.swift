@@ -6,7 +6,6 @@
 //  Copyright © 2018 Olga Volkova OC. All rights reserved.
 //
 
-//TODO: !!! currently mess of alarm and alarmEntity useage. Must fix this!!!
 import Foundation
 import UIKit
 
@@ -17,23 +16,23 @@ protocol SetAlarmViewControllerDelegate {
 
 class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: - IBOutlets
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var tableView: UITableView!
-    var alarm: Alarm?
-
+    
+    //MARK: - Properties and delegates
+    var alarm: Alarm? // pass in alarm object for editing
     var delegate: SetAlarmViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         config()
     }
     
     func config() {
-        // uses alarmEntity
         if alarm == nil {
             navigationItem.title = "New Alarm"
-            // initially show 8am on datepicker
+            // show 8am on datePicker if new...
             var components = DateComponents()
             components.hour = 8
             components.minute = 0
@@ -49,6 +48,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         
+        // otherwise set datePicker time to alarm time
         datePicker.date = (alarm?.alarmTimeAndDate)!
     }
     
@@ -71,7 +71,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Repeat on following weekdays"
+        return "Repeat on following weekdays:"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -90,6 +90,8 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func doneButtonPress(_ sender: Any) {
+        // send back alarm object to process/display in AlarmsViewController
+        // note: if alarm is new/edited is handled in AlarmsViewController
         delegate?.setAlarmViewControllerDone(alarm: alarm!)
         navigationController?.popViewController(animated: true)
     }

@@ -27,20 +27,13 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         let fetchedAlarm = fetchedResultsController.object(at: indexPath)
         cell.populate(caption: fetchedAlarm.localAlarmTimeString, subcaption: fetchedAlarm.repeatingDayString, enabled: fetchedAlarm.enabled)
-        
-        //        if let alarm = alarm(at: indexPath) {
-        //            cell.populate(caption: alarm.localAlarmTimeString, subcaption: alarm.repeatingDayString, enabled: alarm.enabled)
-        //        }
         return cell
     }
     
-    // Added titleForHeaderInSection, sort table view based on enabled or not (then by alarm time)
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let sectionInfo = fetchedResultsController.sections?[section]
-        return sectionInfo?.name
+        return "Alarms"
     }
-    
-    // Added didSelectRowAt method, ask Peter if needed (this way, just select row to edit details)
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         editAlarm(at: indexPath)
     }
