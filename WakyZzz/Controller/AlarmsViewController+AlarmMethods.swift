@@ -80,10 +80,10 @@ extension AlarmsViewController {
     
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
-        tableView.beginUpdates()
+//        tableView.beginUpdates()
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        tableView.endUpdates()
+//        tableView.deleteRows(at: [indexPath], with: .automatic)
+//        tableView.endUpdates()
     }
     
     func editAlarm(at indexPath: IndexPath) {

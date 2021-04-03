@@ -108,7 +108,7 @@ final class WakyZzzTests: XCTestCase {
             XCTFail("\(#function) error happened \(error.localizedDescription)")
         }
         
-        // fetch same goal
+        // fetch same alarm
         let allAlarms = fetchedResultsController.fetchedObjects
         guard let alarm = allAlarms?.last else {
             XCTFail()
@@ -117,6 +117,36 @@ final class WakyZzzTests: XCTestCase {
         
         XCTAssertNotNil(alarm, "alarm should not be nil")
         XCTAssertEqual(alarm.enabled, true)
+        XCTAssertEqual(alarm.time, alarmTime)
+        XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
+        XCTAssertEqual(alarm.snoozed, false)
+        XCTAssertEqual(alarm.timesSnoozed, 0)
+        XCTAssertNotEqual(alarm.timesSnoozed, 1)
+    }
+    
+    func testAddNewAlarmWithID() {
+        let alarmTime = Int32(8*60*60)
+        let id = UUID()
+        // create alarm
+        testStack.createAlarmEntityWithID(id: id)
+        
+        do {
+            try testStack.fetchedAlarmResultsController.performFetch()
+        } catch {
+            print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
+        }
+        
+        // fetch same alarm
+        let allAlarms = fetchedResultsController.fetchedObjects
+        guard let alarm = allAlarms?.last else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertNotNil(alarm, "alarm should not be nil")
+        XCTAssertEqual(alarm.enabled, true)
+        XCTAssertEqual(alarm.alarmID, id)
         XCTAssertEqual(alarm.time, alarmTime)
         XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
         XCTAssertEqual(alarm.snoozed, false)
@@ -220,6 +250,37 @@ final class WakyZzzTests: XCTestCase {
         XCTAssertNotNil(alarm, "alarm not nil")
     }
     
+    func testUpdateSnoozeStatue() {
+        let alarmTime = Int32(8*60*60)
+        // create alarm
+        testStack.createAlarmEntity()
+        
+        do {
+            try testStack.fetchedAlarmResultsController.performFetch()
+        } catch {
+            print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
+        }
+        
+        // fetch same alarm
+        let allAlarms = fetchedResultsController.fetchedObjects
+        guard let alarm = allAlarms?.last else {
+            XCTFail()
+            return
+        }
+        
+        alarm.snoozed = true
+        alarm.timesSnoozed = 1
+        
+        XCTAssertNotNil(alarm, "alarm should not be nil")
+        XCTAssertEqual(alarm.enabled, true)
+        XCTAssertEqual(alarm.time, alarmTime)
+        XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
+        XCTAssertEqual(alarm.snoozed, true)
+        XCTAssertEqual(alarm.timesSnoozed, 1)
+        XCTAssertNotEqual(alarm.timesSnoozed, 0)
+    }
+    
     func testAddNewAlarmObject() {
         let alarmTime = 8*60*60
         let alarm = Alarm()
@@ -229,10 +290,10 @@ final class WakyZzzTests: XCTestCase {
         alarm.snoozed = false
         alarm.timesSnoozed = 0
         
-        // create goal
+        // create alarm
         testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
 
-        // fetch same goal
+        // fetch same alarm
         do {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
@@ -248,5 +309,41 @@ final class WakyZzzTests: XCTestCase {
         XCTAssertEqual(mockAlarm.snoozed, false)
         XCTAssertEqual(mockAlarm.timesSnoozed, 0)
         XCTAssertNotEqual(mockAlarm.timesSnoozed, 1)
+    }
+    
+    func testUpdateAlarmObject() {
+        let alarmTime = 10*60*60
+        let alarm = Alarm()
+        alarm.enabled = true
+        alarm.time = alarmTime
+        alarm.repeatDays = [false, false, false, true, false, false, false]
+        alarm.snoozed = false
+        alarm.timesSnoozed = 1
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        
+        // create alarm
+        testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
+        
+        // fetch same alarm
+        do {
+            try testStack.fetchedAlarmResultsController.performFetch()
+        } catch {
+            print("could not perform fetch")
+        }
+        
+        // modify alarm...
+        testStack.updateAlarmEntityFromAlarmObject(at: indexPath, alarm: alarm)
+        
+        // fetch same alarm
+        let mockAlarm = testStack.fetchedAlarmResultsController.object(at: indexPath)
+
+        XCTAssertNotNil(mockAlarm, "alarm should not be nil")
+        XCTAssertEqual(mockAlarm.enabled, true)
+        XCTAssertEqual(mockAlarm.time, Int32(alarmTime))
+        XCTAssertEqual(mockAlarm.repeatDays, [false, false, false, true, false, false, false])
+        XCTAssertEqual(mockAlarm.snoozed, false)
+        XCTAssertEqual(mockAlarm.timesSnoozed, 1)
+        XCTAssertNotEqual(mockAlarm.timesSnoozed, 0)
     }
 }

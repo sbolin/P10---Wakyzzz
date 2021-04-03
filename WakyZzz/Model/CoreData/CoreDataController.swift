@@ -17,15 +17,8 @@ class CoreDataController {
     
     lazy var modelName = "WakyZzz"
     
-    //MARK: - NSManagedObjectModel
-//    lazy var model: NSManagedObjectModel = {
-//        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
-//        return NSManagedObjectModel(contentsOf: modelURL)!
-//    }()
-    
     //MARK: - NSPersistentContainer
     lazy var persistentContainer: NSPersistentContainer = {
-//        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
         let container = NSPersistentContainer(name: modelName)
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
@@ -64,8 +57,7 @@ class CoreDataController {
     //MARK: - Fetch Properties
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
-        request.returnsObjectsAsFaults = false // since few alarms, return objects, not faults
-        // annoying having table resort when alarm enabled/disabled...
+        request.returnsObjectsAsFaults = false // return objects not faults (small model)
 //        let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
 //        request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
@@ -103,6 +95,7 @@ class CoreDataController {
         }
     }
     
+    // tested, not used otherwise
     func createAlarmEntity() {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = UUID()
@@ -114,6 +107,7 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
+    // tested, in populate alarms only, can delete in final
     func createAlarmEntityWithID(id: UUID) {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = id
@@ -125,12 +119,14 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
+    // tested
     func changeAlarmStatus(at indexPath: IndexPath, status: Bool) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         alarmEntity.enabled = status
         saveContext(context: managedContext)
     }
     
+    // tested, not used otherwise
     func changeAlarmTime(at indexPath: IndexPath, date: Date) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         let calendar = Calendar.current
@@ -140,18 +136,21 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
+    // tested, not used otherwise
     func changeRepeateDays(at indexPath: IndexPath, repeatDays: [Bool]) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         alarmEntity.repeatDays = repeatDays
         saveContext(context: managedContext)
     }
     
+    // tested
     func deleteAlarmEntity(at indexPath: IndexPath) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         managedContext.delete(alarmEntity)
         saveContext(context: managedContext)
     }
     
+    // tested, not used yet
     func updateSnoozeStatus(for alarmID: UUID) {
         guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
         alarmEntity.snoozed = true
@@ -162,6 +161,7 @@ class CoreDataController {
         }
     }
     
+    // tested
     func createAlarmEntityFromAlarmObject(alarm: Alarm) {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = alarm.alarmID
@@ -174,6 +174,7 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
+    // tested
     func updateAlarmEntityFromAlarmObject(at indexPath: IndexPath, alarm: Alarm) {
         // just update all properties, rather than track/update individual properties
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
