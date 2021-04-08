@@ -67,7 +67,7 @@ extension AlarmsViewController {
         }
         
         let notification = LocalNotification(
-            id: UUID().uuidString,
+            id: UUID().uuidString, // from core data
             title: alarmName,
             subtitle: subtitle,
             body: body,
@@ -75,29 +75,33 @@ extension AlarmsViewController {
             repeatDays: repeated,
             dateComponents: dateComponents)
         
-        notifcationController.createNotificationContent(notification: notification, type: type)
+        notifcationController.createNotification(notification: notification, type: type)
     }
     
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
-//        tableView.beginUpdates()
+        let alarmEntity = fetchedResultsController.object(at: indexPath)
+        let alarmID = alarmEntity.alarmID.uuidString
+        // remove notification
+        self.notifcationController.center.removePendingNotificationRequests(withIdentifiers: [alarmID])
+        
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
-//        tableView.deleteRows(at: [indexPath], with: .automatic)
-//        tableView.endUpdates()
     }
     
+    // present
     func editAlarm(at indexPath: IndexPath) {
         editingIndexPath = indexPath
         let alarmEntity = fetchedResultsController.object(at: indexPath)
+        
         presentSetAlarmViewController(alarmEntity: alarmEntity)
     }
     
-    func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
+//    func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
 //        tableView.beginUpdates()
-        CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
+//        CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
 //        tableView.insertRows(at: [indexPath], with: .automatic)
 //        tableView.endUpdates()
-    }
+//    }
     
     // convert/pass Alarm object to SetAlarmViewController in lieu of AlarmEntity
     func presentSetAlarmViewController(alarmEntity: AlarmEntity?) {
@@ -112,15 +116,18 @@ extension AlarmsViewController {
 
 //MARK: - SetAlarmViewControllerDelegate methods
 extension AlarmsViewController: SetAlarmViewControllerDelegate {
-    // SetAlarmViewControllerDelegate methods
     func setAlarmViewControllerDone(alarm: Alarm) {
         if let editingIndexPath = editingIndexPath {
             // edited alarm
             CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
+            let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
+            updateNotificationForAlarmEntity(for: alarmEntity)
         }
         else {
-            // new alarm
+            // new core data alarmEntity
             CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
+            guard let alarmEntity = fetchedResultsController.fetchedObjects?.last else { return }
+            createNotificationForAlarmEntity(for: alarmEntity, type: .snoozable)
         }
         editingIndexPath = nil
     }

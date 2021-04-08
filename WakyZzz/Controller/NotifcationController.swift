@@ -39,7 +39,6 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
 
     //MARK: - Request Authorization
     func requestNotificationAuthorization() {
-        print(#function)
         let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .announcement, .badge, .carPlay, .sound) // asks for authorization to show notification via alert, Siri read aloud, badges, carplay, and play sound
         
         // unused authorization options, keep in case added functionality later
@@ -112,7 +111,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                        intentIdentifiers: [],
                                                        hiddenPreviewsBodyPlaceholder: "",
                                                        options: .customDismissAction)
-        
+        /// alarm has been snoozed
         let snoozedCategory = UNNotificationCategory(identifier: NotificationType.snoozed.rawValue,
                                                        actions: [turnOffAlarm, snoozeAlarm],
                                                        intentIdentifiers: [],
@@ -128,12 +127,11 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         // Register the notification type.
         center.setNotificationCategories([snoozableCategory, snoozedCategory, nonSnoozableCategory])
         
-        print(#function)
         print("Actions and Categories set")
     }
 
     //MARK: - Schedule Notification
-    func createNotificationContent(notification: LocalNotification, type: NotificationType) {
+    func createNotification(notification: LocalNotification, type: NotificationType) {
         
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
@@ -155,11 +153,11 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         
         for index in 0..<notification.repeatDays.count {
             let repeatDay = notification.repeatDays[index]
-            createNotification(notification: notification, weekDay: repeatDay, content: content)
+            addNotification(notification: notification, weekDay: repeatDay, content: content)
         }
     }
     
-    private func createNotification(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
+    private func addNotification(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
         
         // notification parameters
         let dateComponent = notification.dateComponents

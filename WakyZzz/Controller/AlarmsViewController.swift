@@ -16,6 +16,7 @@ class AlarmsViewController: UIViewController {
     
     //MARK: Set up data store
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
+    var notificationController: NotificationController!
     
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager
@@ -37,16 +38,6 @@ class AlarmsViewController: UIViewController {
         configureTableView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if CoreDataController.shared.modelIsEmpty {
-            print(#function)
-            print("Model empty? \(CoreDataController.shared.modelIsEmpty)")
-            // leave this for now...
-            populateAlarms()
-        }
-    }
-    
     func checkFirstRun() {
         let launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
         if !launchedBefore  {
@@ -57,6 +48,9 @@ class AlarmsViewController: UIViewController {
             let alert = UIAlertController(title: "Lets get started!", message: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. Alarm goes off once if no repeated days.\n4. Switch turns alarm on/off", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
             self.present(alert, animated: true)
+            // temporary, will be removed in final
+            populateAlarms()
+            //
         }
     }
     
@@ -75,6 +69,14 @@ class AlarmsViewController: UIViewController {
         }
     }
     
+    func createNotificationForAlarmEntity(for entity: AlarmEntity, type: NotificationType) {
+        print(#function)
+    }
+    
+    func updateNotificationForAlarmEntity(for entity: AlarmEntity) {
+        print(#function)
+    }
+    
     //MARK: - Actions
     @IBAction func addButtonPress(_ sender: Any) {
         presentSetAlarmViewController(alarmEntity: nil) // (alarm: nil)
@@ -89,3 +91,4 @@ extension AlarmsViewController: AlarmCellDelegate {
         }
     }
 }
+

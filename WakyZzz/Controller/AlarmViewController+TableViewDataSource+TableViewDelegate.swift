@@ -41,6 +41,8 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
     //MARK: Set up table view editing
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
+
+            // delete core data object and associated notification
             self.deleteAlarm(at: indexPath)
             completion(true)
         }
