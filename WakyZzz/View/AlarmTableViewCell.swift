@@ -25,19 +25,21 @@ class AlarmTableViewCell: UITableViewCell {
         
         super.awakeFromNib()
         
-        configure()
+//        configure()
     }
     
-    func configure() {
-        
-    }
+//    func configure() {
+//
+//    }
     
+    // populate tableview cell method
     func populate(caption: String, subcaption: String, enabled: Bool) {
         captionLabel.text = caption
         subcaptionLabel.text = subcaption
         enabledSwitch.isOn = enabled
     }
     
+    // Enable switch toggled, call delegate method to handle
     @IBAction func enabledStateChanged(_ sender: Any) {
         delegate?.alarmCell(self, enabledChanged: enabledSwitch.isOn)
     }

@@ -21,9 +21,6 @@ class AlarmsViewController: UIViewController {
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager
     let center = UNUserNotificationCenter.current()
-    var alarmName = ""
-    var subtitle = ""
-    var body = ""
     var editingIndexPath: IndexPath?
 
 //MARK: - View Lifecylcle
@@ -49,7 +46,7 @@ class AlarmsViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
             self.present(alert, animated: true)
             // temporary, will be removed in final
-            populateAlarms()
+//            populateAlarms()
             //
         }
     }
@@ -69,26 +66,71 @@ class AlarmsViewController: UIViewController {
         }
     }
     
-    func createNotificationForAlarmEntity(for entity: AlarmEntity, type: NotificationType) {
-        print(#function)
-    }
-    
-    func updateNotificationForAlarmEntity(for entity: AlarmEntity) {
-        print(#function)
-    }
-    
     //MARK: - Actions
     @IBAction func addButtonPress(_ sender: Any) {
         presentSetAlarmViewController(alarmEntity: nil) // (alarm: nil)
     }
 }
 
+//MARK: - AlarmCellDelegate method
 extension AlarmsViewController: AlarmCellDelegate {
-    // AlarmCellDelegate method
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
+        var notificationType: NotificationType
         if let indexPath = tableView.indexPath(for: cell) {
             CoreDataController.shared.changeAlarmStatus(at: indexPath, status: enabled)
+            // update notification
+            let alarmEntity = fetchedResultsController.object(at: indexPath)
+            if alarmEntity.timesSnoozed == 3 {
+                notificationType = .nonSnoozable
+            } else if alarmEntity.timesSnoozed > 0 {
+                notificationType = .snoozed
+            } else {
+                notificationType = .snoozable
+            }
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)
         }
     }
 }
 
+//MARK: - SetAlarmViewControllerDelegate methods
+extension AlarmsViewController: SetAlarmViewControllerDelegate {
+    func setAlarmViewControllerDone(alarm: Alarm) {
+        var notificationType: NotificationType
+        if let editingIndexPath = editingIndexPath {
+            // alarm has been edited
+            CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
+            // update notification
+            let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
+            if alarmEntity.timesSnoozed == 3 {
+                notificationType = .nonSnoozable
+            } else if alarmEntity.timesSnoozed > 0 {
+                notificationType = .snoozed
+            } else {
+                notificationType = .snoozable
+            }
+            // NOTE: need to check if notification must be cancelled first, then re-scheduled, or if can just reschedule using same ID
+            // cancel for now...
+            notifcationController.CancelNotificationForEntity(entity: alarmEntity)
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)
+        }
+        else {
+            // new core data alarmEntity
+            CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
+            guard let alarmEntity = fetchedResultsController.fetchedObjects?.last else { return }
+            // create notification
+            if alarmEntity.timesSnoozed == 3 {
+                notificationType = .nonSnoozable
+            } else if alarmEntity.timesSnoozed > 0 {
+                notificationType = .snoozed
+            } else {
+                notificationType = .snoozable
+            }
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)        }
+        editingIndexPath = nil
+    }
+    
+    func setAlarmViewControllerCancel() {
+        // cancel pressed, don't do anything
+        editingIndexPath = nil
+    }
+}

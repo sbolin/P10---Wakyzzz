@@ -27,6 +27,8 @@
 		15594DB625E12E8B00BE602D /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DB525E12E8B00BE602D /* CoreDataController.swift */; };
 		157B2FBF260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */; };
 		157B2FC3260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */; };
+		15A14945261F6D5400E7788E /* NotifcationController+CleanupMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */; };
+		15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */; };
 		15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */; };
 		15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */; };
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
@@ -67,6 +69,8 @@
 		15594DB525E12E8B00BE602D /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmViewController+FetchedResultsControllerDelegate.swift"; sourceTree = "<group>"; };
 		157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+AlarmMethods.swift"; sourceTree = "<group>"; };
+		15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotifcationController+CleanupMethods.swift"; sourceTree = "<group>"; };
+		15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationController+CreationMethods.swift"; sourceTree = "<group>"; };
 		15C7E6E525E6B9C400630D13 /* WakyZzz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WakyZzz.xcdatamodel; sourceTree = "<group>"; };
 		15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 				15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */,
 				0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */,
 				15594DA125DE4D4F00BE602D /* NotifcationController.swift */,
+				15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */,
+				15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -320,12 +326,14 @@
 				0424EB5620BEF89000E15E46 /* AlarmsViewController.swift in Sources */,
 				0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */,
 				157B2FC3260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift in Sources */,
+				15A14945261F6D5400E7788E /* NotifcationController+CleanupMethods.swift in Sources */,
 				157B2FBF260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift in Sources */,
 				0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */,
 				15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */,
 				15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */,
 				0424EB5420BEF89000E15E46 /* AppDelegate.swift in Sources */,
 				0424EB6B20BEF96400E15E46 /* Action.swift in Sources */,
+				15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */,
 				0424EB6920BEF93F00E15E46 /* Alarm.swift in Sources */,
 				15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */,
 				15594DA225DE4D4F00BE602D /* NotifcationController.swift in Sources */,

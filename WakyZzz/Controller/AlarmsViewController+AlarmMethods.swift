@@ -34,50 +34,6 @@ extension AlarmsViewController {
         CoreDataController.shared.saveContext(context: context)
     }
     
-    // Schedule notification alarms at given time/repeat. Better to call using AlarmEntity
-    func scheduleAlarm(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
-        let date = Date() // use today's date for now...
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
-        let month = calendar.component(.month, from: date)
-        let day = calendar.component(.day, from: date)
-        let weekday = calendar.component(.weekday, from: date)
-        var repeated: [Int] = [weekday]
-        let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
-        let snoozedTimes = 0 // TODO: get from CoreData
-        let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
-        
-        if repeats {
-            repeated = [3, 5, 7] // use Core Data to populate...
-        }
-        
-        switch type {
-            case .snoozable:
-                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
-                subtitle = "Shut off or snooze for 1 minute"
-                body = "Body of notification"
-            case .snoozed:
-                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
-                subtitle = "Shut off or snooze for 1 minute"
-                body = "You have snoozed \(snoozedTimes) out of 3" // timesSn
-            case .nonSnoozable:
-                alarmName = "Act of Kindness Alert! ⚠️"
-                subtitle = "You must perform an act of kindness to turn alarm off"
-                body = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
-        }
-        
-        let notification = LocalNotification(
-            id: UUID().uuidString, // from core data
-            title: alarmName,
-            subtitle: subtitle,
-            body: body,
-            repeating: repeats,
-            repeatDays: repeated,
-            dateComponents: dateComponents)
-        
-        notifcationController.createNotification(notification: notification, type: type)
-    }
-    
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
         let alarmEntity = fetchedResultsController.object(at: indexPath)
@@ -88,20 +44,13 @@ extension AlarmsViewController {
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
     }
     
-    // present
+    // present SetAlarmViewController to edit alarm
     func editAlarm(at indexPath: IndexPath) {
         editingIndexPath = indexPath
         let alarmEntity = fetchedResultsController.object(at: indexPath)
         
         presentSetAlarmViewController(alarmEntity: alarmEntity)
     }
-    
-//    func addAlarm(_ alarm: Alarm, at indexPath: IndexPath) {
-//        tableView.beginUpdates()
-//        CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
-//        tableView.insertRows(at: [indexPath], with: .automatic)
-//        tableView.endUpdates()
-//    }
     
     // convert/pass Alarm object to SetAlarmViewController in lieu of AlarmEntity
     func presentSetAlarmViewController(alarmEntity: AlarmEntity?) {
@@ -111,28 +60,5 @@ extension AlarmsViewController {
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         }
-    }
-}
-
-//MARK: - SetAlarmViewControllerDelegate methods
-extension AlarmsViewController: SetAlarmViewControllerDelegate {
-    func setAlarmViewControllerDone(alarm: Alarm) {
-        if let editingIndexPath = editingIndexPath {
-            // edited alarm
-            CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
-            let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
-            updateNotificationForAlarmEntity(for: alarmEntity)
-        }
-        else {
-            // new core data alarmEntity
-            CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
-            guard let alarmEntity = fetchedResultsController.fetchedObjects?.last else { return }
-            createNotificationForAlarmEntity(for: alarmEntity, type: .snoozable)
-        }
-        editingIndexPath = nil
-    }
-    
-    func setAlarmViewControllerCancel() {
-        editingIndexPath = nil
     }
 }

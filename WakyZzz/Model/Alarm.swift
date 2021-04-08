@@ -47,7 +47,7 @@ class Alarm: Codable {
     var repeatingDayString: String { // switched name to repeatingDayString from repeating
         var captions = [String]()
         
-        // TODO: if repeatDays same as LocalNotification:
+// TODO: if repeatDays same as LocalNotification:
 //        repeatDays.forEach { repeatDay in
 //            captions.append(Alarm.daysOfWeek[repeatDay])
 //        }
@@ -61,6 +61,7 @@ class Alarm: Codable {
         return captions.count > 0 ? captions.joined(separator: ", ") : "One time alarm"
     }
     
+    //MARK: - SetAlarmViewController delegate method
     func setAlarmTime(date: Date) {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
