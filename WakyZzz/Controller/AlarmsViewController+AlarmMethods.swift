@@ -37,9 +37,10 @@ extension AlarmsViewController {
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
         let alarmEntity = fetchedResultsController.object(at: indexPath)
-        let alarmID = alarmEntity.alarmID.uuidString
+//        let alarmID = alarmEntity.alarmID.uuidString
         // remove notification
-        self.notifcationController.center.removePendingNotificationRequests(withIdentifiers: [alarmID])
+//        self.notifcationController.center.removePendingNotificationRequests(withIdentifiers: [alarmID])
+        self.notifcationController.CancelNotificationForEntity(entity: alarmEntity)
         
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
     }

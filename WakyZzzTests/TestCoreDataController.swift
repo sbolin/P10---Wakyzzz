@@ -1,6 +1,6 @@
 //
 //  TestCoreDataController.swift
-//  WakyZzzTests
+//  WakyZzzCoreDataTests
 //
 //  Created by Scott Bolin on 2/27/21.
 //  Copyright © 2021 Olga Volkova OC. All rights reserved.

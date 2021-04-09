@@ -12,7 +12,7 @@ import UserNotifications
 extension NotificationController {
    
    //MARK: - Create Notification
-   // Schedule notification alarms at given time/repeat. Better to call using AlarmEntity
+   // Schedule notification alarms at given time/repeat.
     func ScheduleNotificationForEntity(entity: AlarmEntity) {
         let id = entity.alarmID.uuidString
         // if id == notification id then delete existing notification...

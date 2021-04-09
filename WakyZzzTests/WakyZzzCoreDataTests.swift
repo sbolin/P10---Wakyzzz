@@ -1,6 +1,6 @@
 //
-//  WakyZzzTests.swift
-//  WakyZzzTests
+//  WakyZzzCoreDataTests.swift
+//  WakyZzzCoreDataTests
 //
 //  Created by Scott Bolin on 2/27/21.
 //  Copyright © 2021 Olga Volkova OC. All rights reserved.
@@ -10,7 +10,7 @@ import XCTest
 import CoreData
 @testable import WakyZzz
 
-final class WakyZzzTests: XCTestCase {
+final class WakyZzzCoreDataTests: XCTestCase {
     
     //MARK: - Properties
     var testStack: CoreDataController!

@@ -16,7 +16,7 @@ class AlarmsViewController: UIViewController {
     
     //MARK: Set up data store
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
-    var notificationController: NotificationController!
+//    var notificationController: NotificationController!
     
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager

@@ -29,10 +29,11 @@
 		157B2FC3260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */; };
 		15A14945261F6D5400E7788E /* NotifcationController+CleanupMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */; };
 		15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */; };
+		15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */; };
 		15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */; };
 		15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */; };
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
-		15D4AA2125E97B58000E4BF0 /* WakyZzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */; };
+		15D4AA2125E97B58000E4BF0 /* WakyZzzCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */; };
 		15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,11 +72,12 @@
 		157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+AlarmMethods.swift"; sourceTree = "<group>"; };
 		15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotifcationController+CleanupMethods.swift"; sourceTree = "<group>"; };
 		15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationController+CreationMethods.swift"; sourceTree = "<group>"; };
+		15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzNotificationTests.swift; sourceTree = "<group>"; };
 		15C7E6E525E6B9C400630D13 /* WakyZzz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WakyZzz.xcdatamodel; sourceTree = "<group>"; };
 		15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		15D4AA1E25E97B58000E4BF0 /* WakyZzzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakyZzzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzTests.swift; sourceTree = "<group>"; };
+		15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzCoreDataTests.swift; sourceTree = "<group>"; };
 		15D4AA2225E97B58000E4BF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -208,8 +210,9 @@
 		15D4AA1F25E97B58000E4BF0 /* WakyZzzTests */ = {
 			isa = PBXGroup;
 			children = (
-				15D4AA2025E97B58000E4BF0 /* WakyZzzTests.swift */,
 				15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */,
+				15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */,
+				15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */,
 				15D4AA2225E97B58000E4BF0 /* Info.plist */,
 			);
 			path = WakyZzzTests;
@@ -345,8 +348,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15D4AA2125E97B58000E4BF0 /* WakyZzzTests.swift in Sources */,
+				15D4AA2125E97B58000E4BF0 /* WakyZzzCoreDataTests.swift in Sources */,
 				15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */,
+				15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
