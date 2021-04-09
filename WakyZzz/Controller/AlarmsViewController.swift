@@ -75,19 +75,11 @@ class AlarmsViewController: UIViewController {
 //MARK: - AlarmCellDelegate method
 extension AlarmsViewController: AlarmCellDelegate {
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
-        var notificationType: NotificationType
         if let indexPath = tableView.indexPath(for: cell) {
             CoreDataController.shared.changeAlarmStatus(at: indexPath, status: enabled)
             // update notification
             let alarmEntity = fetchedResultsController.object(at: indexPath)
-            if alarmEntity.timesSnoozed == 3 {
-                notificationType = .nonSnoozable
-            } else if alarmEntity.timesSnoozed > 0 {
-                notificationType = .snoozed
-            } else {
-                notificationType = .snoozable
-            }
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
         }
     }
 }
@@ -95,37 +87,23 @@ extension AlarmsViewController: AlarmCellDelegate {
 //MARK: - SetAlarmViewControllerDelegate methods
 extension AlarmsViewController: SetAlarmViewControllerDelegate {
     func setAlarmViewControllerDone(alarm: Alarm) {
-        var notificationType: NotificationType
         if let editingIndexPath = editingIndexPath {
             // alarm has been edited
             CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
             // update notification
             let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
-            if alarmEntity.timesSnoozed == 3 {
-                notificationType = .nonSnoozable
-            } else if alarmEntity.timesSnoozed > 0 {
-                notificationType = .snoozed
-            } else {
-                notificationType = .snoozable
-            }
+
             // NOTE: need to check if notification must be cancelled first, then re-scheduled, or if can just reschedule using same ID
             // cancel for now...
             notifcationController.CancelNotificationForEntity(entity: alarmEntity)
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
         }
         else {
             // new core data alarmEntity
             CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
             guard let alarmEntity = fetchedResultsController.fetchedObjects?.last else { return }
             // create notification
-            if alarmEntity.timesSnoozed == 3 {
-                notificationType = .nonSnoozable
-            } else if alarmEntity.timesSnoozed > 0 {
-                notificationType = .snoozed
-            } else {
-                notificationType = .snoozable
-            }
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity, type: notificationType)        }
+            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)        }
         editingIndexPath = nil
     }
     

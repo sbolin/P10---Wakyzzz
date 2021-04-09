@@ -48,6 +48,20 @@ extension AlarmEntity {
         return formatter.string(from: alarmTimeAndDate!)
     }
     
+    @objc public var dateFromTime: Date {
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = Int(time/3600) // h
+        let minute = Int(time/60) - hour * 60 // m
+        
+        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .second, .day, .month, .year, .weekdayOrdinal], from: date as Date)
+        
+        alarmTimeComponents.hour = hour
+        alarmTimeComponents.minute = minute
+        
+        return calendar.date(from: alarmTimeComponents)!
+    }
+    
     @objc public var repeatingDayString: String { // switched name to repeatingDayString from repeating
         var captions = [String]() // temp var holding string of repeated days
         for i in 0 ..< repeatDays.count {
@@ -56,6 +70,20 @@ extension AlarmEntity {
             }
         }
         return captions.count > 0 ? captions.joined(separator: ", ") : "One time alarm"
+    }
+    
+    @objc public var repeats: Bool {
+        return repeatDays.contains(true)
+    }
+    
+    @objc public var repeated: [Int] {
+        var days = [Int]() // temp var holding repeated days
+        for i in 0 ..< repeatDays.count {
+            if repeatDays[i] {
+                days.append(i)
+            }
+        }
+        return days
     }
     
     func toAlarm() -> Alarm {
@@ -68,7 +96,6 @@ extension AlarmEntity {
         alarm.timesSnoozed = Int(self.timesSnoozed)
         return alarm
     }
-
 }
 
 extension AlarmEntity : Identifiable {

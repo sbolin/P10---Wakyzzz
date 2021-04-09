@@ -13,66 +13,65 @@ extension NotificationController {
    
    //MARK: - Create Notification
    // Schedule notification alarms at given time/repeat. Better to call using AlarmEntity
-    func ScheduleNotificationForEntity(entity: AlarmEntity, type: NotificationType) {
+    func ScheduleNotificationForEntity(entity: AlarmEntity) {
         let id = entity.alarmID.uuidString
         // if id == notification id then delete existing notification...
         // add new notification with id, and use entity to create date/repeat, etc
+        let date = entity.dateFromTime // use today's date for now...
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let weekday = calendar.component(.weekday, from: date)
+        
+        let repeats = entity.repeats
+        let repeated = entity.repeated
+        let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
+        let snoozedTimes = entity.timesSnoozed
+        let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
+        let type = getNotificationType(alarmEntity: entity)
+
+        var alarmName = ""
+        var subtitle = ""
+        var body = ""
+        
+        switch type {
+            case .snoozable:
+                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
+                subtitle = "Shut off or snooze for 1 minute"
+                body = "Body of notification"
+            case .snoozed:
+                alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
+                subtitle = "Shut off or snooze for 1 minute"
+                body = "You have snoozed \(snoozedTimes) out of 3" // timesSn
+            case .nonSnoozable:
+                alarmName = "Act of Kindness Alert! ⚠️"
+                subtitle = "You must perform an act of kindness to turn alarm off"
+                body = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
+        }
+        
+        let notification = LocalNotification(
+            id: id, // from core data
+            title: alarmName,
+            subtitle: subtitle,
+            body: body,
+            repeating: repeats,
+            repeatDays: repeated,
+            dateComponents: dateComponents)
+        
+        createNotificationContent(notification: notification, type: type)
     }
     
     func CancelNotificationForEntity(entity: AlarmEntity) {
         let id = entity.alarmID.uuidString
         // cancel notification id
+        removeNotification(at: id)
     }
-    
-   func ScheduleNotification(hour: Int, minute: Int, repeats: Bool, type: NotificationType) {
-      let date = Date() // use today's date for now...
-      let calendar = Calendar.current
-      let year = calendar.component(.year, from: date)
-      let month = calendar.component(.month, from: date)
-      let day = calendar.component(.day, from: date)
-      let weekday = calendar.component(.weekday, from: date)
-      var repeated: [Int] = [weekday]
-      let dateComponents = DateComponents(calendar: .current, timeZone: .current, year: year, month: month, day: day, hour: hour, minute: minute, weekday: weekday)
-      let snoozedTimes = 0 // TODO: get from CoreData
-      let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
-      
-      if repeats {
-         repeated = [3, 5, 7] // use Core Data to populate...
-      }
-      
-      var alarmName = ""
-      var subtitle = ""
-      var body = ""
-      
-      switch type {
-         case .snoozable:
-            alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
-            subtitle = "Shut off or snooze for 1 minute"
-            body = "Body of notification"
-         case .snoozed:
-            alarmName = "Turn Alarm Off 🔕 or Snooze? 😴"
-            subtitle = "Shut off or snooze for 1 minute"
-            body = "You have snoozed \(snoozedTimes) out of 3" // timesSn
-         case .nonSnoozable:
-            alarmName = "Act of Kindness Alert! ⚠️"
-            subtitle = "You must perform an act of kindness to turn alarm off"
-            body = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
-      }
-      
-      let notification = LocalNotification(
-         id: UUID().uuidString, // from core data
-         title: alarmName,
-         subtitle: subtitle,
-         body: body,
-         repeating: repeats,
-         repeatDays: repeated,
-         dateComponents: dateComponents)
-      
-      createNotificationContent(notification: notification, type: type)
-   }
    
    // Create notification content from notification object
-   func createNotificationContent(notification: LocalNotification, type: NotificationType) {
+   private func createNotificationContent(notification: LocalNotification, type: NotificationType) {
       
       // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
       let content = UNMutableNotificationContent()
@@ -93,7 +92,7 @@ extension NotificationController {
       
       
       for index in 0..<notification.repeatDays.count {
-         let repeatDay = notification.repeatDays[index]
+         let repeatDay = notification.repeatDays[index] // assumes Sunday = 0...
          createNotificationRequest(notification: notification, weekDay: repeatDay, content: content)
       }
    }
@@ -130,4 +129,16 @@ extension NotificationController {
       listDeliveredNotifications()
       #endif
    }
+    
+    private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
+        var notificationType: NotificationType
+        if alarmEntity.timesSnoozed == 3 {
+            notificationType = .nonSnoozable
+        } else if alarmEntity.timesSnoozed > 0 {
+            notificationType = .snoozed
+        } else {
+            notificationType = .snoozable
+        }
+        return notificationType
+    }
 }
