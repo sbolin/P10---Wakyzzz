@@ -67,7 +67,9 @@ final class WakyZzzNotificationTests: XCTestCase {
         // create notification
         notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
-            count = requests.count
+            requests.forEach { request in
+                count += 1
+            }
         }
         XCTAssertNotNil(count)
         XCTAssertEqual(count, 1)
@@ -84,17 +86,13 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.snoozed = false
         alarmEntity.timesSnoozed = 0
         // create notification
-        notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
+        notifcationController.cancelNotificationForEntity(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
-            count = requests.count
+            requests.forEach { request in
+                count += 1
+            }
         }
         XCTAssertNotNil(count)
-        XCTAssertEqual(count, 1)
-        
-        notifcationController.CancelNotificationForEntity(entity: alarmEntity)
-        center.getPendingNotificationRequests { requests in
-            count = requests.count
-        }
         XCTAssertEqual(count, 0)
     }
     

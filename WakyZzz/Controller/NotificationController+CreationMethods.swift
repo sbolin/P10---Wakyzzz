@@ -24,7 +24,7 @@ extension NotificationController {
         let day = calendar.component(.day, from: date)
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
-        let weekday = calendar.component(.weekday, from: date)
+        let weekday = entity.repeated[0]
         
         let repeats = entity.repeats
         let repeated = entity.repeated
@@ -63,12 +63,6 @@ extension NotificationController {
         
         createNotificationContent(notification: notification, type: type)
     }
-    
-    func CancelNotificationForEntity(entity: AlarmEntity) {
-        let id = entity.alarmID.uuidString
-        // cancel notification id
-        removeNotification(at: id)
-    }
    
    // Create notification content from notification object
    private func createNotificationContent(notification: LocalNotification, type: NotificationType) {
@@ -91,7 +85,7 @@ extension NotificationController {
       content.targetContentIdentifier = "WakyZzz" // placeholder...
       
       
-      for index in 0..<notification.repeatDays.count {
+      for index in 0..<(notification.repeatDays.count - 1) {
          let repeatDay = notification.repeatDays[index] // assumes Sunday = 0...
          createNotificationRequest(notification: notification, weekDay: repeatDay, content: content)
       }
@@ -99,7 +93,7 @@ extension NotificationController {
    
    // create Notification Request and add notification given n
    private func createNotificationRequest(notification: LocalNotification, weekDay: Int, content: UNNotificationContent) {
-      
+    print(#function)
       // notification parameters
       let dateComponent = notification.dateComponents
       let repeats = notification.repeating
@@ -113,24 +107,26 @@ extension NotificationController {
       
       center.add(request) { error in
          if let error = error {
-            print("Request \(id) creation error: ", error.localizedDescription)
+            print("Error adding request \(id): \(error.localizedDescription)")
          } else {
-            print("Notification \(id) Scheduled")
+            print("Notification \(id) added to center")
             self.notifications.append(notification) // not needed...only use notification for creation
          }
       }
       
       // below is for debug only, not needed...
-      #if DEBUG
+//      #if DEBUG
       print(#function)
       print("Notification \(id) with request id \(request.identifier) set")
       print("List of notifications follows:")
       listScheduledNotifications()
+    print("=======================")
       listDeliveredNotifications()
-      #endif
+//      #endif
    }
     
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
+        print(#function)
         var notificationType: NotificationType
         if alarmEntity.timesSnoozed == 3 {
             notificationType = .nonSnoozable

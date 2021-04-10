@@ -40,7 +40,7 @@ extension AlarmsViewController {
 //        let alarmID = alarmEntity.alarmID.uuidString
         // remove notification
 //        self.notifcationController.center.removePendingNotificationRequests(withIdentifiers: [alarmID])
-        self.notifcationController.CancelNotificationForEntity(entity: alarmEntity)
+        self.notifcationController.cancelNotificationForEntity(entity: alarmEntity)
         
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
     }

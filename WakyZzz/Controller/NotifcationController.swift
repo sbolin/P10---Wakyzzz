@@ -39,6 +39,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
 
     //MARK: - Request Authorization
     func requestNotificationAuthorization() {
+        print(#function)
         let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .announcement, .badge, .carPlay, .sound) // asks for authorization to show notification via alert, Siri read aloud, badges, carplay, and play sound
         
         // unused authorization options, keep in case added functionality later
@@ -84,6 +85,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
     
     //MARK: - Setup Notification Actions and Categories
     func setupActions() {
+        print(#function)
         /// Define Notification actions.
         /// snoozed < 3 times
         // turn off alarm

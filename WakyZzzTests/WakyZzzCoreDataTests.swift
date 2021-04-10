@@ -346,4 +346,38 @@ final class WakyZzzCoreDataTests: XCTestCase {
         XCTAssertEqual(mockAlarm.timesSnoozed, 1)
         XCTAssertNotEqual(mockAlarm.timesSnoozed, 0)
     }
+    
+    func testFetchAlarmByAlarmID() {
+        let alarmTime = 8*60*60
+        let alarm = Alarm()
+        alarm.alarmID = UUID()
+        alarm.enabled = true
+        alarm.time = alarmTime
+        alarm.repeatDays = [false, false, false, false, false, false, false]
+        alarm.snoozed = false
+        alarm.timesSnoozed = 0
+        let alarmID = alarm.alarmID
+        // create alarm
+        testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
+        
+        // fetch same alarm
+        do {
+            try testStack.fetchedAlarmResultsController.performFetch()
+        } catch {
+            print("could not perform fetch")
+        }
+        
+        guard let mockAlarm = testStack.fetchAlarmByAlarmID(with: alarmID) else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertNotNil(mockAlarm, "alarm should not be nil")
+        XCTAssertEqual(mockAlarm.enabled, true)
+        XCTAssertEqual(mockAlarm.time, Int32(alarmTime))
+        XCTAssertEqual(mockAlarm.repeatDays, [false, false, false, false, false, false, false])
+        XCTAssertEqual(mockAlarm.snoozed, false)
+        XCTAssertEqual(mockAlarm.timesSnoozed, 0)
+        XCTAssertNotEqual(mockAlarm.timesSnoozed, 1)
+    }
 }
