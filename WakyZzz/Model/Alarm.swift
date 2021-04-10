@@ -15,7 +15,6 @@ class Alarm: Codable {
     var alarmID = UUID()
     var time = 8 * 3600 // 360
     var repeatDays = [false, false, false, false, false, false, false]
-//    var repeatDays: [Int] = [] // redefined
     var enabled = true
     var snoozed = false // new
     var timesSnoozed = 0 // new
@@ -27,7 +26,7 @@ class Alarm: Codable {
         let hour = time/3600 // h
         let minute = time/60 - hour * 60 // m
 
-        var alarmTimeComponents = calendar.dateComponents([.second, .minute, .hour, .day, .month, .year, .weekday, .weekOfMonth], from: date as Date)
+        var alarmTimeComponents = calendar.dateComponents([.second, .minute, .hour, .day, .month, .year, .weekday], from: date as Date)
 
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute

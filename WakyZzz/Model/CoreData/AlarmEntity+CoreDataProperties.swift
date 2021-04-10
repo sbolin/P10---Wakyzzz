@@ -76,8 +76,9 @@ extension AlarmEntity {
         return repeatDays.contains(true)
     }
     
-    @objc public var repeated: [Int] {
+    @objc public var repeated: [Int]? {
         var days = [Int]() // temp var holding repeated days
+        if !repeats { return nil } // non-repeating alarm
         for i in 0 ..< repeatDays.count {
             if repeatDays[i] {
                 days.append(i)

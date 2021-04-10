@@ -17,13 +17,14 @@ enum NotificationType: String {
 
 // not specifically needed, just used to post notification details to viewcontroller...
 struct LocalNotification {
-    var id: String
-    var title: String
-    var subtitle: String
-    var body: String
-    var repeating: Bool
-    var repeatDays: [Int]
+    let id: String
+    let title: String
+    let subtitle: String
+    let body: String
+    let repeats: Bool
+    let repeated: [Int]?
     var dateComponents: DateComponents
+    let type: NotificationType
 }
 
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {

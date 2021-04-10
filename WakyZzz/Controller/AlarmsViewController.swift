@@ -79,7 +79,7 @@ extension AlarmsViewController: AlarmCellDelegate {
             CoreDataController.shared.changeAlarmStatus(at: indexPath, status: enabled)
             // update notification
             let alarmEntity = fetchedResultsController.object(at: indexPath)
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
+            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
         }
     }
 }
@@ -96,14 +96,13 @@ extension AlarmsViewController: SetAlarmViewControllerDelegate {
             // NOTE: need to check if notification must be cancelled first, then re-scheduled, or if can just reschedule using same ID
             // cancel for now...
             notifcationController.cancelNotificationForEntity(entity: alarmEntity)
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
+            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
         }
         else {
             // new core data alarmEntity
-            CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm)
-            guard let alarmEntity = fetchedResultsController.fetchedObjects?.last else { return }
+            guard let alarmEntity = CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm) else { return }
             // create notification
-            notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)        }
+            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)        }
         editingIndexPath = nil
     }
     

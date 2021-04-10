@@ -85,13 +85,17 @@ class CoreDataController {
     
     //MARK: - CoreData Utility Methods
     //MARK: SaveContext
-    func saveContext(context: NSManagedObjectContext) {
-        guard context.hasChanges else { return }
+    @discardableResult
+    func saveContext(context: NSManagedObjectContext) -> Bool {
+        guard context.hasChanges else { return true }
         do {
             try context.save()
+            print("Saved context")
+            return true
         } catch let error as NSError {
             context.rollback() // if error, go back to previous state
             print("Unresolved error \(error), \(error.localizedDescription)")
+            return false
         }
     }
     
@@ -162,7 +166,7 @@ class CoreDataController {
     }
     
     // tested
-    func createAlarmEntityFromAlarmObject(alarm: Alarm) {
+    func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = alarm.alarmID
         newAlarmEntity.time = Int32(alarm.time)
@@ -171,7 +175,13 @@ class CoreDataController {
         newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
         newAlarmEntity.enabled = alarm.enabled
         
-        saveContext(context: managedContext)
+        let result = saveContext(context: managedContext)
+        
+        if result {
+        return newAlarmEntity
+        } else {
+            return nil
+        }
     }
     
     // tested

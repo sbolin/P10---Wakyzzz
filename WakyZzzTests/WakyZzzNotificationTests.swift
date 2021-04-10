@@ -55,6 +55,7 @@ final class WakyZzzNotificationTests: XCTestCase {
     //MARK: - Tests
     //MARK: Notification Tests
     func test_createNotification() {
+        let expectation = XCTestExpectation(description: "Test passed")// create
         var count = 0
         let derivedContext = testStack.derivedContext
         let alarmEntity = AlarmEntity(context: derivedContext)
@@ -65,14 +66,16 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.snoozed = false
         alarmEntity.timesSnoozed = 0
         // create notification
-        notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
+        notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
             requests.forEach { request in
                 count += 1
+                XCTAssertTrue(count > 0)
+                expectation.fulfill()
+                // fulfill expectation
             }
         }
-        XCTAssertNotNil(count)
-        XCTAssertEqual(count, 1)
+        wait(for: [expectation], timeout: 1.0)
     }
     
     func test_cancelNotification() {
@@ -109,7 +112,7 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.snoozed = false
         alarmEntity.timesSnoozed = 0 // so notification type should be .snoozable
         // create notification
-        notifcationController.ScheduleNotificationForEntity(entity: alarmEntity)
+        notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
 
         center.getPendingNotificationRequests { requests in
             createdTitle = requests[0].content.title
