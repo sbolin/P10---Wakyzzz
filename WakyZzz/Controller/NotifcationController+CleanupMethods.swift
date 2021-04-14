@@ -73,7 +73,7 @@ extension NotificationController {
         center.getPendingNotificationRequests { notifications in
             for notification in notifications {
                 count += 1
-                print(count, notification)
+                print("s: ",count, notification)
             }
         }
         print("====Scheduled Notifications====")
@@ -85,7 +85,7 @@ extension NotificationController {
         center.getDeliveredNotifications { notifications in
             for notification in notifications {
                 count += 1
-                print(count, notification)
+                print("d: ", count, notification)
             }
         }
         print("====Delivered Notifications====")

@@ -14,7 +14,7 @@ extension NotificationController {
    //MARK: - Create Notification
    // Schedule notification alarms at given time/repeat.
     func assembleNotificationItemsFrom(entity: AlarmEntity) {
-        
+        // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
         let dateComponents = getDateComponents(alarmEntity: entity)
         let snoozedTimes = entity.timesSnoozed
         let type = getNotificationType(alarmEntity: entity)
@@ -28,7 +28,7 @@ extension NotificationController {
             repeated: entity.repeated,
             dateComponents: dateComponents,
             type: type)
-        
+        // send to create content...
         createNotificationContent(notification: notification)
     }
    
@@ -38,7 +38,7 @@ extension NotificationController {
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
         
-        // Set content
+        // Set alarm sounds. Sound played depends on type/number times snoozed
         let defaultSound = UNNotificationSound.init(named: (UNNotificationSoundName("sound.mp3")) as String)
         let annoyingSound = UNNotificationSound.init(named: (UNNotificationSoundName("evil.m4a")) as String)
         
@@ -57,7 +57,7 @@ extension NotificationController {
         if notification.repeats {                                               // check if there are repeated alarms or not
             var _notification = notification                                    // notification is passed in, thus immutable, so create temp notification object
             guard let unwrappedRepeated = notification.repeated else { return } // could force unwrap, since notification.repeats is true (so repeated is non-nil)
-            for index in 0..<(unwrappedRepeated.count - 1) {                    // cycle thru each repeated weekday
+            for index in 0..<(unwrappedRepeated.count) {                        // cycle thru each repeated weekday
                 let repeatDay = unwrappedRepeated[index]                        // get the repeat day in array at [index]
                 var newDateComponents = notification.dateComponents             // make a copy the dateComponents from the notification...
                 newDateComponents.weekday = repeatDay                           // and modify the repeat day based on notification.repeated array values
@@ -137,18 +137,18 @@ extension NotificationController {
         
         switch type {
             case .snoozable:
-                returnText[0] = "Turn Alarm Off 🔕 or Snooze? 😴"
-                returnText[1] = "Shut off or snooze for 1 minute"
-                returnText[2] = "Body of notification"
+                returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
+                returnText.append("Shut off or snooze for 1 minute")
+                returnText.append("Body of notification")
             case .snoozed:
-                returnText[0] = "Turn Alarm Off 🔕 or Snooze? 😴"
-                returnText[1] = "Shut off or snooze for 1 minute"
-                returnText[2] = "You have snoozed \(snoozedTimes) out of 3"
+                returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
+                returnText.append("Shut off or snooze for 1 minute")
+                returnText.append("You have snoozed \(snoozedTimes) out of 3")
             case .nonSnoozable:
                 let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
-                returnText[0] = "Act of Kindness Alert! ⚠️"
-                returnText[1] = "You must perform an act of kindness to turn alarm off"
-                returnText[2] = "Random act of kindness: \(actOfKindness ?? "Smile today!")"
+                returnText.append("Act of Kindness Alert! ⚠️")
+                returnText.append("You must perform an act of kindness to turn alarm off")
+                returnText.append("Random act of kindness: \(actOfKindness ?? "Smile today!")")
         }
         return returnText
     }

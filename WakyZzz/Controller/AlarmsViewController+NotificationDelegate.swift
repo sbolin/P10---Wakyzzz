@@ -14,6 +14,8 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         let id = response.notification.request.identifier
         let categoryID = response.notification.request.content.categoryIdentifier
         let actionID = response.actionIdentifier
+        guard let uuid = UUID(uuidString: id) else { return } // not sure what to do if can't get uuid
+        guard let alarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: uuid) else { return }
         
         print(#function)
         print("alarm id: \(id)")
@@ -24,16 +26,26 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
             switch actionID {
                 case "TURN_OFF_ALARM":
                     print("alarm turned off")
-                // check if alarm repeats other days, if so do nothing, otherwise turn off
-                
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
+                    
                 case "SNOOZE_ALARM":
                     print("alarm snoozed")
-                // increment snooze count
+                    // increment snooze count
+                    alarmEntity.timesSnoozed += 1
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                 // create new alarm with UNTimeIntervalNotificationTrigger
                 
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
                     print("for this app, just open app and let user decide what to do")
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     
                 case UNNotificationDismissActionIdentifier:
                     // User dismissed notification (clicked "x" button)
@@ -51,6 +63,9 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     print("notification shows the act of kindness")
                     print("must perform an act of kindness to turn off")
                     // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     break
                     
                 case "ACT_OF_KINDNESS_LATER":
@@ -58,6 +73,9 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     print("notification shows the act of kindness")
                     print("must promise to perform an act of kindness later to turn off")
                     // increment snooze count
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     break
                     
                 case UNNotificationDefaultActionIdentifier:
@@ -80,6 +98,8 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
     // show notification while app is at the forground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let id = notification.request.identifier
+        guard let uuid = UUID(uuidString: id) else { return } // not sure what to do if can't get uuid
+        guard let alarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: uuid) else { return }
         print(#function)
         print("In app click, alarm id: \(id)")
         print("alarm category: \(notification.request.content.categoryIdentifier)")
@@ -87,10 +107,20 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         switch notification.request.content.categoryIdentifier {
             case "SNOOZABLE_ALARM":
                 print("Snoozable alarm, turn off alarm \(id)")
+                alarmEntity.timesSnoozed += 1
+                if !alarmEntity.repeats {
+                    alarmEntity.enabled = false
+                }
             case "NON_SNOOZABLE_ALARM":
                 print("Non Snoozable alarm, also turn off \(id)")
+                if !alarmEntity.repeats {
+                    alarmEntity.enabled = false
+                }
             default:
                 print("Default action, which is also to turn off alarm")
+                if !alarmEntity.repeats {
+                    alarmEntity.enabled = false
+                }
         }
         center.removeAllDeliveredNotifications()
         completionHandler([.banner, .sound, .list])
