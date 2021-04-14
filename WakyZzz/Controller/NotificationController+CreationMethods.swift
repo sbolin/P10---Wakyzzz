@@ -10,9 +10,9 @@ import UIKit
 import UserNotifications
 
 extension NotificationController {
-   
-   //MARK: - Create Notification
-   // Schedule notification alarms at given time/repeat.
+    
+    //MARK: - Create Notification
+    // Schedule notification alarms at given time/repeat.
     func assembleNotificationItemsFrom(entity: AlarmEntity) {
         // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
         let dateComponents = getDateComponents(alarmEntity: entity)
@@ -31,8 +31,8 @@ extension NotificationController {
         // send to create content...
         createNotificationContent(notification: notification)
     }
-   
-   // Create notification content from notification object
+    
+    // Create notification content from notification object
     private func createNotificationContent(notification: LocalNotification) {
         
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
@@ -68,40 +68,40 @@ extension NotificationController {
             createNotificationRequest(notification: notification, content: content) // if non-repeating, dateComponent in notification is correct already (and not needed).
         }
     }
-   
-   // create Notification Request and add notification given n
-   private func createNotificationRequest(notification: LocalNotification, content: UNNotificationContent) {
-    print(#function)
-      // notification parameters
-      let dateComponent = notification.dateComponents
-      let repeats = notification.repeats
-      let id = notification.id // must use core data id so id can be tracked
-      
-      // notification trigger
-      let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
-      
-      // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
-      let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-      
-      center.add(request) { error in
-         if let error = error {
-            print("Error adding request \(id): \(error.localizedDescription)")
-         } else {
-            print("Notification \(id) added to center")
-            self.notifications.append(notification) // not needed...only use notification for creation
-         }
-      }
-      
-      // below is for debug only, not needed...
-//      #if DEBUG
-      print(#function)
-      print("Notification \(id) with request id \(request.identifier) set")
-      print("List of notifications follows:")
-      listScheduledNotifications()
-    print("=======================")
-      listDeliveredNotifications()
-//      #endif
-   }
+    
+    // create Notification Request and add notification given n
+    private func createNotificationRequest(notification: LocalNotification, content: UNNotificationContent) {
+        print(#function)
+        // notification parameters
+        let dateComponent = notification.dateComponents
+        let repeats = notification.repeats
+        let id = notification.id // notification id matches core data id.
+        
+        // notification trigger
+        let trigger = notification.type == .snoozable ?  UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats) : UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: false)
+        
+        // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        
+        center.add(request) { error in
+            if let error = error {
+                print("Error adding request \(id): \(error.localizedDescription)")
+            } else {
+                print("Notification \(id) added to center")
+                self.notifications.append(notification) // not needed...only use notification for creation
+            }
+        }
+        
+        // below is for debug only, not needed...
+        //      #if DEBUG
+        print(#function)
+        print("Notification \(id) with request id \(request.identifier) set")
+        print("List of notifications follows:")
+        listScheduledNotifications()
+        print("=======================")
+        listDeliveredNotifications()
+        //      #endif
+    }
     
     // get the NotificationType based on AlarmEntity object timesSnoozed attribute
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
