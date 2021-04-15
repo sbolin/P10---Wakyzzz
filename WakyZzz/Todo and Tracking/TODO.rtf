@@ -1,15 +1,10 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2578
 \cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 SFProText-Regular;\f1\fnil\fcharset0 SFPro-Regular;\f2\fnil\fcharset0 Montserrat-Regular;
-\f3\fnil\fcharset0 SFProText-Semibold;\f4\fnil\fcharset0 LucidaGrande;\f5\fnil\fcharset0 SFMono-Regular;
-\f6\fnil\fcharset0 Menlo-Regular;}
+\f3\fnil\fcharset0 SFProText-Semibold;\f4\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red251\green2\blue7;
-\red242\green36\blue140;\red29\green33\blue40;\red200\green218\blue255;\red208\green168\blue255;\red86\green208\blue179;
-\red171\green100\blue255;\red171\green100\blue255;\red255\green255\blue0;\red208\green168\blue255;\red0\green191\blue1;
-\red171\green100\blue255;\red108\green121\blue135;}
+}
 {\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c100000\c100000\c100000;\cssrgb\c100000\c14913\c0;
-\csgenericrgb\c94752\c13993\c54713;\csgenericrgb\c11556\c12863\c15598;\csgenericrgb\c78522\c85450\c100000;\csgenericrgb\c81569\c65882\c100000;\csgenericrgb\c33577\c81593\c70189;
-\csgenericrgb\c67059\c39216\c100000;\csgenericrgb\c66997\c39255\c100000;\csgenericrgb\c100000\c100000\c0;\csgenericrgb\c81466\c65692\c100000;\csgenericrgb\c0\c74742\c319;
-\cspthree\c70032\c51332\c97259;\csgenericrgb\c42353\c47451\c52941;}
+}
 {\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid1\'01\uc0\u9642 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
 {\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid101\'01\uc0\u9642 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
 {\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid201\'01\uc0\u9642 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
@@ -107,14 +102,7 @@ Integrate Notifications with the\'a0Core Data/Tableview.
 \f2\fs32 \cb1 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\f0\fs28 \cf0 \kerning1\expnd0\expndtw0 \
-\
-\
-\
-\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-
-\f3\b \cf0 \
+\f3\b\fs28 \cf0 \kerning1\expnd0\expndtw0 \
 \
 \
 Questions 20 Feb 21
@@ -192,59 +180,4 @@ TODO 15-20 Mar:\
 Unit testing of notifications\
 3. Review client docs again, make sure including everything required.\
 \
-\
-\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
-\cf4 Each UNNotification has an identifier which is set when creating an identifier: \cf0 \
-
-\f5\fs26 \cf5 \cb6 let\cf7  request = \cf8 UNNotificationRequest\cf7 (identifier: \cf9 identifier\cf7 , content: content, trigger: trigger)
-\f6 \
-
-\f0\fs28 \cf0 \cb1 \
-\cf4 Update the notification with identify \'91identifier\'92:\cf0 \
-Can\'92t directly update an existing notification. Must remove notification with identity, then make a new notification with the same identity.\
-\
-\cf4 Delete notification with identity \'91identifier\'92 (can delete more than 1):\cf0 \
-
-\f5\fs26 \cf8 \cb6 UNUserNotificationCenter\cf7 .\cf10 current\cf7 ().\cf10 removeDeliveredNotifications\cf7 (withIdentifiers: [\cf9 identifier\cf7 ])
-\f6 \
-
-\f0 \cf2 \cb1 \
-
-\fs28 \cf0 \
-\cf4 Delete all delivered notifications:
-\f6\fs26 \cf2 \
-
-\f5 \cf8 \cb6 UNUserNotificationCenter\cf7 .\cf10 current\cf7 ().\cf10 removeAllDeliveredNotifications()
-\f0 \cb1 \
-\
-\
-\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
-\cf4 General creation of notifications:\
-\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
-
-\f6 \cf5 \cb6 let\cf7  center = \cf8 UNUserNotificationCenter\cf7 .\cf10 current\cf7 ()\
-\
-\cf5 let\cf7  content = \cf8 UNMutableNotificationContent\cf7 ()\
-content.\cf11 title\cf7  = \cf12 "Important Message"\cf7 \
-content.\cf11 body\cf7  = \cf12 "It's a snow day tomorrow. No school busses."\cf7 \
-content.\cf11 categoryIdentifier\cf7  = \cf12 "alarm"\cf7 \
-content.\cf11 userInfo\cf7  = [\cf12 "additionalData"\cf7 : \cf12 \'93more data\'94, \'93even more data\'94\cf7 ]\
-content.\cf11 sound\cf7  = \cf8 UNNotificationSound\cf7 .\cf10 default\cf7 ()\
-        \
-\cf5 var\cf7  dateComponents = \cf13 DateComponents\cf7 ()\
-dateComponents.\cf11 hour\cf7  = \cf14 8\cf7 \
-dateComponents.\cf11 minute\cf7  = \cf14 00\cf7 \
-        \
-\cf5 let\cf7  trigger = \cf8 UNCalendarNotificationTrigger\cf7 (dateMatching: dateComponents, repeats: \cf5 true\cf7 )\
-        \
-\cf5 let\cf7  notificationRequest = \cf8 UNNotificationRequest\cf7 (identifier: \cf15 identifier\cf7 , content: \cf15 content\cf7 , trigger: \cf15 trigger\cf7 )\
-        \
-\
-\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
-\cf16 // Add Action button to notification\cf7 \
-\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
-\cf5 let\cf7  actionButton = \cf8 UNNotificationAction\cf7 (identifier: \cf12 "Show"\cf7 , title: \cf12 "Tap to read"\cf7 , options: .\cf11 foreground\cf7 )\
-\cf5 let\cf7  notificationCategory = \cf8 UNNotificationCategory\cf7 (identifier: \cf12 "alarm"\cf7 , actions: [actionButton], intentIdentifiers: [])\
-\
-center.\cf10 setNotificationCategories\cf7 ([notificationCategory])\
-center.\cf10 add\cf7 (notificationRequest)}
+}

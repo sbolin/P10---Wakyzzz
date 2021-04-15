@@ -53,7 +53,6 @@ class AlarmsViewController: UIViewController {
     
     // Setup TableView delegate and datasource, populate alarms
     func configureTableView() {
-        print(#function)
         // setup fetchrequest
         if fetchedResultsController == nil {
             fetchedResultsController = CoreDataController.shared.fetchedAlarmResultsController

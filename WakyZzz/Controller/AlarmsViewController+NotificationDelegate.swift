@@ -34,18 +34,15 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                 case "SNOOZE_ALARM":
                     print("alarm snoozed")
                     // increment snooze count
-                    alarmEntity.timesSnoozed += 1
+                    CoreDataController.shared.updateSnoozeStatus(for: uuid)
                     if !alarmEntity.repeats {
-                        alarmEntity.enabled = false
+                        alarmEntity.enabled = true
                     }
                 // create new alarm with UNTimeIntervalNotificationTrigger
                 
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
                     print("for this app, just open app and let user decide what to do")
-                    if !alarmEntity.repeats {
-                        alarmEntity.enabled = false
-                    }
                     
                 case UNNotificationDismissActionIdentifier:
                     // User dismissed notification (clicked "x" button)

@@ -18,12 +18,13 @@ extension NotificationController {
         let dateComponents = getDateComponents(alarmEntity: entity)
         let snoozedTimes = entity.timesSnoozed
         let type = getNotificationType(alarmEntity: entity)
+        let notificationText = makeNotificationText(type: type, snoozedTimes: snoozedTimes)
         
         let notification = LocalNotification(
             id: entity.alarmID.uuidString,
-            title: makeNotificationText(type: type, snoozedTimes: snoozedTimes)[0],
-            subtitle: makeNotificationText(type: type, snoozedTimes: snoozedTimes)[1],
-            body: makeNotificationText(type: type, snoozedTimes: snoozedTimes)[2],
+            title: notificationText[0],
+            subtitle: notificationText[1],
+            body: notificationText[2],
             repeats: entity.repeats,
             repeated: entity.repeated,
             dateComponents: dateComponents,
@@ -39,8 +40,9 @@ extension NotificationController {
         let content = UNMutableNotificationContent()
         
         // Set alarm sounds. Sound played depends on type/number times snoozed
-        let defaultSound = UNNotificationSound.init(named: (UNNotificationSoundName("sound.mp3")) as String)
-        let annoyingSound = UNNotificationSound.init(named: (UNNotificationSoundName("evil.m4a")) as String)
+        
+        let defaultSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("sound.mp3").rawValue))
+        let annoyingSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("evil.m4a").rawValue))
         
         // Set notification content
         content.title = notification.title
@@ -152,4 +154,9 @@ extension NotificationController {
         }
         return returnText
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUNNotificationSoundName(_ input: String) -> UNNotificationSoundName {
+	return UNNotificationSoundName(rawValue: input)
 }

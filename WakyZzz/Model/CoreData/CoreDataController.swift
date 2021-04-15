@@ -46,10 +46,8 @@ class CoreDataController {
         do {
             let request = AlarmEntity.alarmFetchRequest()
             let count = try managedContext.count(for: request)
-            print("count: \(count)")
             return count == 0
         } catch {
-            print("could not count objects")
             return false
         }
     }()
@@ -181,7 +179,7 @@ class CoreDataController {
         alarmEntity.snoozed = true
         alarmEntity.timesSnoozed += 1
         saveContext(context: managedContext)
-        if alarmEntity.timesSnoozed > 3 {
+        if alarmEntity.timesSnoozed > 2 {
             print("Activate Random Act of Kindness™")
         }
     }

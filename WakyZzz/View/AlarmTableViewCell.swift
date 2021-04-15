@@ -25,12 +25,12 @@ class AlarmTableViewCell: UITableViewCell {
         
         super.awakeFromNib()
         
-//        configure()
+        configure()
     }
     
-//    func configure() {
-//
-//    }
+    func configure() {
+
+    }
     
     // populate tableview cell method
     func populate(caption: String, subcaption: String, enabled: Bool) {
