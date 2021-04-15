@@ -27,8 +27,8 @@ final class WakyZzzNotificationTests: XCTestCase {
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
 //DANGER: DELETE ALL NOTIFICATIONS!
-        notifcationController.removeAllDeliveredNotifications()
-        notifcationController.removeAllPendingNotificationRequests()
+        removeAllDeliveredNotifications()
+        removeAllPendingNotificationRequests()
         
         // core data
         testStack = TestCoreDataController()
@@ -45,8 +45,8 @@ final class WakyZzzNotificationTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         //DANGER: DELETE ALL NOTIFICATIONS!
-        notifcationController.removeAllDeliveredNotifications()
-        notifcationController.removeAllPendingNotificationRequests()
+        removeAllDeliveredNotifications()
+        removeAllPendingNotificationRequests()
         
         // core data teardown
         testStack = nil
@@ -127,6 +127,18 @@ final class WakyZzzNotificationTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 0.5)
+    }
+    
+    // helper methods
+    
+    // used in testing setup and teardown
+    func removeAllDeliveredNotifications() {
+        center.removeAllDeliveredNotifications()
+    }
+    
+    // used in testing setup and teardown
+    func removeAllPendingNotificationRequests() {
+        center.removeAllPendingNotificationRequests()
     }
 }
 

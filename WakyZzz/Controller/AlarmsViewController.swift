@@ -32,7 +32,18 @@ class AlarmsViewController: UIViewController {
         checkFirstRun()
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
+ //       configureTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        fetchedResultsController.delegate = self
         configureTableView()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        fetchedResultsController.delegate = nil
     }
     
     func checkFirstRun() {
@@ -41,13 +52,27 @@ class AlarmsViewController: UIViewController {
             // First launch, set user defaults to true (Launched Before = true)
             UserDefaults.standard.set(true, forKey: "Launched Before")
             
+            // set up alert text nicely aligned
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+
             // show alert for setting up alarms
-            let alert = UIAlertController(title: "Lets get started!", message: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. Alarm goes off once if no repeated days.\n4. Switch turns alarm on/off", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Lets get started!", message: "message", preferredStyle: .alert)
+            
+            // reassign message using attributed text
+            let messageText = NSAttributedString(
+                string: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. No repeat = 1 time alarm.\n4. Switch turns alarm on/off.\n5. Click notification to turn off alarm",
+                attributes: [
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                    NSAttributedString.Key.foregroundColor : UIColor.black,
+                    NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13)
+                ]
+            )
+            alert.setValue(messageText, forKey: "attributedMessage")
+            
+            // add alert
             alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
             self.present(alert, animated: true)
-            // temporary, will be removed in final
-//            populateAlarms()
-            //
         }
     }
     
@@ -63,6 +88,7 @@ class AlarmsViewController: UIViewController {
         } catch (let error) {
             print("Fetch failed, error: \(error.localizedDescription)")
         }
+        tableView.reloadData()
     }
     
     //MARK: - Actions

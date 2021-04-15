@@ -173,7 +173,7 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
-    // tested, not used yet
+    // tested
     func updateSnoozeStatus(for alarmID: UUID) {
         guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
         alarmEntity.snoozed = true

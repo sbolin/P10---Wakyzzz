@@ -13,6 +13,7 @@ extension NotificationController {
     
     //MARK: - Create Notification
     // Schedule notification alarms at given time/repeat.
+    // tested
     func assembleNotificationItemsFrom(entity: AlarmEntity) {
         // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
         let dateComponents = getDateComponents(alarmEntity: entity)
@@ -40,9 +41,10 @@ extension NotificationController {
         let content = UNMutableNotificationContent()
         
         // Set alarm sounds. Sound played depends on type/number times snoozed
-        
-        let defaultSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("sound.mp3").rawValue))
-        let annoyingSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("evil.m4a").rawValue))
+        let defaultSound = UNNotificationSound.init(named: UNNotificationSoundName("sound.m4a"))
+        let annoyingSound = UNNotificationSound.init(named: UNNotificationSoundName("evil.m4a"))
+//        let defaultSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("sound.m4a").rawValue))
+//        let annoyingSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("evil.m4a").rawValue))
         
         // Set notification content
         content.title = notification.title
@@ -75,12 +77,20 @@ extension NotificationController {
     private func createNotificationRequest(notification: LocalNotification, content: UNNotificationContent) {
         print(#function)
         // notification parameters
-        let dateComponent = notification.dateComponents
+        var dateComponent = notification.dateComponents
         let repeats = notification.repeats
         let id = notification.id // notification id matches core data id.
-        
+        var trigger: UNCalendarNotificationTrigger?
         // notification trigger
-        let trigger = notification.type == .snoozable ?  UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats) : UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: false)
+        switch notification.type {
+            case .snoozable:
+                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+            case .snoozed:
+                dateComponent.minute! += 1
+                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+            case .nonSnoozable:
+                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+        }
         
         // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
@@ -106,6 +116,7 @@ extension NotificationController {
     }
     
     // get the NotificationType based on AlarmEntity object timesSnoozed attribute
+    // tested indirectly
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
         print(#function)
         var notificationType: NotificationType
@@ -157,6 +168,6 @@ extension NotificationController {
 }
 
 // Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertToUNNotificationSoundName(_ input: String) -> UNNotificationSoundName {
-	return UNNotificationSoundName(rawValue: input)
-}
+//fileprivate func convertToUNNotificationSoundName(_ input: String) -> UNNotificationSoundName {
+//	return UNNotificationSoundName(rawValue: input)
+//}

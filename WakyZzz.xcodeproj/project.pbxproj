@@ -16,7 +16,6 @@
 		0424EB6B20BEF96400E15E46 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6A20BEF96400E15E46 /* Action.swift */; };
 		0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */; };
 		0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */; };
-		0424EB7120C038AE00E15E46 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0424EB7020C038AE00E15E46 /* sound.mp3 */; };
 		154999DC25D531E300835EFA /* evil.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 154999DB25D531E300835EFA /* evil.m4a */; };
 		15576E872603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */; };
 		15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */; };
@@ -27,6 +26,7 @@
 		15594DB625E12E8B00BE602D /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15594DB525E12E8B00BE602D /* CoreDataController.swift */; };
 		157B2FBF260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */; };
 		157B2FC3260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */; };
+		157FD4142628A0B200A01C7B /* sound.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 157FD4132628A0B200A01C7B /* sound.m4a */; };
 		15A14945261F6D5400E7788E /* NotifcationController+CleanupMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */; };
 		15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */; };
 		15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */; };
@@ -59,7 +59,6 @@
 		0424EB6A20BEF96400E15E46 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 		0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmViewController.swift; sourceTree = "<group>"; };
-		0424EB7020C038AE00E15E46 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
 		154999DB25D531E300835EFA /* evil.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = evil.m4a; sourceTree = "<group>"; };
 		15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmViewController+TableViewDataSource+TableViewDelegate.swift"; sourceTree = "<group>"; };
 		15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+NotificationDelegate.swift"; sourceTree = "<group>"; };
@@ -70,6 +69,7 @@
 		15594DB525E12E8B00BE602D /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		157B2FBE260E5D0900267B5C /* AlarmViewController+FetchedResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmViewController+FetchedResultsControllerDelegate.swift"; sourceTree = "<group>"; };
 		157B2FC2260E650B00267B5C /* AlarmsViewController+AlarmMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+AlarmMethods.swift"; sourceTree = "<group>"; };
+		157FD4132628A0B200A01C7B /* sound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound.m4a; sourceTree = "<group>"; };
 		15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotifcationController+CleanupMethods.swift"; sourceTree = "<group>"; };
 		15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationController+CreationMethods.swift"; sourceTree = "<group>"; };
 		15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzNotificationTests.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		15594D8A25DD538C00BE602D /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				0424EB7020C038AE00E15E46 /* sound.mp3 */,
+				157FD4132628A0B200A01C7B /* sound.m4a */,
 				154999DB25D531E300835EFA /* evil.m4a */,
 			);
 			path = Sounds;
@@ -300,7 +300,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0424EB7120C038AE00E15E46 /* sound.mp3 in Resources */,
+				157FD4142628A0B200A01C7B /* sound.m4a in Resources */,
 				0424EB5E20BEF89100E15E46 /* LaunchScreen.storyboard in Resources */,
 				15594DB125E10EBF00BE602D /* ClientSpec.rtf in Resources */,
 				15594D8425DD4D9900BE602D /* TODO.rtf in Resources */,

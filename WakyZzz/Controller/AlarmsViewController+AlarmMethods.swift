@@ -10,6 +10,7 @@ import UIKit
 
 extension AlarmsViewController {
     // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
+    /*
     func populateAlarms() {
         let context = CoreDataController.shared.managedContext
         // weekday alarm
@@ -33,6 +34,7 @@ extension AlarmsViewController {
         
         CoreDataController.shared.saveContext(context: context)
     }
+    */
     
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
