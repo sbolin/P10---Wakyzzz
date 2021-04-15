@@ -55,7 +55,7 @@ final class WakyZzzNotificationTests: XCTestCase {
     //MARK: - Tests
     //MARK: Notification Tests
     func test_createNotification() {
-        let expectation = XCTestExpectation(description: "Test passed")// create
+        let expectation = XCTestExpectation(description: "Test passed")
         var count = 0
         let derivedContext = testStack.derivedContext
         let alarmEntity = AlarmEntity(context: derivedContext)
@@ -75,10 +75,11 @@ final class WakyZzzNotificationTests: XCTestCase {
                 // fulfill expectation
             }
         }
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: 0.5)
     }
     
     func test_cancelNotification() {
+        let expectation = XCTestExpectation(description: "Test passed")
         var count = 0
         let derivedContext = testStack.derivedContext
         let alarmEntity = AlarmEntity(context: derivedContext)
@@ -93,13 +94,16 @@ final class WakyZzzNotificationTests: XCTestCase {
         center.getPendingNotificationRequests { requests in
             requests.forEach { request in
                 count += 1
+                XCTAssertTrue(count > 0)
+                expectation.fulfill()
+                // fulfill expectation
             }
         }
-        XCTAssertNotNil(count)
-        XCTAssertEqual(count, 0)
+        wait(for: [expectation], timeout: 0.5)
     }
     
     func test_getNotificationType() {
+        let expectation = XCTestExpectation(description: "Test passed")
         // indirectly test private method by examining created notification title, and compare to expected title (which is unique for each type)
         let expectedTitle = "Turn Alarm Off 🔕 or Snooze? 😴"
         var createdTitle = ""
@@ -116,8 +120,10 @@ final class WakyZzzNotificationTests: XCTestCase {
 
         center.getPendingNotificationRequests { requests in
             createdTitle = requests[0].content.title
+            XCTAssertEqual(expectedTitle, createdTitle)
+            expectation.fulfill()
         }
-        XCTAssertEqual(expectedTitle, createdTitle)
+        wait(for: [expectation], timeout: 0.5)
     }
 }
 
