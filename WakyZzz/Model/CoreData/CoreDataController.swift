@@ -126,6 +126,25 @@ class CoreDataController {
     }
     
     // tested
+    func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
+        let newAlarmEntity = AlarmEntity(context: managedContext)
+        newAlarmEntity.alarmID = alarm.alarmID
+        newAlarmEntity.time = Int32(alarm.time)
+        newAlarmEntity.repeatDays = alarm.repeatDays
+        newAlarmEntity.snoozed = alarm.snoozed
+        newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
+        newAlarmEntity.enabled = alarm.enabled
+        
+        let result = saveContext(context: managedContext)
+        
+        if result {
+            return newAlarmEntity
+        } else {
+            return nil
+        }
+    }
+    
+    // tested
     func changeAlarmStatus(at indexPath: IndexPath, status: Bool) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         alarmEntity.enabled = status
@@ -164,25 +183,6 @@ class CoreDataController {
         saveContext(context: managedContext)
         if alarmEntity.timesSnoozed > 3 {
             print("Activate Random Act of Kindness™")
-        }
-    }
-    
-    // tested
-    func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
-        let newAlarmEntity = AlarmEntity(context: managedContext)
-        newAlarmEntity.alarmID = alarm.alarmID
-        newAlarmEntity.time = Int32(alarm.time)
-        newAlarmEntity.repeatDays = alarm.repeatDays
-        newAlarmEntity.snoozed = alarm.snoozed
-        newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
-        newAlarmEntity.enabled = alarm.enabled
-        
-        let result = saveContext(context: managedContext)
-        
-        if result {
-        return newAlarmEntity
-        } else {
-            return nil
         }
     }
     

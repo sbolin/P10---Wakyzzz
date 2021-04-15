@@ -90,6 +90,9 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.snoozed = false
         alarmEntity.timesSnoozed = 0
         // create notification
+        notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+        // check if notification created
+        //cancel notification
         notifcationController.cancelNotificationForEntity(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
             requests.forEach { request in

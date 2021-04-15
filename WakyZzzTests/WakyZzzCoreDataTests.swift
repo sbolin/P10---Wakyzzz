@@ -291,7 +291,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         alarm.timesSnoozed = 0
         
         // create alarm
-        testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
+        let _ = testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
 
         // fetch same alarm
         do {
@@ -323,7 +323,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         let indexPath = IndexPath(row: 0, section: 0)
         
         // create alarm
-        testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
+        let _ = testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
         
         // fetch same alarm
         do {
@@ -358,7 +358,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         alarm.timesSnoozed = 0
         let alarmID = alarm.alarmID
         // create alarm
-        testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
+        let _ = testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
         
         // fetch same alarm
         do {
