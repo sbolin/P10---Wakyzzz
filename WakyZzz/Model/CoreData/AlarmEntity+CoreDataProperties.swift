@@ -37,11 +37,13 @@ extension AlarmEntity {
         let calendar = Calendar.current
         let hour = Int(time/3600) // h
         let minute = Int(time/60) - hour * 60 // m
+        let weekday = calendar.component(.weekday, from: date) ////
         
-        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .second, .day, .month, .year, .weekdayOrdinal], from: date as Date)
+        var alarmTimeComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .weekday], from: date as Date) ////
         
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute
+        alarmTimeComponents.weekday = weekday ////
         
         let alarmTimeAndDate = calendar.date(from: alarmTimeComponents)
         
@@ -53,11 +55,14 @@ extension AlarmEntity {
         let calendar = Calendar.current
         let hour = Int(time/3600) // h
         let minute = Int(time/60) - hour * 60 // m
+        let weekday = calendar.component(.weekday, from: date) ////
+
         
-        var alarmTimeComponents = calendar.dateComponents([.hour, .minute, .second, .day, .month, .year, .weekdayOrdinal], from: date as Date)
+        var alarmTimeComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .weekday], from: date as Date) //
         
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute
+        alarmTimeComponents.weekday = weekday ////
         
         return calendar.date(from: alarmTimeComponents)!
     }

@@ -11,7 +11,7 @@ import Foundation
 class Alarm: Codable { 
     
     static let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    
+    //                      ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     var alarmID = UUID()
     var time = 8 * 3600 // 360
     var repeatDays = [false, false, false, false, false, false, false]
@@ -25,11 +25,13 @@ class Alarm: Codable {
         let calendar = Calendar.current
         let hour = time/3600 // h
         let minute = time/60 - hour * 60 // m
+        let weekday = calendar.component(.weekday, from: date)
 
         var alarmTimeComponents = calendar.dateComponents([.second, .minute, .hour, .day, .month, .year, .weekday], from: date as Date)
 
         alarmTimeComponents.hour = hour
         alarmTimeComponents.minute = minute
+        alarmTimeComponents.weekday = weekday
 
         return calendar.date(from: alarmTimeComponents)
     }
@@ -46,11 +48,7 @@ class Alarm: Codable {
     var repeatingDayString: String { // switched name to repeatingDayString from repeating
         var captions = [String]()
         
-// TODO: if repeatDays same as LocalNotification:
-//        repeatDays.forEach { repeatDay in
-//            captions.append(Alarm.daysOfWeek[repeatDay])
-//        }
-// based on current repeatDays
+// create repeat day captions
         for i in 0 ..< repeatDays.count {
             if repeatDays[i] {
                 captions.append(Alarm.daysOfWeek[i])
@@ -63,7 +61,7 @@ class Alarm: Codable {
     //MARK: - SetAlarmViewController delegate method
     func setAlarmTime(date: Date) {
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute, .month, .year, .day, .second, .weekOfMonth], from: date as Date)
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .weekday], from: date as Date)
         
         time = components.hour! * 3600 + components.minute! * 60        
     }

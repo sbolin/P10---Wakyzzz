@@ -18,10 +18,18 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         guard let alarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: uuid) else { return }
         
         print(#function)
-        print("alarm id: \(id)")
-        print("alarm category: \(categoryID)")
-        print("alarm actionID: \(actionID)")
-        
+        print("alarm id         : \(id)")
+        print("alarm category   : \(categoryID)")
+        print("alarm actionID   : \(actionID)")
+        print("alarm uuid       : \(uuid)")
+        print("alarmEntity ID   : \(alarmEntity.alarmID)")
+        print("alarmEntity En   : \(alarmEntity.enabled)")
+        print("alarmEntity Rpt  : \(alarmEntity.repeatDays)")
+        print("alarmEntity Snz# : \(alarmEntity.timesSnoozed)")
+        print("category ID      : \(categoryID)")
+        print("action ID        : \(actionID)")
+
+
         if (categoryID == "SNOOZABLE_ALARM") || (categoryID == "SNOOZED_ALARM") {
             switch actionID {
                 case "TURN_OFF_ALARM":
@@ -33,13 +41,14 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     
                 case "SNOOZE_ALARM":
                     print("alarm snoozed")
-                    // increment snooze count
+                    // increment snooze count in updateSnoozeStatus
                     CoreDataController.shared.updateSnoozeStatus(for: uuid)
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = true
                     }
-                // create new alarm with UNTimeIntervalNotificationTrigger
-                
+                    // update notification (will automatically adds timesSnoozed to alarm time - ie, if snoozed 1 time adds 1 minute, 2 times adds 2 minutes...)
+                    notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+                                    
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
                     print("for this app, just open app and let user decide what to do")
@@ -47,6 +56,10 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                 case UNNotificationDismissActionIdentifier:
                     // User dismissed notification (clicked "x" button)
                     print("for this app, just open app and let user decide what to do")
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     
                 default:
                     print("Unknown identifier, should not happen")
@@ -69,7 +82,7 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     print("snoozed 3 times")
                     print("notification shows the act of kindness")
                     print("must promise to perform an act of kindness later to turn off")
-                    // increment snooze count
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = false
                     }
@@ -92,7 +105,7 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         //       manager.removeDeliveredNotifications(identifiers: [notification])
     }
     
-    // show notification while app is at the forground
+    // show notification while app is in the forground, just turn alarm off
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let id = notification.request.identifier
         guard let uuid = UUID(uuidString: id) else { return } // not sure what to do if can't get uuid
@@ -104,7 +117,6 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         switch notification.request.content.categoryIdentifier {
             case "SNOOZABLE_ALARM":
                 print("Snoozable alarm, turn off alarm \(id)")
-                alarmEntity.timesSnoozed += 1
                 if !alarmEntity.repeats {
                     alarmEntity.enabled = false
                 }

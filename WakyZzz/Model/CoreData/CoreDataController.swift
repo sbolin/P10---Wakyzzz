@@ -99,7 +99,7 @@ class CoreDataController {
         }
     }
     
-    // tested, not used otherwise
+    // tested, function only used in unit tests
     func createAlarmEntity() {
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = UUID()
@@ -125,6 +125,7 @@ class CoreDataController {
     
     // tested
     func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
+        print(#function)
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = alarm.alarmID
         newAlarmEntity.time = Int32(alarm.time)
@@ -132,7 +133,7 @@ class CoreDataController {
         newAlarmEntity.snoozed = alarm.snoozed
         newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
         newAlarmEntity.enabled = alarm.enabled
-        
+        print("repeat days: \(newAlarmEntity.repeatDays)")
         let result = saveContext(context: managedContext)
         
         if result {
@@ -153,7 +154,7 @@ class CoreDataController {
     func changeAlarmTime(at indexPath: IndexPath, date: Date) {
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute, .second, .day, .month, .year, .weekdayOrdinal], from: date as Date)
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .weekday], from: date as Date) ///
         let time = components.hour! * 3600 + components.minute! * 60
         alarmEntity.time = Int32(time)
         saveContext(context: managedContext)
@@ -176,16 +177,18 @@ class CoreDataController {
     // tested
     func updateSnoozeStatus(for alarmID: UUID) {
         guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
+        print("initial snooze count: \(alarmEntity.timesSnoozed)")
         alarmEntity.snoozed = true
         alarmEntity.timesSnoozed += 1
+        print("updated snooze count: \(alarmEntity.timesSnoozed)")
         saveContext(context: managedContext)
-        if alarmEntity.timesSnoozed > 2 {
+        if alarmEntity.timesSnoozed == 4 { // not really needed, just print when snoozes run out...
             print("Activate Random Act of Kindness™")
         }
     }
     
-    // tested
-    func updateAlarmEntityFromAlarmObject(at indexPath: IndexPath, alarm: Alarm) {
+    // tested, updates AlarmEntity after being edited in SetAlarmViewController
+    func updateAlarmEntityFromAlarmObject(at indexPath: IndexPath, alarm: Alarm) { // update
         // just update all properties, rather than track/update individual properties
         let alarmEntity = fetchedAlarmResultsController.object(at: indexPath)
         alarmEntity.alarmID = alarm.alarmID

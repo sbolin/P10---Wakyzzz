@@ -16,6 +16,7 @@ extension NotificationController {
     // tested
     func assembleNotificationItemsFrom(entity: AlarmEntity) {
         // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
+        print(#function)
         let dateComponents = getDateComponents(alarmEntity: entity)
         let snoozedTimes = entity.timesSnoozed
         let type = getNotificationType(alarmEntity: entity)
@@ -28,6 +29,8 @@ extension NotificationController {
             body: notificationText[2],
             repeats: entity.repeats,
             repeated: entity.repeated,
+            snoozed: entity.snoozed,
+            timesSnoozed: entity.timesSnoozed,
             dateComponents: dateComponents,
             type: type)
         // send to create content...
@@ -36,15 +39,13 @@ extension NotificationController {
     
     // Create notification content from notification object
     private func createNotificationContent(notification: LocalNotification) {
-        
+        print(#function)
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
         
         // Set alarm sounds. Sound played depends on type/number times snoozed
         let defaultSound = UNNotificationSound.init(named: UNNotificationSoundName("sound.m4a"))
         let annoyingSound = UNNotificationSound.init(named: UNNotificationSoundName("evil.m4a"))
-//        let defaultSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("sound.m4a").rawValue))
-//        let annoyingSound = UNNotificationSound.init(named: convertToUNNotificationSoundName(UNNotificationSoundName("evil.m4a").rawValue))
         
         // Set notification content
         content.title = notification.title
@@ -61,10 +62,10 @@ extension NotificationController {
         if notification.repeats {                                               // check if there are repeated alarms or not
             var _notification = notification                                    // notification is passed in, thus immutable, so create temp notification object
             guard let unwrappedRepeated = notification.repeated else { return } // could force unwrap, since notification.repeats is true (so repeated is non-nil)
-            for index in 0..<(unwrappedRepeated.count) {                        // cycle thru each repeated weekday
-                let repeatDay = unwrappedRepeated[index]                        // get the repeat day in array at [index]
+            for index in 0..<unwrappedRepeated.count {                          // cycle thru each repeated weekday
+                let repeatDay = unwrappedRepeated[index]                        // get the repeat day in array at [index + 1]
                 var newDateComponents = notification.dateComponents             // make a copy the dateComponents from the notification...
-                newDateComponents.weekday = repeatDay                           // and modify the repeat day based on notification.repeated array values
+                newDateComponents.weekday = repeatDay + 1                       // and modify the repeat day based on notification.repeated array values
                 _notification.dateComponents = newDateComponents                // apply new dateComponent to notificaiton
                 createNotificationRequest(notification: _notification, content: content)
             }
@@ -86,7 +87,7 @@ extension NotificationController {
             case .snoozable:
                 trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
             case .snoozed:
-                dateComponent.minute! += 1
+                dateComponent.minute! += Int(notification.timesSnoozed)
                 trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
             case .nonSnoozable:
                 trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
@@ -100,19 +101,15 @@ extension NotificationController {
                 print("Error adding request \(id): \(error.localizedDescription)")
             } else {
                 print("Notification \(id) added to center")
-                self.notifications.append(notification) // not needed...only use notification for creation
+//                self.notifications.append(notification) // not needed...only use notification for creation
             }
         }
         
         // below is for debug only, not needed...
-        //      #if DEBUG
         print(#function)
         print("Notification \(id) with request id \(request.identifier) set")
-        print("List of notifications follows:")
         listScheduledNotifications()
-        print("=======================")
         listDeliveredNotifications()
-        //      #endif
     }
     
     // get the NotificationType based on AlarmEntity object timesSnoozed attribute
@@ -120,13 +117,13 @@ extension NotificationController {
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
         print(#function)
         var notificationType: NotificationType
-        if alarmEntity.timesSnoozed == 3 {
-            notificationType = .nonSnoozable
-        } else if alarmEntity.timesSnoozed > 0 {
-            notificationType = .snoozed
-        } else {
-            notificationType = .snoozable
+        switch alarmEntity.timesSnoozed {
+            case 0: notificationType = .snoozable
+            case 1...3: notificationType = .snoozed
+            default: notificationType = .nonSnoozable
         }
+        
+        print("notification type: \(notificationType.rawValue)")
         return notificationType
     }
     
@@ -152,7 +149,7 @@ extension NotificationController {
             case .snoozable:
                 returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
                 returnText.append("Shut off or snooze for 1 minute")
-                returnText.append("Body of notification")
+                returnText.append("You can snooze 3 times...")
             case .snoozed:
                 returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
                 returnText.append("Shut off or snooze for 1 minute")
@@ -166,8 +163,3 @@ extension NotificationController {
         return returnText
     }
 }
-
-// Helper function inserted by Swift 4.2 migrator.
-//fileprivate func convertToUNNotificationSoundName(_ input: String) -> UNNotificationSoundName {
-//	return UNNotificationSoundName(rawValue: input)
-//}

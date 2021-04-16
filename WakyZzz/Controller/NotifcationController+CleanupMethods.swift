@@ -49,12 +49,17 @@ extension NotificationController {
     func cancelNotificationForEntity(entity: AlarmEntity) {
         let id = entity.alarmID.uuidString
         // cancel notification id
+        print("removing notification \(id)")
         center.removePendingNotificationRequests(withIdentifiers: [id])
-        
+        // add this, since above doesn't seem to work?
+        center.removeAllDeliveredNotifications()
+        //
+        listScheduledNotifications()
     }
     
     //MARK: - NotificationController helper methods
     func listScheduledNotifications() {
+        print(#function)
         var count = 0
         center.getPendingNotificationRequests { notifications in
             for notification in notifications {
@@ -65,6 +70,7 @@ extension NotificationController {
     }
     
     func listDeliveredNotifications() {
+        print(#function)
         var count = 0
         center.getDeliveredNotifications { notifications in
             for notification in notifications {

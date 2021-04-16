@@ -23,6 +23,8 @@ struct LocalNotification {
     let body: String
     let repeats: Bool
     let repeated: [Int]?
+    let snoozed: Bool
+    let timesSnoozed: Int16
     var dateComponents: DateComponents
     let type: NotificationType
 }

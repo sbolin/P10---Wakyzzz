@@ -37,7 +37,6 @@ class AlarmsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        fetchedResultsController.delegate = self
         configureTableView()
     }
     
@@ -101,10 +100,16 @@ class AlarmsViewController: UIViewController {
 extension AlarmsViewController: AlarmCellDelegate {
     func alarmCell(_ cell: AlarmTableViewCell, enabledChanged enabled: Bool) {
         if let indexPath = tableView.indexPath(for: cell) {
+            // update core data model
             CoreDataController.shared.changeAlarmStatus(at: indexPath, status: enabled)
-            // update notification
+            // update notification based on enabled
             let alarmEntity = fetchedResultsController.object(at: indexPath)
-            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+            switch enabled {
+                case true:
+                    notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+                case false:
+                    notifcationController.cancelNotificationForEntity(entity: alarmEntity)
+            }
         }
     }
 }
@@ -113,14 +118,13 @@ extension AlarmsViewController: AlarmCellDelegate {
 extension AlarmsViewController: SetAlarmViewControllerDelegate {
     func setAlarmViewControllerDone(alarm: Alarm) {
         if let editingIndexPath = editingIndexPath {
-            // alarm has been edited
+            // alarm has been edited, update core data model 
             CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
-            // update notification
+            // get entity object
             let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
 
-            // NOTE: need to check if notification must be cancelled first, then re-scheduled, or if can just reschedule using same ID
-            // cancel for now...
-            notifcationController.cancelNotificationForEntity(entity: alarmEntity)
+// update notification from entity
+//            notifcationController.cancelNotificationForEntity(entity: alarmEntity)
             notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
         }
         else {

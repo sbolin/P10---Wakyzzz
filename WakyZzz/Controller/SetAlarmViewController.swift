@@ -76,12 +76,14 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         alarm?.repeatDays[indexPath.row] = true
-        tableView.cellForRow(at: indexPath)?.accessoryType = (alarm?.repeatDays[indexPath.row])! ? .checkmark : .none
+//        tableView.cellForRow(at: indexPath)?.accessoryType = (alarm?.repeatDays[indexPath.row])! ? .checkmark : .none
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         alarm?.repeatDays[indexPath.row] = false
-        tableView.cellForRow(at: indexPath)?.accessoryType = (alarm?.repeatDays[indexPath.row])! ? .checkmark : .none
+//        tableView.cellForRow(at: indexPath)?.accessoryType = (alarm?.repeatDays[indexPath.row])! ? .checkmark : .none
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
     
     @IBAction func cancelButtonPress(_ sender: Any) {
@@ -91,10 +93,11 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func doneButtonPress(_ sender: Any) {
         // send back alarm object to process/display in AlarmsViewController
-        // note: if alarm is new/edited is handled in AlarmsViewController
-        delegate?.setAlarmViewControllerDone(alarm: alarm!)
+        // note: new/edited alarm is handled in AlarmsViewController
         navigationController?.popViewController(animated: true)
+        delegate?.setAlarmViewControllerDone(alarm: alarm!)
     }
+    
     @IBAction func datePickerValueChanged(_ sender: Any) {
         alarm?.setAlarmTime(date: datePicker.date)
     }

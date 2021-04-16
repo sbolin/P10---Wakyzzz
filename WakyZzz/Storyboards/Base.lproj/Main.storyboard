@@ -20,27 +20,27 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                                 <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AlarmCell" rowHeight="120" id="VSk-wo-5zH" customClass="AlarmTableViewCell" customModule="WakyZzz" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AlarmCell" id="VSk-wo-5zH" customClass="AlarmTableViewCell" customModule="WakyZzz" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VSk-wo-5zH" id="UFv-lQ-eKE">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Ty1-Op-q1J">
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="Ty1-Op-q1J">
                                                     <rect key="frame" x="12" y="12" width="351" height="96"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="yS6-6a-PjO">
-                                                            <rect key="frame" x="0.0" y="0.0" width="351" height="64"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="351" height="58"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00 AM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FKQ-CR-bhd">
-                                                                    <rect key="frame" x="0.0" y="3.5" width="294" height="57.5"/>
+                                                                    <rect key="frame" x="0.0" y="0.5" width="294" height="57.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aOW-6I-KN4">
-                                                                    <rect key="frame" x="302" y="16.5" width="51" height="31"/>
+                                                                    <rect key="frame" x="302" y="13.5" width="51" height="31"/>
                                                                     <connections>
                                                                         <action selector="enabledStateChanged:" destination="VSk-wo-5zH" eventType="valueChanged" id="KeT-Qc-YCx"/>
                                                                     </connections>
@@ -61,9 +61,9 @@
                                                 </stackView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="Ty1-Op-q1J" secondAttribute="bottom" constant="12" id="Awq-n5-pbe"/>
                                                 <constraint firstItem="Ty1-Op-q1J" firstAttribute="leading" secondItem="UFv-lQ-eKE" secondAttribute="leading" constant="12" id="UQB-26-EP7"/>
                                                 <constraint firstItem="Ty1-Op-q1J" firstAttribute="top" secondItem="UFv-lQ-eKE" secondAttribute="top" constant="12" id="WLN-iV-sqG"/>
-                                                <constraint firstAttribute="bottom" secondItem="Ty1-Op-q1J" secondAttribute="bottom" constant="12" id="dQi-FH-Khj"/>
                                                 <constraint firstAttribute="trailing" secondItem="Ty1-Op-q1J" secondAttribute="trailing" constant="12" id="shu-Pp-NCj"/>
                                             </constraints>
                                         </tableViewCellContentView>

@@ -9,41 +9,14 @@
 import UIKit
 
 extension AlarmsViewController {
-    // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
-    /*
-    func populateAlarms() {
-        let context = CoreDataController.shared.managedContext
-        // weekday alarm
-        let weekDayAlarmID = UUID()
-        CoreDataController.shared.createAlarmEntityWithID(id: weekDayAlarmID)
-        guard let weekDayAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekDayAlarmID) else { return }
-        // Weekdays 5am
-        weekDayAlarmEntity.time = 5 * 3600
-        weekDayAlarmEntity.enabled = true
-        for i in 1 ... 5 {
-            weekDayAlarmEntity.repeatDays[i] = true
-        }
-        
-        let weekEndAlarmID = UUID()
-        CoreDataController.shared.createAlarmEntityWithID(id: weekEndAlarmID)
-        guard let weekendAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
-        weekendAlarmEntity.time = 9 * 3600
-        weekendAlarmEntity.enabled = false
-        weekendAlarmEntity.repeatDays[0] = true
-        weekendAlarmEntity.repeatDays[6] = true
-        
-        CoreDataController.shared.saveContext(context: context)
-    }
-    */
     
     //MARK: - Tableview helper function
     func deleteAlarm(at indexPath: IndexPath) {
+        print(#function)
+        print("deleting alarm...")
         let alarmEntity = fetchedResultsController.object(at: indexPath)
-//        let alarmID = alarmEntity.alarmID.uuidString
-        // remove notification
-//        self.notifcationController.center.removePendingNotificationRequests(withIdentifiers: [alarmID])
+        print("id: \(alarmEntity.alarmID)")
         self.notifcationController.cancelNotificationForEntity(entity: alarmEntity)
-        
         CoreDataController.shared.deleteAlarmEntity(at: indexPath)
     }
     
@@ -51,7 +24,6 @@ extension AlarmsViewController {
     func editAlarm(at indexPath: IndexPath) {
         editingIndexPath = indexPath
         let alarmEntity = fetchedResultsController.object(at: indexPath)
-        
         presentSetAlarmViewController(alarmEntity: alarmEntity)
     }
     
@@ -64,4 +36,31 @@ extension AlarmsViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    // Temporary function to populate alarms with dummy data, will be removed after app works properly and user will set their own alarms
+    /*
+     func populateAlarms() {
+     let context = CoreDataController.shared.managedContext
+     // weekday alarm
+     let weekDayAlarmID = UUID()
+     CoreDataController.shared.createAlarmEntityWithID(id: weekDayAlarmID)
+     guard let weekDayAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekDayAlarmID) else { return }
+     // Weekdays 5am
+     weekDayAlarmEntity.time = 5 * 3600
+     weekDayAlarmEntity.enabled = true
+     for i in 1 ... 5 {
+     weekDayAlarmEntity.repeatDays[i] = true
+     }
+     
+     let weekEndAlarmID = UUID()
+     CoreDataController.shared.createAlarmEntityWithID(id: weekEndAlarmID)
+     guard let weekendAlarmEntity = CoreDataController.shared.fetchAlarmByAlarmID(with: weekEndAlarmID) else { return }
+     weekendAlarmEntity.time = 9 * 3600
+     weekendAlarmEntity.enabled = false
+     weekendAlarmEntity.repeatDays[0] = true
+     weekendAlarmEntity.repeatDays[6] = true
+     
+     CoreDataController.shared.saveContext(context: context)
+     }
+     */
 }
