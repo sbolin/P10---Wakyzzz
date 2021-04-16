@@ -77,6 +77,7 @@ extension NotificationController {
     // create Notification Request and add notification given n
     private func createNotificationRequest(notification: LocalNotification, content: UNNotificationContent) {
         print(#function)
+        print("notification type: \(notification.type.rawValue)")
         // notification parameters
         var dateComponent = notification.dateComponents
         let repeats = notification.repeats
@@ -90,6 +91,7 @@ extension NotificationController {
                 dateComponent.minute! += Int(notification.timesSnoozed)
                 trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
             case .nonSnoozable:
+                dateComponent.minute! += Int(notification.timesSnoozed)
                 trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
         }
         
@@ -119,7 +121,7 @@ extension NotificationController {
         var notificationType: NotificationType
         switch alarmEntity.timesSnoozed {
             case 0: notificationType = .snoozable
-            case 1...3: notificationType = .snoozed
+            case 1...2: notificationType = .snoozed //
             default: notificationType = .nonSnoozable
         }
         
@@ -151,14 +153,15 @@ extension NotificationController {
                 returnText.append("Shut off or snooze for 1 minute")
                 returnText.append("You can snooze 3 times...")
             case .snoozed:
+                let timeText = snoozedTimes > 1 ? "times" : "time"
                 returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
                 returnText.append("Shut off or snooze for 1 minute")
-                returnText.append("You have snoozed \(snoozedTimes) out of 3")
+                returnText.append("You have snoozed \(snoozedTimes) \(timeText) out of 3")
             case .nonSnoozable:
                 let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
                 returnText.append("Act of Kindness Alert! ⚠️")
-                returnText.append("You must perform an act of kindness to turn alarm off")
-                returnText.append("Random act of kindness: \(actOfKindness ?? "Smile today!")")
+                returnText.append("You must perform a random act of kindness to turn alarm off")
+                returnText.append("kindness: \(actOfKindness ?? "Smile today!")")
         }
         return returnText
     }
