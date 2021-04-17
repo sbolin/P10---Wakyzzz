@@ -65,9 +65,11 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.repeatDays = [false, false, false, false, false, false, false]
         alarmEntity.snoozed = false
         alarmEntity.timesSnoozed = 0
+        print("alarmEntity: \(alarmEntity)")
         // create notification
         notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
+            print("getPendingNotificationRequests: \(requests)")
             requests.forEach { request in
                 count += 1
                 XCTAssertTrue(count > 0)
@@ -75,7 +77,7 @@ final class WakyZzzNotificationTests: XCTestCase {
                 // fulfill expectation
             }
         }
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1.0)
     }
     
     func test_cancelNotification() {
@@ -91,18 +93,15 @@ final class WakyZzzNotificationTests: XCTestCase {
         alarmEntity.timesSnoozed = 0
         // create notification
         notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
-        // check if notification created
         //cancel notification
         notifcationController.cancelNotificationForEntity(entity: alarmEntity)
         center.getPendingNotificationRequests { requests in
-            requests.forEach { request in
-                count += 1
-                XCTAssertTrue(count > 0)
-                expectation.fulfill()
-                // fulfill expectation
-            }
+            count = requests.count
+            XCTAssertTrue(count == 0)
+            expectation.fulfill()
+            // fulfill expectation
         }
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1.0)
     }
     
     func test_getNotificationType() {
@@ -126,7 +125,7 @@ final class WakyZzzNotificationTests: XCTestCase {
             XCTAssertEqual(expectedTitle, createdTitle)
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1.0)
     }
     
     // helper methods

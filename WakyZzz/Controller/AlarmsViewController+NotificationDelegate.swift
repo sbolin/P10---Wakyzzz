@@ -76,7 +76,7 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = false
                     }
-                    break
+                    
                     
                 case "ACT_OF_KINDNESS_LATER":
                     print("snoozed 3 times")
@@ -86,15 +86,23 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = false
                     }
-                    break
+                    
                     
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
-                    print("for this app, just open app and let user decide what to do")
+                    print("turns alarm off if ")
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     
                 case UNNotificationDismissActionIdentifier:
                     // User dismissed notification (clicked "x" button)
                     print("for this app, just open app and let user decide what to do")
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
                     
                 default:
                     print("Unknown identifier, should not happen")

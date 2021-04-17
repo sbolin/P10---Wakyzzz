@@ -29,9 +29,9 @@ class AlarmsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         center.delegate = self
-        checkFirstRun()
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
+        checkFirstRun()
  //       configureTableView()
     }
     
