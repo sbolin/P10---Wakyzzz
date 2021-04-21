@@ -40,14 +40,17 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: Set up table view editing
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
-
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completion) in
             // delete core data object and associated notification
-            self.deleteAlarm(at: indexPath)
+            let alarmEntity = self.fetchedResultsController.object(at: indexPath)
+            self.notifcationController.cancelNotificationForEntity(entity: alarmEntity)
+            CoreDataController.shared.managedContext.delete(alarmEntity)
+//            CoreDataController.shared.deleteAlarmEntity(at: indexPath)
+            print("deleted alarm at \(indexPath)")
             completion(true)
         }
         
-        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (_, _, completion) in
             self.editAlarm(at: indexPath)
             completion(true)
         }

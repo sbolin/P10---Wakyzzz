@@ -19,7 +19,8 @@ class TestCoreDataController: CoreDataController {
         persistentStoreDescription.url = URL(fileURLWithPath: "/dev/null")
         
         let container = NSPersistentContainer(
-            name: CoreDataController.shared.modelName)
+            name: CoreDataController.shared.modelName,
+            managedObjectModel: CoreDataController.shared.model)
         
         container.persistentStoreDescriptions = [persistentStoreDescription]
         

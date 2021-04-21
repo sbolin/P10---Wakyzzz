@@ -13,7 +13,7 @@ import CoreData
 final class WakyZzzCoreDataTests: XCTestCase {
     
     //MARK: - Properties
-    var testStack: CoreDataController!
+    var testStack: TestCoreDataController!
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
     
     override func setUp() {
@@ -126,9 +126,9 @@ final class WakyZzzCoreDataTests: XCTestCase {
     
     func testAddNewAlarmWithID() {
         let alarmTime = Int32(8*60*60)
-        let id = UUID()
+//        let id = UUID()
         // create alarm
-        testStack.createAlarmEntityWithID(id: id)
+        testStack.createAlarmEntity()
         
         do {
             try testStack.fetchedAlarmResultsController.performFetch()
@@ -139,14 +139,15 @@ final class WakyZzzCoreDataTests: XCTestCase {
         
         // fetch same alarm
         let allAlarms = fetchedResultsController.fetchedObjects
-        guard let alarm = allAlarms?.last else {
+        guard let alarm = allAlarms?.last else { // last
             XCTFail()
             return
         }
         
         XCTAssertNotNil(alarm, "alarm should not be nil")
         XCTAssertEqual(alarm.enabled, true)
-        XCTAssertEqual(alarm.alarmID, id)
+        // can't set the id on its own, it is set by the entity itself.
+//        XCTAssertEqual(alarm.alarmID, id)
         XCTAssertEqual(alarm.time, alarmTime)
         XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
         XCTAssertEqual(alarm.snoozed, false)

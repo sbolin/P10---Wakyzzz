@@ -16,10 +16,14 @@ class CoreDataController {
     init() {}
     
     lazy var modelName = "WakyZzz"
+    lazy var model: NSManagedObjectModel = {
+        let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
+    }()
     
     //MARK: - NSPersistentContainer
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: modelName)
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 print("Unresolved error \(error), \(error.userInfo)")
@@ -56,9 +60,7 @@ class CoreDataController {
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {
         let request = AlarmEntity.alarmFetchRequest()
         request.returnsObjectsAsFaults = false // return objects not faults (small model)
-//        let alarmEnabledSort = NSSortDescriptor(keyPath: \AlarmEntity.enabled, ascending: true)
         let alarmTimeSort = NSSortDescriptor(keyPath: \AlarmEntity.time, ascending: true)
-//        request.sortDescriptors = [alarmEnabledSort, alarmTimeSort]
         request.sortDescriptors = [alarmTimeSort]
 
         let fetchedResultsController = NSFetchedResultsController(
@@ -111,17 +113,17 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
-    // tested, in populate alarms only, can delete in final
-    func createAlarmEntityWithID(id: UUID) {
-        let newAlarmEntity = AlarmEntity(context: managedContext)
-        newAlarmEntity.alarmID = id
-        newAlarmEntity.time = Int32(8 * 60 * 60)
-        newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
-        newAlarmEntity.snoozed = false
-        newAlarmEntity.timesSnoozed = Int16(0)
-        newAlarmEntity.enabled = true // alarm turned on when created
-        saveContext(context: managedContext)
-    }
+//    // tested, in populate alarms only, can delete in final
+//    func createAlarmEntityWithID(id: UUID) {
+//        let newAlarmEntity = AlarmEntity(context: managedContext)
+//        newAlarmEntity.alarmID = id
+//        newAlarmEntity.time = Int32(8 * 60 * 60)
+//        newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
+//        newAlarmEntity.snoozed = false
+//        newAlarmEntity.timesSnoozed = Int16(0)
+//        newAlarmEntity.enabled = true // alarm turned on when created
+//        saveContext(context: managedContext)
+//    }
     
     // tested
     func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
