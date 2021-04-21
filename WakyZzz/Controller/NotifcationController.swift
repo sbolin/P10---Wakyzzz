@@ -13,6 +13,7 @@ enum NotificationType: String {
     case snoozable = "SNOOZABLE_ALARM"
     case snoozed = "SNOOZED_ALARM"
     case nonSnoozable = "NON_SNOOZABLE_ALARM"
+    case delayedAction = "DELAYED_ACTION"
 }
 
 // not specifically needed, just used to post notification details to viewcontroller...
@@ -27,6 +28,11 @@ struct LocalNotification {
     let timesSnoozed: Int16
     var dateComponents: DateComponents
     let type: NotificationType
+}
+
+struct NotificationRequest {
+    let notification: LocalNotification
+    let content: UNNotificationContent
 }
 
 class NotificationController: NSObject, UNUserNotificationCenterDelegate {
@@ -109,6 +115,11 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                       title: "Defer Act of Kindness (Trust system™)",
                                                       options: .foreground) //UNNotificationActionOptions(rawValue: 3))
         
+        // reminder to perform act of kindness
+        let remindPerformKindness = UNNotificationAction(identifier: "REMINDER_PERFORM_ACT_OF_KINDNESS",
+                                                      title: "Perform Act of Kindness",
+                                                      options: .foreground) //UNNotificationActionOptions(rawValue: 4))
+        
         /// Define the notification categories
         /// snoozed < 3 times
         let snoozableCategory = UNNotificationCategory(identifier: NotificationType.snoozable.rawValue,
@@ -129,8 +140,15 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                                                           hiddenPreviewsBodyPlaceholder: "",
                                                           options: .customDismissAction)
         
+        /// remind user to perform act of kindness if user deferred action
+        let reminderCategory = UNNotificationCategory(identifier: NotificationType.delayedAction.rawValue,
+                                                          actions: [remindPerformKindness],
+                                                          intentIdentifiers: [],
+                                                          hiddenPreviewsBodyPlaceholder: "",
+                                                          options: .customDismissAction)
+        
         // Register the notification type.
-        center.setNotificationCategories([snoozableCategory, snoozedCategory, nonSnoozableCategory])
+        center.setNotificationCategories([snoozableCategory, snoozedCategory, nonSnoozableCategory, reminderCategory])
         
         print("Actions and Categories set")
     }

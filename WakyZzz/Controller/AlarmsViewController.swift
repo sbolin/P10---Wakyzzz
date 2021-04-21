@@ -16,14 +16,14 @@ class AlarmsViewController: UIViewController {
     
     //MARK: Set up data store
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
-//    var notificationController: NotificationController!
+    //    var notificationController: NotificationController!
     
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager
     let center = UNUserNotificationCenter.current()
     var editingIndexPath: IndexPath?
-
-//MARK: - View Lifecylcle
+    
+    //MARK: - View Lifecylcle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -32,7 +32,6 @@ class AlarmsViewController: UIViewController {
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
         checkFirstRun()
- //       configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +53,7 @@ class AlarmsViewController: UIViewController {
             // set up alert text nicely aligned
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .left
-
+            
             // show alert for setting up alarms
             let alert = UIAlertController(title: "Lets get started!", message: "message", preferredStyle: .alert)
             
@@ -106,7 +105,7 @@ extension AlarmsViewController: AlarmCellDelegate {
             let alarmEntity = fetchedResultsController.object(at: indexPath)
             switch enabled {
                 case true:
-                    notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+                    notifcationController.notificationFactory(entity: alarmEntity)
                 case false:
                     notifcationController.cancelNotificationForEntity(entity: alarmEntity)
             }
@@ -122,16 +121,14 @@ extension AlarmsViewController: SetAlarmViewControllerDelegate {
             CoreDataController.shared.updateAlarmEntityFromAlarmObject(at: editingIndexPath, alarm: alarm)
             // get entity object
             let alarmEntity = fetchedResultsController.object(at: editingIndexPath)
-
-// update notification from entity
-//            notifcationController.cancelNotificationForEntity(entity: alarmEntity)
-            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
+            notifcationController.notificationFactory(entity: alarmEntity)
         }
         else {
             // new core data alarmEntity
             guard let alarmEntity = CoreDataController.shared.createAlarmEntityFromAlarmObject(alarm: alarm) else { return }
             // create notification
-            notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)        }
+            notifcationController.notificationFactory(entity: alarmEntity)
+        }
         editingIndexPath = nil
     }
     

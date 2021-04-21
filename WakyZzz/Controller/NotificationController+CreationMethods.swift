@@ -11,10 +11,24 @@ import UserNotifications
 
 extension NotificationController {
     
-    //MARK: - Create Notification
+    //MARK: - Notification factory for creating notifications given a Core Data AlarmEntity object
     // Schedule notification alarms at given time/repeat.
-    // tested
-    func assembleNotificationItemsFrom(entity: AlarmEntity) {
+    func notificationFactory(entity: AlarmEntity) {
+        let localNotification = createLocalNotification(entity: entity)
+        let content = createNotificationContent(notification: localNotification)
+        let requests = createNotificationRequest(notification: localNotification, content: content)
+        addRequests(requests: requests) { result in
+            if result {
+                print("Notification \(localNotification.id) added successfully")
+            } else {
+                print("Error, Notification not added")
+            }
+        }
+    }
+    
+    //MARK: - Create LocalNotification object given Core Data AlarmEntity object
+    // create local notification object from core data Entity
+    func createLocalNotification(entity: AlarmEntity) -> LocalNotification {
         // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
         print(#function)
         let dateComponents = getDateComponents(alarmEntity: entity)
@@ -22,7 +36,7 @@ extension NotificationController {
         let type = getNotificationType(alarmEntity: entity)
         let notificationText = makeNotificationText(type: type, snoozedTimes: snoozedTimes)
         
-        let notification = LocalNotification(
+        return LocalNotification(
             id: entity.alarmID.uuidString,
             title: notificationText[0],
             subtitle: notificationText[1],
@@ -34,11 +48,11 @@ extension NotificationController {
             dateComponents: dateComponents,
             type: type)
         // send to create content...
-        createNotificationContent(notification: notification)
     }
     
+    // MARK: - Create notification content form given LocalNotification object, return UNMutableNotificationContent
     // Create notification content from notification object
-    private func createNotificationContent(notification: LocalNotification) {
+    func createNotificationContent(notification: LocalNotification) -> UNMutableNotificationContent {
         print(#function)
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
@@ -58,62 +72,80 @@ extension NotificationController {
         content.summaryArgumentCount = 0 // placeholder, count of unread notifications
         content.targetContentIdentifier = "WakyZzz" // placeholder...
         
-        // loop thru repeated weekdays and create notifications for each day
-        if notification.repeats {                                               // check if there are repeated alarms or not
-            var _notification = notification                                    // notification is passed in, thus immutable, so create temp notification object
-            guard let unwrappedRepeated = notification.repeated else { return } // could force unwrap, since notification.repeats is true (so repeated is non-nil)
-            for index in 0..<unwrappedRepeated.count {                          // cycle thru each repeated weekday
-                let repeatDay = unwrappedRepeated[index]                        // get the repeat day in array at [index + 1]
-                var newDateComponents = notification.dateComponents             // make a copy the dateComponents from the notification...
-                newDateComponents.weekday = repeatDay + 1                       // and modify the repeat day based on notification.repeated array values
-                _notification.dateComponents = newDateComponents                // apply new dateComponent to notificaiton
-                createNotificationRequest(notification: _notification, content: content)
-            }
-        } else {                                                                // no repeated alarms
-            createNotificationRequest(notification: notification, content: content) // if non-repeating, dateComponent in notification is correct already (and not needed).
-        }
+        return content
     }
     
-    // create Notification Request and add notification given n
-    private func createNotificationRequest(notification: LocalNotification, content: UNNotificationContent) {
-        print(#function)
-        print("notification type: \(notification.type.rawValue)")
-        // notification parameters
-        var dateComponent = notification.dateComponents
-        let repeats = notification.repeats
-        let id = notification.id // notification id matches core data id.
-        var trigger: UNCalendarNotificationTrigger?
-        // notification trigger
-        switch notification.type {
-            case .snoozable:
-                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
-            case .snoozed:
-                dateComponent.minute! += Int(notification.timesSnoozed)
-                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
-            case .nonSnoozable:
-                dateComponent.minute! += Int(notification.timesSnoozed)
-                trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+    //MARK: - Create notification requests given local notification and content, return [NotificationRequest]
+    // loop thru repeated weekdays and create notifications for each day
+    func createNotificationRequest(notification: LocalNotification, content: UNMutableNotificationContent) -> [NotificationRequest] {
+        var request = [NotificationRequest]()
+        if notification.repeats {                                                  // check if there are repeated alarms or not
+            var _notification = notification                                       // notification is passed in, thus immutable, so create temp notification object
+            guard let unwrappedRepeated = notification.repeated else { return [] } // could force unwrap, since notification.repeats is true (so repeated is non-nil)
+            for index in 0..<unwrappedRepeated.count {                             // cycle thru each repeated weekday
+                let repeatDay = unwrappedRepeated[index]                           // get the repeat day in array at [index + 1]
+                var newDateComponents = notification.dateComponents                // make a copy the dateComponents from the notification...
+                newDateComponents.weekday = repeatDay + 1                          // and modify the repeat day based on notification.repeated array values
+                _notification.dateComponents = newDateComponents                   // apply new dateComponent to notificaiton
+                request.append(NotificationRequest(notification: _notification, content: content))
+//                addRequests(notification: _notification, content: content)
+            }
+        } else {                                                                   // no repeated alarms
+            request.append(NotificationRequest(notification: notification, content: content))
+//            addRequests(notification: notification, content: content) // if non-repeating, dateComponent in notification is correct already (and not needed).
         }
-        
-        // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        
-        center.add(request) { error in
-            if let error = error {
-                print("Error adding request \(id): \(error.localizedDescription)")
-            } else {
-                print("Notification \(id) added to center")
-//                self.notifications.append(notification) // not needed...only use notification for creation
+        return request
+    }
+    
+    //MARK: - Add given NotificationRequests to notification center, return bool with outcome
+    // create Notification Request and add notification given n
+    func addRequests(requests: [NotificationRequest], completionHandler: @escaping (Bool) -> Void) {
+        print(#function)
+        for request in requests {
+            
+            let notification = request.notification
+            let content = request.content
+            
+            print("notification type: \(notification.type.rawValue)")
+            // notification parameters
+            var dateComponent = notification.dateComponents
+            let repeats = notification.repeats
+            let id = notification.id // notification id matches core data id.
+            var trigger: UNCalendarNotificationTrigger?
+            // notification trigger
+            switch notification.type {
+                case .snoozable:
+                    trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+                case .snoozed:
+                    dateComponent.minute! += Int(notification.timesSnoozed)
+                    trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+                case .nonSnoozable:
+                    dateComponent.minute! += Int(notification.timesSnoozed)
+                    trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+                case .delayedAction:
+                    dateComponent.minute! += 30 // alarm will go off in 30 minutes
+                    trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: repeats)
+            }
+            
+            // add notification request. Note: if repeating all repeats share the same id (not sure this works?)
+            let revisedRequest = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+            
+            center.add(revisedRequest) { error in
+                if let error = error {
+                    print("Error adding request \(id): \(error.localizedDescription)")
+                    completionHandler(false)
+                } else {
+                    print("Notification \(id) with request id \(revisedRequest.identifier) set")
+                    completionHandler(true)
+                }
             }
         }
-        
         // below is for debug only, not needed...
-        print(#function)
-        print("Notification \(id) with request id \(request.identifier) set")
         listScheduledNotifications()
         listDeliveredNotifications()
     }
     
+    //MARK: - Notification helper methods
     // get the NotificationType based on AlarmEntity object timesSnoozed attribute
     // tested indirectly
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
@@ -149,7 +181,7 @@ extension NotificationController {
         
         switch type {
             case .snoozable:
-                returnText.append("Turn Alarm Off 🔕 or Snooze? 😴")
+                returnText.append("Turn Off Alarm 🔕 or Snooze? 😴")
                 returnText.append("Shut off or snooze for 1 minute")
                 returnText.append("You can snooze 3 times...")
             case .snoozed:
@@ -159,9 +191,13 @@ extension NotificationController {
                 returnText.append("You have snoozed \(snoozedTimes) \(timeText) out of 3")
             case .nonSnoozable:
                 let actOfKindness = ActOfKindness.allCases.randomElement()?.rawValue
-                returnText.append("Act of Kindness Alert! ⚠️")
+                returnText.append("⚠️ Act of Kindness Alert! ⚠️")
                 returnText.append("You must perform a random act of kindness to turn alarm off")
                 returnText.append("kindness: \(actOfKindness ?? "Smile today!")")
+            case .delayedAction:
+                returnText.append("⛔️ Reminder! ⛔️")
+                returnText.append("Did you perform your Act of Kindness?")
+                returnText.append("Perform Act of Kindness to turn off alarm")
         }
         return returnText
     }

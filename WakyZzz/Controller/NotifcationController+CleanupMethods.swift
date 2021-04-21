@@ -54,7 +54,7 @@ extension NotificationController {
         // add this, since above doesn't seem to work?
         center.removeAllDeliveredNotifications()
         //
-        listScheduledNotifications()
+        print("cancelled notification \(id)")
     }
     
     //MARK: - NotificationController helper methods

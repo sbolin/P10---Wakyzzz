@@ -28,8 +28,8 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
         print("alarmEntity Snz# : \(alarmEntity.timesSnoozed)")
         print("category ID      : \(categoryID)")
         print("action ID        : \(actionID)")
-
-
+        
+        
         if (categoryID == "SNOOZABLE_ALARM") || (categoryID == "SNOOZED_ALARM") {
             switch actionID {
                 case "TURN_OFF_ALARM":
@@ -47,8 +47,8 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                         alarmEntity.enabled = true
                     }
                     // update notification (will automatically adds timesSnoozed to alarm time - ie, if snoozed 1 time adds 1 minute, 2 times adds 2 minutes...)
-                    notifcationController.assembleNotificationItemsFrom(entity: alarmEntity)
-                                    
+                    notifcationController.notificationFactory(entity: alarmEntity)
+                    
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
                     print("for this app, just open app and let user decide what to do")
@@ -76,7 +76,6 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = false
                     }
-                    
                     
                 case "ACT_OF_KINDNESS_LATER":
                     print("snoozed 3 times")
@@ -108,9 +107,20 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     print("Unknown identifier, should not happen")
             }
         }
+        
+        if categoryID == "DELAYED_ACTION" {
+            switch actionID {
+                case "REMINDER_PERFORM_ACT_OF_KINDNESS":
+                    // check if alarm repeats other days, if so do nothing, otherwise turn off
+                    if !alarmEntity.repeats {
+                        alarmEntity.enabled = false
+                    }
+                default:
+                    print("Unknown identifier, should not happen")
+            }
+        }
         center.removeAllDeliveredNotifications()
         completionHandler()
-        //       manager.removeDeliveredNotifications(identifiers: [notification])
     }
     
     // show notification while app is in the forground, just turn alarm off
@@ -133,8 +143,20 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                 if !alarmEntity.repeats {
                     alarmEntity.enabled = false
                 }
+            case "ACT_OF_KINDNESS_LATER":
+                print("promise to perform act of kindness to turn off alarm")
+                if !alarmEntity.repeats {
+                    alarmEntity.enabled = false
+                }
+                
+            case "REMINDER_PERFORM_ACT_OF_KINDNESS":
+                print("must perform act of kindness to turn off alarm")
+                if !alarmEntity.repeats {
+                    alarmEntity.enabled = false
+                }
+                
             default:
-                print("Default action, which is also to turn off alarm")
+                print("Default action")
                 if !alarmEntity.repeats {
                     alarmEntity.enabled = false
                 }
