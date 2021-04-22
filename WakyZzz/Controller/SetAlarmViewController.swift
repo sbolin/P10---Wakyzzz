@@ -97,6 +97,7 @@ class SetAlarmViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func datePickerValueChanged(_ sender: Any) {
+        // update alarm time when datepicker is changed
         alarm?.setAlarmTime(date: datePicker.date)
     }
     
