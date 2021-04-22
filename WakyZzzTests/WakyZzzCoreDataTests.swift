@@ -162,6 +162,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
             print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
         }
         
         // modify alarm
@@ -220,6 +221,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
             print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
         }
         
         let indexPath = IndexPath(row: 2, section: 0)
@@ -240,6 +242,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
             print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
         }
         
         let indexPath = IndexPath(row: 0, section: 0)
@@ -268,17 +271,35 @@ final class WakyZzzCoreDataTests: XCTestCase {
             XCTFail()
             return
         }
+        ///
+        // update snooze status of alarm
+        testStack.updateSnoozeStatus(for: alarm.alarmID)
         
-        alarm.snoozed = true
-        alarm.timesSnoozed = 1
+        // fetch same alarm again
+        let updatedAllAlarms = fetchedResultsController.fetchedObjects
+        guard let updatedAlarm = updatedAllAlarms?.last else {
+            XCTFail()
+            return
+        }
         
-        XCTAssertNotNil(alarm, "alarm should not be nil")
-        XCTAssertEqual(alarm.enabled, true)
-        XCTAssertEqual(alarm.time, alarmTime)
-        XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
-        XCTAssertEqual(alarm.snoozed, true)
-        XCTAssertEqual(alarm.timesSnoozed, 1)
-        XCTAssertNotEqual(alarm.timesSnoozed, 0)
+        ///
+        
+//        XCTAssertNotNil(alarm, "alarm should not be nil")
+//        XCTAssertEqual(alarm.enabled, true)
+//        XCTAssertEqual(alarm.time, alarmTime)
+//        XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
+//        XCTAssertEqual(alarm.snoozed, true)
+//        XCTAssertEqual(alarm.timesSnoozed, 1)
+//        XCTAssertNotEqual(alarm.timesSnoozed, 0)
+        
+        
+        XCTAssertNotNil(updatedAlarm, "alarm should not be nil")
+        XCTAssertEqual(updatedAlarm.enabled, true)
+        XCTAssertEqual(updatedAlarm.time, alarmTime)
+        XCTAssertEqual(updatedAlarm.repeatDays, [false, false, false, false, false, false, false])
+        XCTAssertEqual(updatedAlarm.snoozed, true)
+        XCTAssertEqual(updatedAlarm.timesSnoozed, 1)
+        XCTAssertNotEqual(updatedAlarm.timesSnoozed, 0)
     }
     
     func testAddNewAlarmObject() {
@@ -403,13 +424,8 @@ final class WakyZzzCoreDataTests: XCTestCase {
         // create Alarm object to test setup
         let alarmToTest = alarm.toAlarm()
         
-        XCTAssertNotNil(alarmToTest)
         XCTAssertNotNil(alarm)
-        //            XCTAssertEqual(alarmToTest.enabled, alarm.enabled)
-        //            XCTAssertEqual(alarmToTest.time, Int(alarm.time))
-        //            XCTAssertEqual(alarmToTest.repeatDays, alarm.repeatDays)
-        //            XCTAssertEqual(alarmToTest.snoozed, alarm.snoozed)
-        //            XCTAssertEqual(alarmToTest.timesSnoozed, Int(alarm.timesSnoozed))
+        XCTAssertNotNil(alarmToTest)
         
         XCTAssertEqual(alarmToTest.enabled, true)
         XCTAssertEqual(alarmToTest.time, alarmTime)

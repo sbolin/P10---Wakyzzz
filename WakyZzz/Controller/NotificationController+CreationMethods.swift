@@ -86,11 +86,11 @@ extension NotificationController {
                 newDateComponents.weekday = repeatDay + 1                          // and modify the repeat day based on notification.repeated array values
                 _notification.dateComponents = newDateComponents                   // apply new dateComponent to notificaiton
                 request.append(NotificationRequest(notification: _notification, content: content))
-//                addRequests(notification: _notification, content: content)
+                //                addRequests(notification: _notification, content: content)
             }
         } else {                                                                   // no repeated alarms
             request.append(NotificationRequest(notification: notification, content: content))
-//            addRequests(notification: notification, content: content) // if non-repeating, dateComponent in notification is correct already (and not needed).
+            //            addRequests(notification: notification, content: content) // if non-repeating, dateComponent in notification is correct already (and not needed).
         }
         return request
     }
@@ -127,12 +127,13 @@ extension NotificationController {
             let revisedRequest = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
             
             center.add(revisedRequest) { error in
-                if error != nil {
+                if let error = error {
+                    // error adding notification request
+                    print("error: \(error)")
+                    completionHandler(false)
+                } else {
                     // notification added successfully
                     completionHandler(true)
-                } else {
-                    // error adding notification request
-                    completionHandler(false)
                 }
             }
         }
@@ -148,7 +149,11 @@ extension NotificationController {
         var notificationType: NotificationType
         switch alarmEntity.timesSnoozed {
             case 0: notificationType = .snoozable
-            case 1...2: notificationType = .snoozed //
+            case 1...2: notificationType = .snoozed
+            //
+            case 3: notificationType = .nonSnoozable
+            case 4: notificationType = .delayedAction
+            //
             default: notificationType = .nonSnoozable
         }
         

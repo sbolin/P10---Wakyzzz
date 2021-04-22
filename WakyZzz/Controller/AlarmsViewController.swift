@@ -13,6 +13,7 @@ class AlarmsViewController: UIViewController {
     
     //MARK:- Outlets
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     //MARK: Set up data store
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
@@ -22,6 +23,8 @@ class AlarmsViewController: UIViewController {
     let notifcationController = NotificationController() // manager
     let center = UNUserNotificationCenter.current()
     var editingIndexPath: IndexPath?
+    var launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
+
     
     //MARK: - View Lifecylcle
     override func viewDidLoad() {
@@ -31,7 +34,13 @@ class AlarmsViewController: UIViewController {
         center.delegate = self
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
-        checkFirstRun()
+        if !launchedBefore {
+//            addButton.tintColor = .gray
+            addButton.isEnabled = false
+        } else {
+//            addButton.tintColor = .systemBlue
+            addButton.isEnabled = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,14 +51,21 @@ class AlarmsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // check if authorized to use notifications. If not, throw up an alert notifying user that app is useless without notifications.
-        notifcationController.center.getNotificationSettings { setting in
-            switch  setting.authorizationStatus {
-                case .denied, .notDetermined,.ephemeral:
-                    AlertsController.showNotificationAlert(controller: self)
-                case .authorized, .provisional:
-                    print("OK")
-                @unknown default:
-                    AlertsController.showNotificationAlert(controller: self)
+        checkFirstRun()
+
+        if launchedBefore {
+            notifcationController.center.getNotificationSettings { setting in
+                switch setting.authorizationStatus {
+                    case .denied, .notDetermined, .ephemeral:
+                        DispatchQueue.main.async {
+                            AlertsController.showNotificationAlert(controller: self)
+                        }
+                    case .authorized, .provisional:
+                        self.addButton.isEnabled = true
+                        print("OK")
+                    @unknown default:
+                        print("OK")
+                }
             }
         }
     }
@@ -60,32 +76,16 @@ class AlarmsViewController: UIViewController {
     }
     
     func checkFirstRun() {
-        let launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
-        if !launchedBefore  {
+        if !launchedBefore {
             // First launch, set user defaults to true (Launched Before = true)
-            UserDefaults.standard.set(true, forKey: "Launched Before")
-            
-            // set up alert text nicely aligned
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .left
-            
-            // show alert for setting up alarms
-            let alert = UIAlertController(title: "Lets get started!", message: "message", preferredStyle: .alert)
-            
-            // reassign message using attributed text
-            let messageText = NSAttributedString(
-                string: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. No repeat = 1 time alarm.\n4. Switch turns alarm on/off.\n5. Click notification to turn off alarm",
-                attributes: [
-                    NSAttributedString.Key.paragraphStyle: paragraphStyle,
-                    NSAttributedString.Key.foregroundColor : UIColor.black,
-                    NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13)
-                ]
-            )
-            alert.setValue(messageText, forKey: "attributedMessage")
-            
-            // add alert
-            alert.addAction(UIAlertAction(title: "Got it! 👍", style: .default, handler: nil))
-            self.present(alert, animated: true)
+//            UserDefaults.standard.set(true, forKey: "Launched Before")
+            launchedBefore.toggle()
+            DispatchQueue.main.async {
+                AlertsController.showSetupAlert(controller: self)
+            }
+/*
+// deleted alert...
+*/
         }
     }
     

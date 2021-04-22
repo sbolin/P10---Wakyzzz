@@ -93,6 +93,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addButton" destination="ne3-dC-bY1" id="kcn-Mv-ZIz"/>
                         <outlet property="tableView" destination="1yg-8g-aiN" id="kT0-tJ-oep"/>
                     </connections>
                 </viewController>

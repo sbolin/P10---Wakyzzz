@@ -145,8 +145,7 @@ final class WakyZzzNotificationTests: XCTestCase {
         
     }
     
-    func test_addRequest() {
-        
+    func test_addRequestSnoozable() {
         // given alarmEntity
         let alarmEntity = makeAlarmEntity()
         alarmEntity.repeatDays = [false, false, false, true, false, false, false]
@@ -161,7 +160,99 @@ final class WakyZzzNotificationTests: XCTestCase {
         let content = notifcationController.createNotificationContent(notification: localNotification)
         // create request from localNotification and content
         let request = notifcationController.createNotificationRequest(notification: localNotification, content: content)
+        notifcationController.addRequests(requests: request) { result in
+            if result {
+                testResult = result
+                expectation.fulfill()
+            } else {
+                testResult = result
+                expectation.fulfill()
+            }
+        }
+        // primary result
+        wait(for: [expectation], timeout: 10.0)
+        XCTAssertEqual(testResult, true)
+    }
+    
+    func test_addRequestSnoozed() {
+        // given alarmEntity
+        let alarmEntity = makeAlarmEntity()
+        alarmEntity.repeatDays = [false, false, false, true, false, false, false]
+        alarmEntity.snoozed = true
+        alarmEntity.timesSnoozed = 2
+        var testResult: Bool = false
         
+        // with expectation
+        let expectation = XCTestExpectation(description: "Test passed")
+        
+        // create local notification with alarm entity
+        let localNotification = notifcationController.createLocalNotification(entity: alarmEntity)
+        // create content from localNotification
+        let content = notifcationController.createNotificationContent(notification: localNotification)
+        // create request from localNotification and content
+        let request = notifcationController.createNotificationRequest(notification: localNotification, content: content)
+        notifcationController.addRequests(requests: request) { result in
+            if result {
+                testResult = result
+                expectation.fulfill()
+            } else {
+                testResult = result
+                expectation.fulfill()
+            }
+        }
+        // primary result
+        wait(for: [expectation], timeout: 10.0)
+        XCTAssertEqual(testResult, true)
+    }
+    
+    func test_addRequestNonSnoozable() {
+        // given alarmEntity
+        let alarmEntity = makeAlarmEntity()
+        alarmEntity.repeatDays = [false, false, false, true, false, false, false]
+        alarmEntity.snoozed = true
+        alarmEntity.timesSnoozed = 3
+        var testResult: Bool = false
+        
+        // with expectation
+        let expectation = XCTestExpectation(description: "Test passed")
+        
+        // create local notification with alarm entity
+        let localNotification = notifcationController.createLocalNotification(entity: alarmEntity)
+        // create content from localNotification
+        let content = notifcationController.createNotificationContent(notification: localNotification)
+        // create request from localNotification and content
+        let request = notifcationController.createNotificationRequest(notification: localNotification, content: content)
+        notifcationController.addRequests(requests: request) { result in
+            if result {
+                testResult = result
+                expectation.fulfill()
+            } else {
+                testResult = result
+                expectation.fulfill()
+            }
+        }
+        // primary result
+        wait(for: [expectation], timeout: 10.0)
+        XCTAssertEqual(testResult, true)
+    }
+    
+    func test_addRequestDelayedAction() {
+        // given alarmEntity
+        let alarmEntity = makeAlarmEntity()
+        alarmEntity.repeatDays = [false, false, false, true, false, false, false]
+        alarmEntity.snoozed = true
+        alarmEntity.timesSnoozed = 4
+        var testResult: Bool = false
+        
+        // with expectation
+        let expectation = XCTestExpectation(description: "Test passed")
+        
+        // create local notification with alarm entity
+        let localNotification = notifcationController.createLocalNotification(entity: alarmEntity)
+        // create content from localNotification
+        let content = notifcationController.createNotificationContent(notification: localNotification)
+        // create request from localNotification and content
+        let request = notifcationController.createNotificationRequest(notification: localNotification, content: content)
         notifcationController.addRequests(requests: request) { result in
             if result {
                 testResult = result

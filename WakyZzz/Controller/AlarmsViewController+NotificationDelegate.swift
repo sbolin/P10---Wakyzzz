@@ -64,7 +64,8 @@ extension AlarmsViewController: UNUserNotificationCenterDelegate {
                     if !alarmEntity.repeats {
                         alarmEntity.enabled = false
                     }
-                    
+                    CoreDataController.shared.updateSnoozeStatus(for: uuid)
+                    notifcationController.notificationFactory(entity: alarmEntity)
                     
                 case UNNotificationDefaultActionIdentifier:
                     // User clicked on notifcation
