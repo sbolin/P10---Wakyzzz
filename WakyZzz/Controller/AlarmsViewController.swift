@@ -34,40 +34,18 @@ class AlarmsViewController: UIViewController {
         center.delegate = self
         notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
-        if !launchedBefore {
-//            addButton.tintColor = .gray
-            addButton.isEnabled = false
-        } else {
-//            addButton.tintColor = .systemBlue
-            addButton.isEnabled = true
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureTableView()
+        checkAuthenticationStatus()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // check if authorized to use notifications. If not, throw up an alert notifying user that app is useless without notifications.
         checkFirstRun()
-
-        if launchedBefore {
-            notifcationController.center.getNotificationSettings { setting in
-                switch setting.authorizationStatus {
-                    case .denied, .notDetermined, .ephemeral:
-                        DispatchQueue.main.async {
-                            AlertsController.showNotificationAlert(controller: self)
-                        }
-                    case .authorized, .provisional:
-                        self.addButton.isEnabled = true
-                        print("OK")
-                    @unknown default:
-                        print("OK")
-                }
-            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -78,14 +56,28 @@ class AlarmsViewController: UIViewController {
     func checkFirstRun() {
         if !launchedBefore {
             // First launch, set user defaults to true (Launched Before = true)
-//            UserDefaults.standard.set(true, forKey: "Launched Before")
-            launchedBefore.toggle()
+            UserDefaults.standard.set(true, forKey: "Launched Before")
+//            launchedBefore.toggle()
             DispatchQueue.main.async {
                 AlertsController.showSetupAlert(controller: self)
             }
-/*
-// deleted alert...
-*/
+        }
+    }
+    
+    func checkAuthenticationStatus() {
+        notifcationController.center.getNotificationSettings { setting in
+            switch setting.authorizationStatus {
+                case .denied, .notDetermined, .ephemeral:
+                    self.addButton.isEnabled = false
+                    DispatchQueue.main.async {
+                        AlertsController.showNotificationAlert(controller: self)
+                    }
+                case .authorized, .provisional:
+                    self.addButton.isEnabled = true
+                    print("OK")
+                @unknown default:
+                    print("OK")
+            }
         }
     }
     
