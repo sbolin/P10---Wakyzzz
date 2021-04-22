@@ -10,16 +10,7 @@ import UIKit
 
 extension AlarmsViewController {
     
-    //MARK: - Tableview helper function
-//    func deleteAlarm(at indexPath: IndexPath) {
-//        print(#function)
-//        print("deleting alarm...")
-//        let alarmEntity = fetchedResultsController.object(at: indexPath)
-//        print("id: \(alarmEntity.alarmID)")
-//        self.notifcationController.cancelNotificationForEntity(entity: alarmEntity)
-//        CoreDataController.shared.deleteAlarmEntity(at: indexPath)
-//    }
-    
+    //MARK: - Tableview helper function   
     // present SetAlarmViewController to edit alarm
     func editAlarm(at indexPath: IndexPath) {
         editingIndexPath = indexPath

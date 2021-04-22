@@ -46,15 +46,15 @@ class CoreDataController {
     }()
     
     //MARK: - Check if Model is empty (for first run check)
-    lazy var modelIsEmpty: Bool = {
-        do {
-            let request = AlarmEntity.alarmFetchRequest()
-            let count = try managedContext.count(for: request)
-            return count == 0
-        } catch {
-            return false
-        }
-    }()
+//    lazy var modelIsEmpty: Bool = {
+//        do {
+//            let request = AlarmEntity.alarmFetchRequest()
+//            let count = try managedContext.count(for: request)
+//            return count == 0
+//        } catch {
+//            return false
+//        }
+//    }()
     
     //MARK: - Fetch Properties
     lazy var fetchedAlarmResultsController: NSFetchedResultsController<AlarmEntity> = {

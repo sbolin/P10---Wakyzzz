@@ -33,7 +33,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         super.tearDown()
         testStack = nil
     }
-
+    
     //MARK: - Tests
     //MARK: CoreData Tests
     func test_coreDataManager() {
@@ -100,7 +100,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         let alarmTime = Int32(8*60*60)
         // create alarm
         testStack.createAlarmEntity()
-
+        
         do {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
@@ -126,7 +126,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
     
     func testAddNewAlarmWithID() {
         let alarmTime = Int32(8*60*60)
-//        let id = UUID()
+        //        let id = UUID()
         // create alarm
         testStack.createAlarmEntity()
         
@@ -147,14 +147,14 @@ final class WakyZzzCoreDataTests: XCTestCase {
         XCTAssertNotNil(alarm, "alarm should not be nil")
         XCTAssertEqual(alarm.enabled, true)
         // can't set the id on its own, it is set by the entity itself.
-//        XCTAssertEqual(alarm.alarmID, id)
+        //        XCTAssertEqual(alarm.alarmID, id)
         XCTAssertEqual(alarm.time, alarmTime)
         XCTAssertEqual(alarm.repeatDays, [false, false, false, false, false, false, false])
         XCTAssertEqual(alarm.snoozed, false)
         XCTAssertEqual(alarm.timesSnoozed, 0)
         XCTAssertNotEqual(alarm.timesSnoozed, 1)
     }
-
+    
     func testChangeAlarmStatus() {
         // create alarms
         testStack.createAlarmEntity()
@@ -168,7 +168,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         // modify alarm
         let indexPath = IndexPath(row: 0, section: 0)
         testStack.changeAlarmStatus(at: indexPath, status: false)
-
+        
         // fetch same alarm
         let alarm = testStack.fetchedAlarmResultsController.object(at: indexPath)
         
@@ -181,7 +181,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         // create alarms
         testStack.createAlarmEntity()
         testStack.createAlarmEntity()
-
+        
         do {
             try testStack.fetchedAlarmResultsController.performFetch()
         } catch {
@@ -228,7 +228,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         testStack.changeRepeateDays(at: indexPath, repeatDays: [true, false, true, false, true, false, true])
         
         // fetch same Alarm
-
+        
         let alarm = testStack.fetchedAlarmResultsController.object(at: indexPath)
         XCTAssertNotNil(alarm, "alarm should not be nil")
         XCTAssertEqual(alarm.repeatDays, [true, false, true, false, true, false, true])
@@ -293,7 +293,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         
         // create alarm
         let _ = testStack.createAlarmEntityFromAlarmObject(alarm: alarm)
-
+        
         // fetch same alarm
         do {
             try testStack.fetchedAlarmResultsController.performFetch()
@@ -338,7 +338,7 @@ final class WakyZzzCoreDataTests: XCTestCase {
         
         // fetch same alarm
         let mockAlarm = testStack.fetchedAlarmResultsController.object(at: indexPath)
-
+        
         XCTAssertNotNil(mockAlarm, "alarm should not be nil")
         XCTAssertEqual(mockAlarm.enabled, true)
         XCTAssertEqual(mockAlarm.time, Int32(alarmTime))
@@ -380,5 +380,48 @@ final class WakyZzzCoreDataTests: XCTestCase {
         XCTAssertEqual(mockAlarm.snoozed, false)
         XCTAssertEqual(mockAlarm.timesSnoozed, 0)
         XCTAssertNotEqual(mockAlarm.timesSnoozed, 1)
+    }
+    
+    func testToAlarm() {
+        // create alarm
+        testStack.createAlarmEntity()
+        let alarmTime = Int(8*60*60)
+        
+        do {
+            try testStack.fetchedAlarmResultsController.performFetch()
+        } catch {
+            print("could not perform fetch")
+            XCTFail("\(#function) error happened \(error.localizedDescription)")
+        }
+        
+        // fetch same alarm
+        let allAlarms = fetchedResultsController.fetchedObjects
+        guard let alarm = allAlarms?.last else {
+            XCTFail()
+            return
+        }
+        
+        // create Alarm object to test setup
+        let alarmToTest = alarm.toAlarm()
+        
+        XCTAssertNotNil(alarmToTest)
+        XCTAssertNotNil(alarm)
+        //            XCTAssertEqual(alarmToTest.enabled, alarm.enabled)
+        //            XCTAssertEqual(alarmToTest.time, Int(alarm.time))
+        //            XCTAssertEqual(alarmToTest.repeatDays, alarm.repeatDays)
+        //            XCTAssertEqual(alarmToTest.snoozed, alarm.snoozed)
+        //            XCTAssertEqual(alarmToTest.timesSnoozed, Int(alarm.timesSnoozed))
+        
+        XCTAssertEqual(alarmToTest.enabled, true)
+        XCTAssertEqual(alarmToTest.time, alarmTime)
+        XCTAssertEqual(alarmToTest.repeatDays, [false, false, false, false, false, false, false])
+        XCTAssertEqual(alarmToTest.snoozed, false)
+        XCTAssertEqual(alarmToTest.timesSnoozed, 0)
+        
+        XCTAssertEqual(alarm.enabled, alarmToTest.enabled)
+        XCTAssertEqual(Int(alarm.time), alarmToTest.time)
+        XCTAssertEqual(alarm.repeatDays, alarmToTest.repeatDays)
+        XCTAssertEqual(alarm.snoozed, alarmToTest.snoozed)
+        XCTAssertEqual(Int(alarm.timesSnoozed), alarmToTest.timesSnoozed)
     }
 }

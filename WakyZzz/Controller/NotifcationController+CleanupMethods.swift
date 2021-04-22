@@ -60,22 +60,18 @@ extension NotificationController {
     //MARK: - NotificationController helper methods
     func listScheduledNotifications() {
         print(#function)
-        var count = 0
         center.getPendingNotificationRequests { notifications in
             for notification in notifications {
-                count += 1
-                print("s: ",count, notification)
+                print("s: ",notification)
             }
         }
     }
     
     func listDeliveredNotifications() {
         print(#function)
-        var count = 0
         center.getDeliveredNotifications { notifications in
             for notification in notifications {
-                count += 1
-                print("d: ", count, notification)
+                print("d: ",notification)
             }
         }
     }

@@ -27,6 +27,7 @@ class WakyZzzAlarmTests: XCTestCase {
     // test default Alarm object is created as expected, including computed props.
     func testAlarm() {
         
+        // check Alarm created properly
         XCTAssertNotNil(alarm)
         XCTAssertTrue(alarm.time == 28_800)
         XCTAssertTrue(alarm.repeatDays == [false, false, false, false, false, false, false])
@@ -36,6 +37,8 @@ class WakyZzzAlarmTests: XCTestCase {
         XCTAssertTrue(alarm.localAlarmTimeString == "08:00")
         XCTAssertTrue(alarm.repeatingDayString == "One time alarm")
 
+        
+        // to test alarmTimeAndDate must create an alarm at set time, then check time components of alarm are correct 
         let date = Date().addingTimeInterval(60) // create known date object
         let calendar = Calendar.current
         //
