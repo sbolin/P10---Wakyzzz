@@ -39,6 +39,21 @@ class AlarmsViewController: UIViewController {
         configureTableView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // check if authorized to use notifications. If not, throw up an alert notifying user that app is useless without notifications.
+        notifcationController.center.getNotificationSettings { setting in
+            switch  setting.authorizationStatus {
+                case .denied, .notDetermined,.ephemeral:
+                    AlertsController.showNotificationAlert(controller: self)
+                case .authorized, .provisional:
+                    print("OK")
+                @unknown default:
+                    AlertsController.showNotificationAlert(controller: self)
+            }
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         fetchedResultsController.delegate = nil

@@ -48,8 +48,8 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
 
     //MARK: - Request Authorization
     func requestNotificationAuthorization() {
-        print(#function)
-        let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .announcement, .badge, .carPlay, .sound) // asks for authorization to show notification via alert, Siri read aloud, badges, carplay, and play sound
+        // asks for authorization to show notification via alert, Siri read aloud, badges, carplay, and play sound
+        let authOptions = UNAuthorizationOptions.init(arrayLiteral: .alert, .announcement, .badge, .carPlay, .sound)
         
         // unused authorization options, keep in case added functionality later
         let _: UNAuthorizationOptions = [
@@ -88,6 +88,7 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
                 }
             } else {
                 print("Notification denied")
+                // should put alert up in AlarmsViewController
             }
         }
     }
@@ -149,7 +150,5 @@ class NotificationController: NSObject, UNUserNotificationCenterDelegate {
         
         // Register the notification type.
         center.setNotificationCategories([snoozableCategory, snoozedCategory, nonSnoozableCategory, reminderCategory])
-        
-        print("Actions and Categories set")
     }
 }

@@ -30,7 +30,6 @@ extension NotificationController {
     // create local notification object from core data Entity
     func createLocalNotification(entity: AlarmEntity) -> LocalNotification {
         // create dateComponents (time/date/weekday) from alarmEntity, get snoozedTimes (number of times user snoozed alarm) and notification type (based on # times snoozed) and create Local notification
-        print(#function)
         let dateComponents = getDateComponents(alarmEntity: entity)
         let snoozedTimes = entity.timesSnoozed
         let type = getNotificationType(alarmEntity: entity)
@@ -53,7 +52,6 @@ extension NotificationController {
     // MARK: - Create notification content form given LocalNotification object, return UNMutableNotificationContent
     // Create notification content from notification object
     func createNotificationContent(notification: LocalNotification) -> UNMutableNotificationContent {
-        print(#function)
         // content is the snoozable alarm, contentNoSnooze is the non-snoozable alarm, + trial
         let content = UNMutableNotificationContent()
         
@@ -100,13 +98,11 @@ extension NotificationController {
     //MARK: - Add given NotificationRequests to notification center, return bool with outcome
     // create Notification Request and add notification given n
     func addRequests(requests: [NotificationRequest], completionHandler: @escaping (Bool) -> Void) {
-        print(#function)
         for request in requests {
             
             let notification = request.notification
             let content = request.content
             
-            print("notification type: \(notification.type.rawValue)")
             // notification parameters
             var dateComponent = notification.dateComponents
             let repeats = notification.repeats
@@ -131,12 +127,12 @@ extension NotificationController {
             let revisedRequest = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
             
             center.add(revisedRequest) { error in
-                if let error = error {
-                    print("Error adding request \(id): \(error.localizedDescription)")
-                    completionHandler(false)
-                } else {
-                    print("Notification \(id) with request id \(revisedRequest.identifier) set")
+                if error != nil {
+                    // notification added successfully
                     completionHandler(true)
+                } else {
+                    // error adding notification request
+                    completionHandler(false)
                 }
             }
         }
@@ -149,7 +145,6 @@ extension NotificationController {
     // get the NotificationType based on AlarmEntity object timesSnoozed attribute
     // tested indirectly
     private func getNotificationType(alarmEntity: AlarmEntity) -> NotificationType {
-        print(#function)
         var notificationType: NotificationType
         switch alarmEntity.timesSnoozed {
             case 0: notificationType = .snoozable
@@ -157,7 +152,6 @@ extension NotificationController {
             default: notificationType = .nonSnoozable
         }
         
-        print("notification type: \(notificationType.rawValue)")
         return notificationType
     }
     

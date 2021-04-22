@@ -113,21 +113,8 @@ class CoreDataController {
         saveContext(context: managedContext)
     }
     
-//    // tested, in populate alarms only, can delete in final
-//    func createAlarmEntityWithID(id: UUID) {
-//        let newAlarmEntity = AlarmEntity(context: managedContext)
-//        newAlarmEntity.alarmID = id
-//        newAlarmEntity.time = Int32(8 * 60 * 60)
-//        newAlarmEntity.repeatDays = [false, false, false, false, false, false, false]
-//        newAlarmEntity.snoozed = false
-//        newAlarmEntity.timesSnoozed = Int16(0)
-//        newAlarmEntity.enabled = true // alarm turned on when created
-//        saveContext(context: managedContext)
-//    }
-    
     // tested
     func createAlarmEntityFromAlarmObject(alarm: Alarm) -> AlarmEntity? {
-        print(#function)
         let newAlarmEntity = AlarmEntity(context: managedContext)
         newAlarmEntity.alarmID = alarm.alarmID
         newAlarmEntity.time = Int32(alarm.time)
@@ -135,7 +122,6 @@ class CoreDataController {
         newAlarmEntity.snoozed = alarm.snoozed
         newAlarmEntity.timesSnoozed = Int16(alarm.timesSnoozed)
         newAlarmEntity.enabled = alarm.enabled
-        print("repeat days: \(newAlarmEntity.repeatDays)")
         let result = saveContext(context: managedContext)
         
         if result {
@@ -179,14 +165,9 @@ class CoreDataController {
     // tested
     func updateSnoozeStatus(for alarmID: UUID) {
         guard let alarmEntity = fetchAlarmByAlarmID(with: alarmID) else { return }
-        print("initial snooze count: \(alarmEntity.timesSnoozed)")
         alarmEntity.snoozed = true
         alarmEntity.timesSnoozed += 1
-        print("updated snooze count: \(alarmEntity.timesSnoozed)")
         saveContext(context: managedContext)
-        if alarmEntity.timesSnoozed == 4 { // not really needed, just print when snoozes run out...
-            print("Activate Random Act of Kindness™")
-        }
     }
     
     // tested, updates AlarmEntity after being edited in SetAlarmViewController

@@ -48,7 +48,6 @@ final class WakyZzzCoreDataTests: XCTestCase {
     
     func test_persistentStoreType() {
         let persistentStore = testStack.persistentContainer.persistentStoreDescriptions
-        print("persistentStore \(persistentStore)")
         let persistentStoreType = persistentStore[0].type
         XCTAssertEqual(persistentStoreType, NSInMemoryStoreType)
     }

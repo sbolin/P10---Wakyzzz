@@ -65,7 +65,6 @@ final class WakyZzzNotificationTests: XCTestCase {
         
         //given AlarmEntity
         let alarmEntity = makeAlarmEntity()
-        print("alarmEntity: \(alarmEntity)")
         
         // create notification with entity
         notifcationController.notificationFactory(entity: alarmEntity)
@@ -75,7 +74,6 @@ final class WakyZzzNotificationTests: XCTestCase {
         var requests: [UNNotificationRequest] = []
         
         center.getPendingNotificationRequests { notificationRequests in
-            print("getPendingNotificationRequests: \(notificationRequests)")
             requests = notificationRequests
             expectation.fulfill()
         }

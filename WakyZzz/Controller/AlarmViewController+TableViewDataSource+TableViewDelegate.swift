@@ -46,7 +46,6 @@ extension AlarmsViewController: UITableViewDelegate, UITableViewDataSource {
             self.notifcationController.cancelNotificationForEntity(entity: alarmEntity)
             CoreDataController.shared.managedContext.delete(alarmEntity)
 //            CoreDataController.shared.deleteAlarmEntity(at: indexPath)
-            print("deleted alarm at \(indexPath)")
             completion(true)
         }
         

@@ -31,6 +31,7 @@
 		15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */; };
 		15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */; };
 		15A4664626309E9200AC0E8D /* WakyZzzAlarmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A4664526309E9200AC0E8D /* WakyZzzAlarmTests.swift */; };
+		15A4665C26318D9700AC0E8D /* AlertsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A4665B26318D9700AC0E8D /* AlertsController.swift */; };
 		15C7E6E625E6B9C400630D13 /* WakyZzz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6E425E6B9C400630D13 /* WakyZzz.xcdatamodeld */; };
 		15C7E6F025E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */; };
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
@@ -75,6 +76,7 @@
 		15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationController+CreationMethods.swift"; sourceTree = "<group>"; };
 		15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzNotificationTests.swift; sourceTree = "<group>"; };
 		15A4664526309E9200AC0E8D /* WakyZzzAlarmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzAlarmTests.swift; sourceTree = "<group>"; };
+		15A4665B26318D9700AC0E8D /* AlertsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsController.swift; sourceTree = "<group>"; };
 		15C7E6E525E6B9C400630D13 /* WakyZzz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WakyZzz.xcdatamodel; sourceTree = "<group>"; };
 		15C7E6EE25E6CB5900630D13 /* AlarmEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -124,7 +126,6 @@
 			isa = PBXGroup;
 			children = (
 				0424EB5320BEF89000E15E46 /* AppDelegate.swift */,
-				0424EB6A20BEF96400E15E46 /* Action.swift */,
 				15594D8C25DD53B000BE602D /* Model */,
 				15594D8E25DD53BE00BE602D /* Controller */,
 				15594D9025DD53CA00BE602D /* View */,
@@ -168,6 +169,7 @@
 		15594D8C25DD53B000BE602D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0424EB6A20BEF96400E15E46 /* Action.swift */,
 				0424EB6820BEF93F00E15E46 /* Alarm.swift */,
 				15594DB425E12E3E00BE602D /* CoreData */,
 			);
@@ -186,6 +188,7 @@
 				15594DA125DE4D4F00BE602D /* NotifcationController.swift */,
 				15A14944261F6D5400E7788E /* NotifcationController+CleanupMethods.swift */,
 				15A1494A261F736700E7788E /* NotificationController+CreationMethods.swift */,
+				15A4665B26318D9700AC0E8D /* AlertsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */,
 				15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */,
 				15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */,
+				15A4665C26318D9700AC0E8D /* AlertsController.swift in Sources */,
 				0424EB5420BEF89000E15E46 /* AppDelegate.swift in Sources */,
 				0424EB6B20BEF96400E15E46 /* Action.swift in Sources */,
 				15A1494B261F736700E7788E /* NotificationController+CreationMethods.swift in Sources */,

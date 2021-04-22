@@ -26,7 +26,6 @@ extension AlarmsViewController: NSFetchedResultsControllerDelegate {
  //               tableView.deleteRows(at: [indexPath!], with: .automatic)
  //               tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .update:
-                print("reloaded tableview rows")
                 tableView.reloadRows(at: [indexPath!], with: .automatic)
 
             @unknown default:
