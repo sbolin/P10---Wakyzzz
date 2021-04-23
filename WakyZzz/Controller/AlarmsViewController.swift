@@ -17,7 +17,7 @@ class AlarmsViewController: UIViewController {
     
     //MARK: Set up data store
     var fetchedResultsController: NSFetchedResultsController<AlarmEntity>!
-    //    var notificationController: NotificationController!
+    var notificationController: NotificationController!
     
     //MARK: - Notification Properties
     let notifcationController = NotificationController() // manager
@@ -32,7 +32,7 @@ class AlarmsViewController: UIViewController {
         tableView.dataSource = self
         center.delegate = self
         // Request authorization to display notifications, and setup notifications
- //       notifcationController.requestNotificationAuthorization()
+        notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
 
     }
@@ -64,12 +64,10 @@ class AlarmsViewController: UIViewController {
         if !launchedBefore {
             // First launch, set user defaults to true (Launched Before = true)
             UserDefaults.standard.set(true, forKey: "Launched Before")
-            DispatchQueue.main.async {
-                AlertsController.showSetupAlert(controller: self)
-            }
-            // wait 20 seconds before throwing up the request authorization, so user has time to orient to the Focus list
+            // wait 10 seconds before throwing up the request authorization, so user has time to orient to the Focus list
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                self.notifcationController.requestNotificationAuthorization()
+                AlertsController.showSetupAlert(controller: self)
+//                self.notifcationController.requestNotificationAuthorization()
             }
         }
     }
