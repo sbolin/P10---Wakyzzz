@@ -23,7 +23,6 @@ class AlarmsViewController: UIViewController {
     let notifcationController = NotificationController() // manager
     let center = UNUserNotificationCenter.current()
     var editingIndexPath: IndexPath?
-    var launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
 
     
     //MARK: - View Lifecylcle
@@ -32,19 +31,25 @@ class AlarmsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         center.delegate = self
-        notifcationController.requestNotificationAuthorization()
+        // Request authorization to display notifications, and setup notifications
+ //       notifcationController.requestNotificationAuthorization()
         notifcationController.setupActions()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureTableView()
-        checkAuthenticationStatus()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // check if authorized to use notifications. If not, throw up an alert notifying user that app is useless without notifications.
+        // check if authorized to use notifications if app was launched previously. If not, throw up an alert notifying user that app is useless without notifications.
+        let launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
+        if launchedBefore {
+            checkAuthenticationStatus()
+        }
+        // check first run status
         checkFirstRun()
     }
     
@@ -53,13 +58,18 @@ class AlarmsViewController: UIViewController {
         fetchedResultsController.delegate = nil
     }
     
+    //MARK: - Status checks
     func checkFirstRun() {
+        let launchedBefore = UserDefaults.standard.bool(forKey: "Launched Before")
         if !launchedBefore {
             // First launch, set user defaults to true (Launched Before = true)
             UserDefaults.standard.set(true, forKey: "Launched Before")
-//            launchedBefore.toggle()
             DispatchQueue.main.async {
                 AlertsController.showSetupAlert(controller: self)
+            }
+            // wait 20 seconds before throwing up the request authorization, so user has time to orient to the Focus list
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                self.notifcationController.requestNotificationAuthorization()
             }
         }
     }

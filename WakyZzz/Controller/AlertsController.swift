@@ -20,7 +20,7 @@ class AlertsController {
         
         // reassign message using attributed text
         let messageText = NSAttributedString(
-            string: "1. Add alarm (+ button).\n2. Set alarm time and days to repeat.\n3. No repeat = 1 time alarm.\n4. Switch turns alarm on/off.\n5. Click notification to turn off alarm",
+            string: "1. Accept Notifications (needed to display alarms).\n2. Add alarm (+ button).\n3. Set alarm time and days to repeat.\n4. No repeat = 1 time alarm.\n5. Switch turns alarm on/off.\n6. Click notification to turn off alarm",
             attributes: [
                 NSAttributedString.Key.paragraphStyle: paragraphStyle,
                 NSAttributedString.Key.foregroundColor : UIColor.black,
