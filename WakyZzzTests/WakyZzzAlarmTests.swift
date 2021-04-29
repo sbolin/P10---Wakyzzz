@@ -34,7 +34,7 @@ class WakyZzzAlarmTests: XCTestCase {
         XCTAssertTrue(alarm.enabled == true)
         XCTAssertTrue(alarm.snoozed == false)
         XCTAssertTrue(alarm.timesSnoozed == 0)
-        XCTAssertTrue(alarm.localAlarmTimeString == "08:00")
+        XCTAssertTrue(alarm.localAlarmTimeString == "8:00 AM")
         XCTAssertTrue(alarm.repeatingDayString == "One time alarm")
 
         

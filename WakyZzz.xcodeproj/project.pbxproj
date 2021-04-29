@@ -37,6 +37,7 @@
 		15C7E6F125E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C7E6EF25E6CB5900630D13 /* AlarmEntity+CoreDataProperties.swift */; };
 		15D4AA2125E97B58000E4BF0 /* WakyZzzCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */; };
 		15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */; };
+		15F32C7D2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F32C7C2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzCoreDataTests.swift; sourceTree = "<group>"; };
 		15D4AA2225E97B58000E4BF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15D4AA2C25E97C73000E4BF0 /* TestCoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataController.swift; sourceTree = "<group>"; };
+		15F32C7C2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzAlarmsViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 				15D4AA2025E97B58000E4BF0 /* WakyZzzCoreDataTests.swift */,
 				15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */,
 				15A4664526309E9200AC0E8D /* WakyZzzAlarmTests.swift */,
+				15F32C7C2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift */,
 				15D4AA2225E97B58000E4BF0 /* Info.plist */,
 			);
 			path = WakyZzzTests;
@@ -359,6 +362,7 @@
 				15D4AA2125E97B58000E4BF0 /* WakyZzzCoreDataTests.swift in Sources */,
 				15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */,
 				15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */,
+				15F32C7D2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift in Sources */,
 				15A4664626309E9200AC0E8D /* WakyZzzAlarmTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -63,8 +63,8 @@ final class WakyZzzCoreDataTests: XCTestCase {
     }
     
     func test_fetchedResultsFetched() {
-        let fetchToDo = fetchedResultsController
-        XCTAssertNotNil(fetchToDo)
+        let fetchAlarm = fetchedResultsController
+        XCTAssertNotNil(fetchAlarm)
     }
     
     func test_fetchedResultsControllerFetches() {
