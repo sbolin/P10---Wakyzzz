@@ -16,6 +16,7 @@
 		0424EB6B20BEF96400E15E46 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6A20BEF96400E15E46 /* Action.swift */; };
 		0424EB6D20BF022900E15E46 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */; };
 		0424EB6F20BF0FAE00E15E46 /* SetAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */; };
+		151DFE58263AD351002BF7D2 /* WakyZzzSetAlarmViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151DFE57263AD351002BF7D2 /* WakyZzzSetAlarmViewControllerTests.swift */; };
 		154999DC25D531E300835EFA /* evil.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 154999DB25D531E300835EFA /* evil.m4a */; };
 		15576E872603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */; };
 		15576E8B2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */; };
@@ -62,6 +63,7 @@
 		0424EB6A20BEF96400E15E46 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		0424EB6C20BF022900E15E46 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 		0424EB6E20BF0FAE00E15E46 /* SetAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmViewController.swift; sourceTree = "<group>"; };
+		151DFE57263AD351002BF7D2 /* WakyZzzSetAlarmViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakyZzzSetAlarmViewControllerTests.swift; sourceTree = "<group>"; };
 		154999DB25D531E300835EFA /* evil.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = evil.m4a; sourceTree = "<group>"; };
 		15576E862603CD9500331D79 /* AlarmViewController+TableViewDataSource+TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmViewController+TableViewDataSource+TableViewDelegate.swift"; sourceTree = "<group>"; };
 		15576E8A2603CE7E00331D79 /* AlarmsViewController+NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmsViewController+NotificationDelegate.swift"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				15A1494E2620A6FA00E7788E /* WakyZzzNotificationTests.swift */,
 				15A4664526309E9200AC0E8D /* WakyZzzAlarmTests.swift */,
 				15F32C7C2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift */,
+				151DFE57263AD351002BF7D2 /* WakyZzzSetAlarmViewControllerTests.swift */,
 				15D4AA2225E97B58000E4BF0 /* Info.plist */,
 			);
 			path = WakyZzzTests;
@@ -363,6 +366,7 @@
 				15D4AA2D25E97C73000E4BF0 /* TestCoreDataController.swift in Sources */,
 				15A1494F2620A6FA00E7788E /* WakyZzzNotificationTests.swift in Sources */,
 				15F32C7D2635DC5A0094BBA7 /* WakyZzzAlarmsViewControllerTests.swift in Sources */,
+				151DFE58263AD351002BF7D2 /* WakyZzzSetAlarmViewControllerTests.swift in Sources */,
 				15A4664626309E9200AC0E8D /* WakyZzzAlarmTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

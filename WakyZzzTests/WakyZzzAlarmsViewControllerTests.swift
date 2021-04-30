@@ -34,7 +34,6 @@ final class WakyZzzAlarmsViewControllerTests: XCTestCase, NSFetchedResultsContro
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "AlarmsViewController") as? AlarmsViewController
         
-        // in view controller, menuItems = ["one", "two", "three"]
         self.viewControllerUnderTest.loadView()
         self.viewControllerUnderTest.viewDidLoad()
         self.viewControllerUnderTest.viewWillAppear(false)
@@ -42,7 +41,6 @@ final class WakyZzzAlarmsViewControllerTests: XCTestCase, NSFetchedResultsContro
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
         testStack = nil
     }
@@ -82,6 +80,7 @@ final class WakyZzzAlarmsViewControllerTests: XCTestCase, NSFetchedResultsContro
     }
     
     func testFirstRunCompleted() {
+        viewControllerUnderTest.checkFirstRun()
         XCTAssertEqual(UserDefaults.standard.bool(forKey: "Launched Before"), true)
     }
     
@@ -113,6 +112,5 @@ final class WakyZzzAlarmsViewControllerTests: XCTestCase, NSFetchedResultsContro
         } catch {
             print("could not perform fetch")
         }
-        print("Alarm count: \(fetchedResultsController.fetchedObjects?.count)")
     }
 }
